@@ -21,7 +21,7 @@ def contract_before(driver,number):
     driver.find_element_by_xpath("//span[text()='+ 申请合同']/..").click()
     #选申请
     time.sleep(1)
-    driver.find_element_by_xpath("//div[@class='ant-spin-container']/div[1]/ul/li").click()
+    driver.find_element_by_xpath("//div[@class='ant-spin-container']/ul/li[1]/ul/li/a").click()
     #继续申请合同
     try:
         time.sleep(1)

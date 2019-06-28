@@ -21,15 +21,15 @@ class apply(unittest.TestCase):
         self.driver.quit()
 #     def test_00_BA_PR_CT_RI(self):
 #         pass
-    def test_01_BA(self):
-        '''标准经费申请单'''
-        pay.standard_BA(self.driver)
-    def test_02_BA(self):
-        '''测算经费申请单'''
-        pay.choice_one_BA(self.driver)
-    def test_11_RI(self):
-        '''标准无经费报销单'''
-        pay.standard_NORI(self.driver)
+#     def test_01_BA(self):
+#         '''标准经费申请单'''
+#         pay.standard_BA(self.driver)
+#     def test_02_BA(self):
+#         '''测算经费申请单'''
+#         pay.choice_one_BA(self.driver)
+#     def test_11_RI(self):
+#         '''标准无经费报销单'''
+#         pay.standard_NORI(self.driver)
     def test_12_RI(self):
         '''框架协议报销单'''
         pay.standart_AGRI(self.driver)

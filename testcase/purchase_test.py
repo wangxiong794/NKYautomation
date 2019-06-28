@@ -26,9 +26,11 @@ class Purchase(unittest.TestCase):
         common_funcation.login_code(self.driver)
     def tearDown(self):
         self.driver.quit()
-    def test_01_PR(self):
-        purchase.standard_PR(self.driver)
+#     def test_01_PR(self):
+#         #新增无明细采购单
+#         purchase.standard_PR(self.driver)
     def test_11_AT(self):
+        #新增验收单
         purchase.standard_AT(self.driver)
 if __name__ == '__main__':
     unittest.main()

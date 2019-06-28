@@ -95,8 +95,7 @@ def start_AGRI(driver):
     time.sleep(0.1)
     driver.find_element(By.XPATH,"//div[@class='ant-tabs-nav ant-tabs-nav-animated']/div[1]/div[3]").click()
     time.sleep(1)
-    driver.find_element(By.XPATH,"//div[@class='ant-spin-container']/div[1]/ul/li").click()
-#     driver.find_element(By.XPATH,"//div[@class='ant-spin-container']/ul/li[1]/ul").click()
+    driver.find_element(By.XPATH,"//div[@class='ant-spin-container']/ul/li[1]/ul/li/a").click()
 def choice_paymethod(driver):
     time.sleep(0.1)
     driver.find_element(By.XPATH,"//div[@id='paymentMethodId']/div/div").click()

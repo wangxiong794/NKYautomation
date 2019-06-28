@@ -7164,63 +7164,93 @@ body.skin-3 {
 
 
     var resultData = {
-    "testPass": 18,
+    "testPass": 14,
     "testResult": [
         {
             "className": "apply",
-            "methodName": "test_01_fund_apply",
-            "description": "带明细经费单",
-            "spendTime": "38.6 s",
-            "status": "错误",
-            "log": [
-                "",
-                "Traceback (most recent call last):\n",
-                "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 59, in testPartExecutor\n    yield\n",
-                "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 615, in run\n    testMethod()\n",
-                "  File \"D:\\eclipse\\work\\neikongyi\\testcase\\pay_test.py\", line 28, in test_01_fund_apply\n    pay.fund_after(self.driver, amount, \"明细经费单\"+time.strftime('%d%H%M'))\n",
-                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\pay.py\", line 229, in fund_after\n    submit(driver)\n",
-                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\common_funcation.py\", line 23, in submit\n    driver.find_element(By.XPATH,\"//span[text()='查看详情']/..\").click()\n",
-                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 978, in find_element\n    'value': value})['value']\n",
-                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 321, in execute\n    self.error_handler.check_response(response)\n",
-                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\errorhandler.py\", line 242, in check_response\n    raise exception_class(message, screen, stacktrace)\n",
-                "selenium.common.exceptions.NoSuchElementException: Message: no such element: Unable to locate element: {\"method\":\"xpath\",\"selector\":\"//span[text()='查看详情']/..\"}\n  (Session info: headless chrome=74.0.3724.8)\n  (Driver info: chromedriver=70.0.3538.67 (9ab0cfab84ded083718d3a4ff830726efd38869f),platform=Windows NT 10.0.17763 x86_64)\n\n"
-            ]
-        },
-        {
-            "className": "ConstructionProject",
-            "methodName": "test_01_DP",
-            "description": "建设项目",
-            "spendTime": "33.0 s",
-            "status": "错误",
-            "log": [
-                "",
-                "Traceback (most recent call last):\n",
-                "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 59, in testPartExecutor\n    yield\n",
-                "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 615, in run\n    testMethod()\n",
-                "  File \"D:\\eclipse\\work\\neikongyi\\testcase\\constructionproject_test.py\", line 27, in test_01_DP\n    constructionProject.DP(self.driver)\n",
-                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\constructionProject.py\", line 18, in DP\n    p_manager=choice_manager(driver)\n",
-                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\constructionProject.py\", line 57, in choice_manager\n    driver.find_element(By.XPATH,\"//li[text()='\"+ p_manager2 +\"']\").click()\n",
-                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 978, in find_element\n    'value': value})['value']\n",
-                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 321, in execute\n    self.error_handler.check_response(response)\n",
-                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\errorhandler.py\", line 242, in check_response\n    raise exception_class(message, screen, stacktrace)\n",
-                "selenium.common.exceptions.NoSuchElementException: Message: no such element: Unable to locate element: {\"method\":\"xpath\",\"selector\":\"//li[text()='丁磊']\"}\n  (Session info: chrome=74.0.3724.8)\n  (Driver info: chromedriver=70.0.3538.67 (9ab0cfab84ded083718d3a4ff830726efd38869f),platform=Windows NT 10.0.17763 x86_64)\n\n"
-            ]
-        },
-        {
-            "className": "ConstructionProject",
-            "methodName": "test_11_BN",
-            "description": "中标单位通报",
-            "spendTime": "29.1 s",
+            "methodName": "test_01_BA",
+            "description": "标准经费申请单",
+            "spendTime": "26.5 s",
             "status": "成功",
             "log": [
                 ""
             ]
         },
         {
+            "className": "apply",
+            "methodName": "test_02_BA",
+            "description": "测算经费申请单",
+            "spendTime": "25.8 s",
+            "status": "成功",
+            "log": [
+                ""
+            ]
+        },
+        {
+            "className": "apply",
+            "methodName": "test_11_RI",
+            "description": "标准无经费报销单",
+            "spendTime": "25.0 s",
+            "status": "成功",
+            "log": [
+                ""
+            ]
+        },
+        {
+            "className": "apply",
+            "methodName": "test_12_RI",
+            "description": "框架协议报销单",
+            "spendTime": "32.4 s",
+            "status": "错误",
+            "log": [
+                "",
+                "Traceback (most recent call last):\n",
+                "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 59, in testPartExecutor\n    yield\n",
+                "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 615, in run\n    testMethod()\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\testcase\\pay_test.py\", line 35, in test_12_RI\n    pay.standart_AGRI(self.driver)\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\pay.py\", line 163, in standart_AGRI\n    start_AGRI(driver)\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\pay.py\", line 98, in start_AGRI\n    driver.find_element(By.XPATH,\"//div[@class='ant-spin-container']/div[1]/ul/li\").click()\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 978, in find_element\n    'value': value})['value']\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 321, in execute\n    self.error_handler.check_response(response)\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\errorhandler.py\", line 242, in check_response\n    raise exception_class(message, screen, stacktrace)\n",
+                "selenium.common.exceptions.NoSuchElementException: Message: no such element: Unable to locate element: {\"method\":\"xpath\",\"selector\":\"//div[@class='ant-spin-container']/div[1]/ul/li\"}\n  (Session info: headless chrome=75.0.3770.100)\n  (Driver info: chromedriver=70.0.3538.67 (9ab0cfab84ded083718d3a4ff830726efd38869f),platform=Windows NT 10.0.17763 x86_64)\n\n"
+            ]
+        },
+        {
+            "className": "ConstructionProject",
+            "methodName": "test_01_DP",
+            "description": "建设项目",
+            "spendTime": "45.6 s",
+            "status": "成功",
+            "log": [
+                ""
+            ]
+        },
+        {
+            "className": "ConstructionProject",
+            "methodName": "test_11_BN",
+            "description": "中标单位通报",
+            "spendTime": "20.5 s",
+            "status": "错误",
+            "log": [
+                "",
+                "Traceback (most recent call last):\n",
+                "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 59, in testPartExecutor\n    yield\n",
+                "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 615, in run\n    testMethod()\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\testcase\\constructionproject_test.py\", line 30, in test_11_BN\n    constructionProject.BN(self.driver)\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\constructionProject.py\", line 108, in BN\n    related_personal(driver)\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\constructionProject.py\", line 128, in related_personal\n    driver.execute_script(js)\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 636, in execute_script\n    'args': converted_args})['value']\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 321, in execute\n    self.error_handler.check_response(response)\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\errorhandler.py\", line 242, in check_response\n    raise exception_class(message, screen, stacktrace)\n",
+                "selenium.common.exceptions.WebDriverException: Message: unknown error: Cannot read property 'scrollTo' of null\n  (Session info: headless chrome=75.0.3770.100)\n  (Driver info: chromedriver=70.0.3538.67 (9ab0cfab84ded083718d3a4ff830726efd38869f),platform=Windows NT 10.0.17763 x86_64)\n\n"
+            ]
+        },
+        {
             "className": "contractQuery",
             "methodName": "test_01_contract",
             "description": "1期付款计划合同",
-            "spendTime": "26.9 s",
+            "spendTime": "34.1 s",
             "status": "错误",
             "log": [
                 "",
@@ -7228,18 +7258,19 @@ body.skin-3 {
                 "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 59, in testPartExecutor\n    yield\n",
                 "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 615, in run\n    testMethod()\n",
                 "  File \"D:\\eclipse\\work\\neikongyi\\testcase\\contract_test.py\", line 32, in test_01_contract\n    money=contract.contract_before(self.driver,'I')\n",
-                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\contract.py\", line 58, in contract_before\n    driver.execute_script(js)\n",
-                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 636, in execute_script\n    'args': converted_args})['value']\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\contract.py\", line 24, in contract_before\n    driver.find_element_by_xpath(\"//div[@class='ant-spin-container']/div[1]/ul/li\").click()\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 394, in find_element_by_xpath\n    return self.find_element(by=By.XPATH, value=xpath)\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 978, in find_element\n    'value': value})['value']\n",
                 "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 321, in execute\n    self.error_handler.check_response(response)\n",
                 "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\errorhandler.py\", line 242, in check_response\n    raise exception_class(message, screen, stacktrace)\n",
-                "selenium.common.exceptions.WebDriverException: Message: unknown error: Cannot read property 'scrollTo' of null\n  (Session info: headless chrome=74.0.3724.8)\n  (Driver info: chromedriver=70.0.3538.67 (9ab0cfab84ded083718d3a4ff830726efd38869f),platform=Windows NT 10.0.17763 x86_64)\n\n"
+                "selenium.common.exceptions.NoSuchElementException: Message: no such element: Unable to locate element: {\"method\":\"xpath\",\"selector\":\"//div[@class='ant-spin-container']/div[1]/ul/li\"}\n  (Session info: headless chrome=75.0.3770.100)\n  (Driver info: chromedriver=70.0.3538.67 (9ab0cfab84ded083718d3a4ff830726efd38869f),platform=Windows NT 10.0.17763 x86_64)\n\n"
             ]
         },
         {
             "className": "contractQuery",
             "methodName": "test_02_contract",
             "description": "2期付款计划合同",
-            "spendTime": "26.6 s",
+            "spendTime": "31.4 s",
             "status": "错误",
             "log": [
                 "",
@@ -7247,18 +7278,19 @@ body.skin-3 {
                 "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 59, in testPartExecutor\n    yield\n",
                 "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 615, in run\n    testMethod()\n",
                 "  File \"D:\\eclipse\\work\\neikongyi\\testcase\\contract_test.py\", line 37, in test_02_contract\n    money=contract.contract_before(self.driver, \"II\")\n",
-                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\contract.py\", line 58, in contract_before\n    driver.execute_script(js)\n",
-                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 636, in execute_script\n    'args': converted_args})['value']\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\contract.py\", line 24, in contract_before\n    driver.find_element_by_xpath(\"//div[@class='ant-spin-container']/div[1]/ul/li\").click()\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 394, in find_element_by_xpath\n    return self.find_element(by=By.XPATH, value=xpath)\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 978, in find_element\n    'value': value})['value']\n",
                 "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 321, in execute\n    self.error_handler.check_response(response)\n",
                 "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\errorhandler.py\", line 242, in check_response\n    raise exception_class(message, screen, stacktrace)\n",
-                "selenium.common.exceptions.WebDriverException: Message: unknown error: Cannot read property 'scrollTo' of null\n  (Session info: headless chrome=74.0.3724.8)\n  (Driver info: chromedriver=70.0.3538.67 (9ab0cfab84ded083718d3a4ff830726efd38869f),platform=Windows NT 10.0.17763 x86_64)\n\n"
+                "selenium.common.exceptions.NoSuchElementException: Message: no such element: Unable to locate element: {\"method\":\"xpath\",\"selector\":\"//div[@class='ant-spin-container']/div[1]/ul/li\"}\n  (Session info: headless chrome=75.0.3770.100)\n  (Driver info: chromedriver=70.0.3538.67 (9ab0cfab84ded083718d3a4ff830726efd38869f),platform=Windows NT 10.0.17763 x86_64)\n\n"
             ]
         },
         {
             "className": "contractQuery",
             "methodName": "test_03_CT",
             "description": "两期合同+变更",
-            "spendTime": "27.0 s",
+            "spendTime": "33.5 s",
             "status": "错误",
             "log": [
                 "",
@@ -7266,18 +7298,19 @@ body.skin-3 {
                 "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 59, in testPartExecutor\n    yield\n",
                 "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 615, in run\n    testMethod()\n",
                 "  File \"D:\\eclipse\\work\\neikongyi\\testcase\\contract_test.py\", line 42, in test_03_CT\n    money=contract.contract_before(self.driver,\"II前\")\n",
-                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\contract.py\", line 58, in contract_before\n    driver.execute_script(js)\n",
-                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 636, in execute_script\n    'args': converted_args})['value']\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\contract.py\", line 24, in contract_before\n    driver.find_element_by_xpath(\"//div[@class='ant-spin-container']/div[1]/ul/li\").click()\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 394, in find_element_by_xpath\n    return self.find_element(by=By.XPATH, value=xpath)\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 978, in find_element\n    'value': value})['value']\n",
                 "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 321, in execute\n    self.error_handler.check_response(response)\n",
                 "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\errorhandler.py\", line 242, in check_response\n    raise exception_class(message, screen, stacktrace)\n",
-                "selenium.common.exceptions.WebDriverException: Message: unknown error: Cannot read property 'scrollTo' of null\n  (Session info: headless chrome=74.0.3724.8)\n  (Driver info: chromedriver=70.0.3538.67 (9ab0cfab84ded083718d3a4ff830726efd38869f),platform=Windows NT 10.0.17763 x86_64)\n\n"
+                "selenium.common.exceptions.NoSuchElementException: Message: no such element: Unable to locate element: {\"method\":\"xpath\",\"selector\":\"//div[@class='ant-spin-container']/div[1]/ul/li\"}\n  (Session info: headless chrome=75.0.3770.100)\n  (Driver info: chromedriver=70.0.3538.67 (9ab0cfab84ded083718d3a4ff830726efd38869f),platform=Windows NT 10.0.17763 x86_64)\n\n"
             ]
         },
         {
             "className": "contractQuery",
             "methodName": "test_04_CT",
             "description": "撤销合同+复制",
-            "spendTime": "29.3 s",
+            "spendTime": "32.9 s",
             "status": "错误",
             "log": [
                 "",
@@ -7285,18 +7318,19 @@ body.skin-3 {
                 "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 59, in testPartExecutor\n    yield\n",
                 "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 615, in run\n    testMethod()\n",
                 "  File \"D:\\eclipse\\work\\neikongyi\\testcase\\contract_test.py\", line 48, in test_04_CT\n    money=contract.contract_before(self.driver,\"II前\")\n",
-                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\contract.py\", line 58, in contract_before\n    driver.execute_script(js)\n",
-                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 636, in execute_script\n    'args': converted_args})['value']\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\contract.py\", line 24, in contract_before\n    driver.find_element_by_xpath(\"//div[@class='ant-spin-container']/div[1]/ul/li\").click()\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 394, in find_element_by_xpath\n    return self.find_element(by=By.XPATH, value=xpath)\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 978, in find_element\n    'value': value})['value']\n",
                 "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 321, in execute\n    self.error_handler.check_response(response)\n",
                 "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\errorhandler.py\", line 242, in check_response\n    raise exception_class(message, screen, stacktrace)\n",
-                "selenium.common.exceptions.WebDriverException: Message: unknown error: Cannot read property 'scrollTo' of null\n  (Session info: headless chrome=74.0.3724.8)\n  (Driver info: chromedriver=70.0.3538.67 (9ab0cfab84ded083718d3a4ff830726efd38869f),platform=Windows NT 10.0.17763 x86_64)\n\n"
+                "selenium.common.exceptions.NoSuchElementException: Message: no such element: Unable to locate element: {\"method\":\"xpath\",\"selector\":\"//div[@class='ant-spin-container']/div[1]/ul/li\"}\n  (Session info: headless chrome=75.0.3770.100)\n  (Driver info: chromedriver=70.0.3538.67 (9ab0cfab84ded083718d3a4ff830726efd38869f),platform=Windows NT 10.0.17763 x86_64)\n\n"
             ]
         },
         {
             "className": "contractQuery",
             "methodName": "test_05_CT",
             "description": "驳回合同+复制",
-            "spendTime": "20.4 s",
+            "spendTime": "33.0 s",
             "status": "错误",
             "log": [
                 "",
@@ -7304,20 +7338,19 @@ body.skin-3 {
                 "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 59, in testPartExecutor\n    yield\n",
                 "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 615, in run\n    testMethod()\n",
                 "  File \"D:\\eclipse\\work\\neikongyi\\testcase\\contract_test.py\", line 54, in test_05_CT\n    money=contract.contract_before(self.driver,'II前')\n",
-                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\contract.py\", line 33, in contract_before\n    ct_apartment=choice_apartment(driver)\n",
-                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\constructionProject.py\", line 49, in choice_apartment\n    driver.find_element(By.XPATH,\"//li[text()='\"+ p_department2 +\"']\").click()\n",
-                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webelement.py\", line 80, in click\n    self._execute(Command.CLICK_ELEMENT)\n",
-                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webelement.py\", line 633, in _execute\n    return self._parent.execute(command, params)\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\contract.py\", line 24, in contract_before\n    driver.find_element_by_xpath(\"//div[@class='ant-spin-container']/div[1]/ul/li\").click()\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 394, in find_element_by_xpath\n    return self.find_element(by=By.XPATH, value=xpath)\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 978, in find_element\n    'value': value})['value']\n",
                 "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 321, in execute\n    self.error_handler.check_response(response)\n",
                 "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\errorhandler.py\", line 242, in check_response\n    raise exception_class(message, screen, stacktrace)\n",
-                "selenium.common.exceptions.WebDriverException: Message: unknown error: Element <li role=\"option\" unselectable=\"on\" class=\"ant-select-dropdown-menu-item\" aria-disabled=\"false\" aria-selected=\"false\" style=\"user-select: none;\">...</li> is not clickable at point (576, 688). Other element would receive the click: <input readonly=\"\" placeholder=\"请选择签订日期\" class=\"ant-calendar-picker-input ant-input\" value=\"\">\n  (Session info: headless chrome=74.0.3724.8)\n  (Driver info: chromedriver=70.0.3538.67 (9ab0cfab84ded083718d3a4ff830726efd38869f),platform=Windows NT 10.0.17763 x86_64)\n\n"
+                "selenium.common.exceptions.NoSuchElementException: Message: no such element: Unable to locate element: {\"method\":\"xpath\",\"selector\":\"//div[@class='ant-spin-container']/div[1]/ul/li\"}\n  (Session info: headless chrome=75.0.3770.100)\n  (Driver info: chromedriver=70.0.3538.67 (9ab0cfab84ded083718d3a4ff830726efd38869f),platform=Windows NT 10.0.17763 x86_64)\n\n"
             ]
         },
         {
             "className": "contractQuery",
             "methodName": "test_06_CT",
             "description": "撤销+复制+讨论",
-            "spendTime": "27.1 s",
+            "spendTime": "32.7 s",
             "status": "错误",
             "log": [
                 "",
@@ -7325,28 +7358,38 @@ body.skin-3 {
                 "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 59, in testPartExecutor\n    yield\n",
                 "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 615, in run\n    testMethod()\n",
                 "  File \"D:\\eclipse\\work\\neikongyi\\testcase\\contract_test.py\", line 60, in test_06_CT\n    money=contract.contract_before(self.driver,\"II前\")\n",
-                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\contract.py\", line 58, in contract_before\n    driver.execute_script(js)\n",
-                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 636, in execute_script\n    'args': converted_args})['value']\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\contract.py\", line 24, in contract_before\n    driver.find_element_by_xpath(\"//div[@class='ant-spin-container']/div[1]/ul/li\").click()\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 394, in find_element_by_xpath\n    return self.find_element(by=By.XPATH, value=xpath)\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 978, in find_element\n    'value': value})['value']\n",
                 "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 321, in execute\n    self.error_handler.check_response(response)\n",
                 "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\errorhandler.py\", line 242, in check_response\n    raise exception_class(message, screen, stacktrace)\n",
-                "selenium.common.exceptions.WebDriverException: Message: unknown error: Cannot read property 'scrollTo' of null\n  (Session info: headless chrome=74.0.3724.8)\n  (Driver info: chromedriver=70.0.3538.67 (9ab0cfab84ded083718d3a4ff830726efd38869f),platform=Windows NT 10.0.17763 x86_64)\n\n"
+                "selenium.common.exceptions.NoSuchElementException: Message: no such element: Unable to locate element: {\"method\":\"xpath\",\"selector\":\"//div[@class='ant-spin-container']/div[1]/ul/li\"}\n  (Session info: headless chrome=75.0.3770.100)\n  (Driver info: chromedriver=70.0.3538.67 (9ab0cfab84ded083718d3a4ff830726efd38869f),platform=Windows NT 10.0.17763 x86_64)\n\n"
             ]
         },
         {
             "className": "frameworkAgreement",
             "methodName": "test_00_AG",
             "description": "申请框架协议并审核",
-            "spendTime": "18.9 s",
-            "status": "成功",
+            "spendTime": "32.6 s",
+            "status": "错误",
             "log": [
-                ""
+                "",
+                "Traceback (most recent call last):\n",
+                "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 59, in testPartExecutor\n    yield\n",
+                "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 615, in run\n    testMethod()\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\testcase\\meeting_test.py\", line 30, in test_00_AG\n    meeting.AG(self.driver,'框架协议'+time.strftime('%d%H%M'))\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\meeting.py\", line 20, in AG\n    driver.find_element(By.XPATH,\"//span[text()='+ 申请框架协议']/..\").click()\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 978, in find_element\n    'value': value})['value']\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 321, in execute\n    self.error_handler.check_response(response)\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\errorhandler.py\", line 242, in check_response\n    raise exception_class(message, screen, stacktrace)\n",
+                "selenium.common.exceptions.NoSuchElementException: Message: no such element: Unable to locate element: {\"method\":\"xpath\",\"selector\":\"//span[text()='+ 申请框架协议']/..\"}\n  (Session info: headless chrome=75.0.3770.100)\n  (Driver info: chromedriver=70.0.3538.67 (9ab0cfab84ded083718d3a4ff830726efd38869f),platform=Windows NT 10.0.17763 x86_64)\n\n"
             ]
         },
         {
             "className": "frameworkAgreement",
             "methodName": "test_01_AG",
             "description": "申请框架协议撤销+复制",
-            "spendTime": "24.5 s",
+            "spendTime": "25.4 s",
             "status": "成功",
             "log": [
                 ""
@@ -7356,7 +7399,7 @@ body.skin-3 {
             "className": "frameworkAgreement",
             "methodName": "test_02_AG",
             "description": "申请框架协议驳回+复制",
-            "spendTime": "29.9 s",
+            "spendTime": "32.1 s",
             "status": "成功",
             "log": [
                 ""
@@ -7366,18 +7409,26 @@ body.skin-3 {
             "className": "frameworkAgreement",
             "methodName": "test_03_AG",
             "description": "申请框架协议变更",
-            "spendTime": "34.6 s",
-            "status": "成功",
+            "spendTime": "53.5 s",
+            "status": "错误",
             "log": [
-                "变更成功",
-                ""
+                "",
+                "Traceback (most recent call last):\n",
+                "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 59, in testPartExecutor\n    yield\n",
+                "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 615, in run\n    testMethod()\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\testcase\\meeting_test.py\", line 40, in test_03_AG\n    meeting.AG_change(self.driver, AG_name1)\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\meeting.py\", line 200, in AG_change\n    driver.find_element(By.XPATH,'//ul/li[9]/div/div/div/a[3]').click()\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 978, in find_element\n    'value': value})['value']\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 321, in execute\n    self.error_handler.check_response(response)\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\errorhandler.py\", line 242, in check_response\n    raise exception_class(message, screen, stacktrace)\n",
+                "selenium.common.exceptions.NoSuchElementException: Message: no such element: Unable to locate element: {\"method\":\"xpath\",\"selector\":\"//ul/li[9]/div/div/div/a[3]\"}\n  (Session info: headless chrome=75.0.3770.100)\n  (Driver info: chromedriver=70.0.3538.67 (9ab0cfab84ded083718d3a4ff830726efd38869f),platform=Windows NT 10.0.17763 x86_64)\n\n"
             ]
         },
         {
             "className": "frameworkAgreement",
             "methodName": "test_11_MA",
             "description": "重要事项自审",
-            "spendTime": "24.7 s",
+            "spendTime": "29.2 s",
             "status": "成功",
             "log": [
                 ""
@@ -7387,7 +7438,7 @@ body.skin-3 {
             "className": "frameworkAgreement",
             "methodName": "test_12_MA",
             "description": "撤销+复制重要事项",
-            "spendTime": "30.3 s",
+            "spendTime": "37.0 s",
             "status": "成功",
             "log": [
                 ""
@@ -7397,7 +7448,7 @@ body.skin-3 {
             "className": "frameworkAgreement",
             "methodName": "test_13_MA",
             "description": "驳回+复制重要事项",
-            "spendTime": "35.6 s",
+            "spendTime": "42.8 s",
             "status": "成功",
             "log": [
                 ""
@@ -7407,7 +7458,7 @@ body.skin-3 {
             "className": "frameworkAgreement",
             "methodName": "test_21_conterSign",
             "description": "发起议事会签",
-            "spendTime": "44.9 s",
+            "spendTime": "26.5 s",
             "status": "错误",
             "log": [
                 "",
@@ -7415,128 +7466,231 @@ body.skin-3 {
                 "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 59, in testPartExecutor\n    yield\n",
                 "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 615, in run\n    testMethod()\n",
                 "  File \"D:\\eclipse\\work\\neikongyi\\testcase\\meeting_test.py\", line 57, in test_21_conterSign\n    meeting.countersign(self.driver)\n",
-                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\meeting.py\", line 332, in countersign\n    meet_related_personal(driver)\n",
-                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\meeting.py\", line 355, in meet_related_personal\n    driver.find_element(By.XPATH,\"//span[text()='加入参会 >']/..\").click()\n",
-                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 978, in find_element\n    'value': value})['value']\n",
-                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 321, in execute\n    self.error_handler.check_response(response)\n",
-                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\errorhandler.py\", line 242, in check_response\n    raise exception_class(message, screen, stacktrace)\n",
-                "selenium.common.exceptions.NoSuchElementException: Message: no such element: Unable to locate element: {\"method\":\"xpath\",\"selector\":\"//span[text()='加入参会 >']/..\"}\n  (Session info: headless chrome=74.0.3724.8)\n  (Driver info: chromedriver=70.0.3538.67 (9ab0cfab84ded083718d3a4ff830726efd38869f),platform=Windows NT 10.0.17763 x86_64)\n\n"
-            ]
-        },
-        {
-            "className": "Purchase",
-            "methodName": "test_00_PR",
-            "description": "采购审批单自审",
-            "spendTime": "24.2 s",
-            "status": "成功",
-            "log": [
-                ""
+                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\meeting.py\", line 329, in countersign\n    meet_description='在'+meet_date+meet_location+'举行的由'+meet_hostuser+'主持的，'+meet_recorduser+'记录的'+meet_type+time.strftime('%H%M%S')\n",
+                "TypeError: can only concatenate str (not \"NoneType\") to str\n"
             ]
         },
         {
             "className": "Purchase",
             "methodName": "test_01_PR",
-            "description": "带供应商采购单",
-            "spendTime": "26.7 s",
-            "status": "成功",
-            "log": [
-                ""
-            ]
-        },
-        {
-            "className": "Purchase",
-            "methodName": "test_02_PR",
-            "description": "带专家采购单",
-            "spendTime": "28.2 s",
-            "status": "成功",
-            "log": [
-                ""
-            ]
-        },
-        {
-            "className": "Purchase",
-            "methodName": "test_03_PR",
-            "description": "带供应商+专家采购单",
-            "spendTime": "30.7 s",
-            "status": "成功",
-            "log": [
-                ""
-            ]
-        },
-        {
-            "className": "Revenue",
-            "methodName": "test_21_IC",
-            "description": "收入登记审批单",
-            "spendTime": "33.8 s",
+            "description": null,
+            "spendTime": "17.5 s",
             "status": "错误",
             "log": [
                 "",
                 "Traceback (most recent call last):\n",
                 "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 59, in testPartExecutor\n    yield\n",
                 "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 615, in run\n    testMethod()\n",
-                "  File \"D:\\eclipse\\work\\neikongyi\\testcase\\revenue_test.py\", line 52, in test_21_IC\n    revenue.IC_before(self.driver)\n",
-                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\revenue.py\", line 101, in IC_before\n    driver.find_element(By.XPATH,\"//tbody[@class='ant-table-tbody']/tr[\"+a+\"]/td[1]/label/span[1]/input\").click()\n",
-                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 978, in find_element\n    'value': value})['value']\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\testcase\\purchase_test.py\", line 30, in test_01_PR\n    purchase.standard_PR(self.driver)\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\purchase.py\", line 108, in standard_PR\n    choice_BAPR(driver)\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\purchase.py\", line 39, in choice_BAPR\n    driver.execute_script('var q=document.querySelector(\"#root > div > div > div > div.content___3gQPC.ant-layout-content > div > div:nth-child(4) > div > div > div > div > div > div > div > table > tbody > tr:nth-child(1) > td.ant-table-selection-column > span > label > span > input\").click(1)')\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 636, in execute_script\n    'args': converted_args})['value']\n",
                 "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 321, in execute\n    self.error_handler.check_response(response)\n",
                 "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\errorhandler.py\", line 242, in check_response\n    raise exception_class(message, screen, stacktrace)\n",
-                "selenium.common.exceptions.NoSuchElementException: Message: no such element: Unable to locate element: {\"method\":\"xpath\",\"selector\":\"//tbody[@class='ant-table-tbody']/tr[2]/td[1]/label/span[1]/input\"}\n  (Session info: headless chrome=74.0.3724.8)\n  (Driver info: chromedriver=70.0.3538.67 (9ab0cfab84ded083718d3a4ff830726efd38869f),platform=Windows NT 10.0.17763 x86_64)\n\n"
+                "selenium.common.exceptions.WebDriverException: Message: unknown error: Cannot read property 'click' of null\n  (Session info: headless chrome=75.0.3770.100)\n  (Driver info: chromedriver=70.0.3538.67 (9ab0cfab84ded083718d3a4ff830726efd38869f),platform=Windows NT 10.0.17763 x86_64)\n\n"
+            ]
+        },
+        {
+            "className": "Purchase",
+            "methodName": "test_11_AT",
+            "description": null,
+            "spendTime": "17.4 s",
+            "status": "错误",
+            "log": [
+                "",
+                "Traceback (most recent call last):\n",
+                "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 59, in testPartExecutor\n    yield\n",
+                "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 615, in run\n    testMethod()\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\testcase\\purchase_test.py\", line 32, in test_11_AT\n    purchase.standard_AT(self.driver)\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\purchase.py\", line 116, in standard_AT\n    choice_BAPR(driver)\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\purchase.py\", line 39, in choice_BAPR\n    driver.execute_script('var q=document.querySelector(\"#root > div > div > div > div.content___3gQPC.ant-layout-content > div > div:nth-child(4) > div > div > div > div > div > div > div > table > tbody > tr:nth-child(1) > td.ant-table-selection-column > span > label > span > input\").click(1)')\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 636, in execute_script\n    'args': converted_args})['value']\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 321, in execute\n    self.error_handler.check_response(response)\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\errorhandler.py\", line 242, in check_response\n    raise exception_class(message, screen, stacktrace)\n",
+                "selenium.common.exceptions.WebDriverException: Message: unknown error: Cannot read property 'click' of null\n  (Session info: headless chrome=75.0.3770.100)\n  (Driver info: chromedriver=70.0.3538.67 (9ab0cfab84ded083718d3a4ff830726efd38869f),platform=Windows NT 10.0.17763 x86_64)\n\n"
             ]
         },
         {
             "className": "Revenue",
-            "methodName": "test_31_RE",
-            "description": "新增收据",
-            "spendTime": "25.5 s",
+            "methodName": "test_01_CG",
+            "description": "发起收费标准",
+            "spendTime": "22.4 s",
             "status": "成功",
             "log": [
                 ""
+            ]
+        },
+        {
+            "className": "Revenue",
+            "methodName": "test_11_RE",
+            "description": "发起收费单",
+            "spendTime": "20.1 s",
+            "status": "错误",
+            "log": [
+                "",
+                "Traceback (most recent call last):\n",
+                "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 59, in testPartExecutor\n    yield\n",
+                "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 615, in run\n    testMethod()\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\testcase\\revenue_test.py\", line 22, in test_11_RE\n    revenue.standard_RE(self.driver)\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\revenue.py\", line 104, in standard_RE\n    edit_RE(driver)\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\revenue.py\", line 91, in edit_RE\n    driver.find_element(By.XPATH,\"//body/div[4]/div/div/div/ul/li[1]\").click()\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webelement.py\", line 80, in click\n    self._execute(Command.CLICK_ELEMENT)\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webelement.py\", line 633, in _execute\n    return self._parent.execute(command, params)\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 321, in execute\n    self.error_handler.check_response(response)\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\errorhandler.py\", line 242, in check_response\n    raise exception_class(message, screen, stacktrace)\n",
+                "selenium.common.exceptions.ElementNotVisibleException: Message: element not interactable\n  (Session info: headless chrome=75.0.3770.100)\n  (Driver info: chromedriver=70.0.3538.67 (9ab0cfab84ded083718d3a4ff830726efd38869f),platform=Windows NT 10.0.17763 x86_64)\n\n"
+            ]
+        },
+        {
+            "className": "Revenue",
+            "methodName": "test_21_IC",
+            "description": "发起收入登记",
+            "spendTime": "34.8 s",
+            "status": "错误",
+            "log": [
+                "",
+                "Traceback (most recent call last):\n",
+                "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 59, in testPartExecutor\n    yield\n",
+                "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 615, in run\n    testMethod()\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\testcase\\revenue_test.py\", line 25, in test_21_IC\n    revenue.standard_IC(self.driver)\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\revenue.py\", line 111, in standard_IC\n    choice_ICRE(driver)\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\revenue.py\", line 53, in choice_ICRE\n    driver.find_element(By.XPATH,\"//span[text()='选择关联收据']/..\").click()\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 978, in find_element\n    'value': value})['value']\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 321, in execute\n    self.error_handler.check_response(response)\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\errorhandler.py\", line 242, in check_response\n    raise exception_class(message, screen, stacktrace)\n",
+                "selenium.common.exceptions.NoSuchElementException: Message: no such element: Unable to locate element: {\"method\":\"xpath\",\"selector\":\"//span[text()='选择关联收据']/..\"}\n  (Session info: headless chrome=75.0.3770.100)\n  (Driver info: chromedriver=70.0.3538.67 (9ab0cfab84ded083718d3a4ff830726efd38869f),platform=Windows NT 10.0.17763 x86_64)\n\n"
             ]
         },
         {
             "className": "adjust",
             "methodName": "test_01_adjust",
             "description": "预算调整单",
-            "spendTime": "22.8 s",
-            "status": "成功",
+            "spendTime": "30.4 s",
+            "status": "错误",
             "log": [
-                ""
+                "",
+                "Traceback (most recent call last):\n",
+                "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 59, in testPartExecutor\n    yield\n",
+                "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 615, in run\n    testMethod()\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\testcase\\budget_test.py\", line 31, in test_01_adjust\n    budget.adjust_before(self.driver)\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\budget.py\", line 7, in adjust_before\n    driver.find_element(By.XPATH,\"//ul/li[3]/div/div/div/a[2]\").click()\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 978, in find_element\n    'value': value})['value']\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 321, in execute\n    self.error_handler.check_response(response)\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\errorhandler.py\", line 242, in check_response\n    raise exception_class(message, screen, stacktrace)\n",
+                "selenium.common.exceptions.NoSuchElementException: Message: no such element: Unable to locate element: {\"method\":\"xpath\",\"selector\":\"//ul/li[3]/div/div/div/a[2]\"}\n  (Session info: headless chrome=75.0.3770.100)\n  (Driver info: chromedriver=70.0.3538.67 (9ab0cfab84ded083718d3a4ff830726efd38869f),platform=Windows NT 10.0.17763 x86_64)\n\n"
             ]
         },
         {
             "className": "adjust",
             "methodName": "test_02_adjust",
             "description": "预算追加单",
-            "spendTime": "20.4 s",
-            "status": "成功",
+            "spendTime": "30.6 s",
+            "status": "错误",
             "log": [
-                ""
+                "",
+                "Traceback (most recent call last):\n",
+                "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 59, in testPartExecutor\n    yield\n",
+                "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 615, in run\n    testMethod()\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\testcase\\budget_test.py\", line 36, in test_02_adjust\n    budget.adjust_before(self.driver)\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\budget.py\", line 7, in adjust_before\n    driver.find_element(By.XPATH,\"//ul/li[3]/div/div/div/a[2]\").click()\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 978, in find_element\n    'value': value})['value']\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 321, in execute\n    self.error_handler.check_response(response)\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\errorhandler.py\", line 242, in check_response\n    raise exception_class(message, screen, stacktrace)\n",
+                "selenium.common.exceptions.NoSuchElementException: Message: no such element: Unable to locate element: {\"method\":\"xpath\",\"selector\":\"//ul/li[3]/div/div/div/a[2]\"}\n  (Session info: headless chrome=75.0.3770.100)\n  (Driver info: chromedriver=70.0.3538.67 (9ab0cfab84ded083718d3a4ff830726efd38869f),platform=Windows NT 10.0.17763 x86_64)\n\n"
             ]
         },
         {
             "className": "adjust",
             "methodName": "test_03_adjust",
             "description": "预算调减单",
-            "spendTime": "21.8 s",
-            "status": "成功",
+            "spendTime": "29.5 s",
+            "status": "错误",
             "log": [
-                ""
+                "",
+                "Traceback (most recent call last):\n",
+                "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 59, in testPartExecutor\n    yield\n",
+                "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 615, in run\n    testMethod()\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\testcase\\budget_test.py\", line 41, in test_03_adjust\n    budget.adjust_before(self.driver)\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\budget.py\", line 7, in adjust_before\n    driver.find_element(By.XPATH,\"//ul/li[3]/div/div/div/a[2]\").click()\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 978, in find_element\n    'value': value})['value']\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 321, in execute\n    self.error_handler.check_response(response)\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\errorhandler.py\", line 242, in check_response\n    raise exception_class(message, screen, stacktrace)\n",
+                "selenium.common.exceptions.NoSuchElementException: Message: no such element: Unable to locate element: {\"method\":\"xpath\",\"selector\":\"//ul/li[3]/div/div/div/a[2]\"}\n  (Session info: headless chrome=75.0.3770.100)\n  (Driver info: chromedriver=70.0.3538.67 (9ab0cfab84ded083718d3a4ff830726efd38869f),platform=Windows NT 10.0.17763 x86_64)\n\n"
             ]
         },
         {
             "className": "adjust",
             "methodName": "test_04_adjust",
             "description": "垫支预算调整",
-            "spendTime": "26.7 s",
-            "status": "成功",
+            "spendTime": "30.5 s",
+            "status": "错误",
             "log": [
-                ""
+                "",
+                "Traceback (most recent call last):\n",
+                "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 59, in testPartExecutor\n    yield\n",
+                "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 615, in run\n    testMethod()\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\testcase\\budget_test.py\", line 46, in test_04_adjust\n    budget.adjust_verification(self.driver, amount, \"核销金额调整\"+time.strftime('%d%H%M'))\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\budget.py\", line 64, in adjust_verification\n    driver.find_element(By.XPATH,\"//ul/li[3]/div/div/div/a[2]\").click()\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 978, in find_element\n    'value': value})['value']\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 321, in execute\n    self.error_handler.check_response(response)\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\errorhandler.py\", line 242, in check_response\n    raise exception_class(message, screen, stacktrace)\n",
+                "selenium.common.exceptions.NoSuchElementException: Message: no such element: Unable to locate element: {\"method\":\"xpath\",\"selector\":\"//ul/li[3]/div/div/div/a[2]\"}\n  (Session info: headless chrome=75.0.3770.100)\n  (Driver info: chromedriver=70.0.3538.67 (9ab0cfab84ded083718d3a4ff830726efd38869f),platform=Windows NT 10.0.17763 x86_64)\n\n"
             ]
         },
         {
             "className": "adjust",
             "methodName": "test_05_adjust",
             "description": "核销金额调减",
-            "spendTime": "22.4 s",
+            "spendTime": "30.4 s",
+            "status": "错误",
+            "log": [
+                "",
+                "Traceback (most recent call last):\n",
+                "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 59, in testPartExecutor\n    yield\n",
+                "  File \"D:\\python3.7\\lib\\unittest\\case.py\", line 615, in run\n    testMethod()\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\testcase\\budget_test.py\", line 49, in test_05_adjust\n    budget.adjust_verification1(self.driver, amount, '核销金额调减'+time.strftime('%d%H%M'))\n",
+                "  File \"D:\\eclipse\\work\\neikongyi\\con_nky\\budget.py\", line 127, in adjust_verification1\n    driver.find_element(By.XPATH,\"//ul/li[3]/div/div/div/a[2]\").click()\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 978, in find_element\n    'value': value})['value']\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 321, in execute\n    self.error_handler.check_response(response)\n",
+                "  File \"D:\\python3.7\\lib\\site-packages\\selenium\\webdriver\\remote\\errorhandler.py\", line 242, in check_response\n    raise exception_class(message, screen, stacktrace)\n",
+                "selenium.common.exceptions.NoSuchElementException: Message: no such element: Unable to locate element: {\"method\":\"xpath\",\"selector\":\"//ul/li[3]/div/div/div/a[2]\"}\n  (Session info: headless chrome=75.0.3770.100)\n  (Driver info: chromedriver=70.0.3538.67 (9ab0cfab84ded083718d3a4ff830726efd38869f),platform=Windows NT 10.0.17763 x86_64)\n\n"
+            ]
+        },
+        {
+            "className": "contractQuery",
+            "methodName": "test_11_FASI",
+            "description": null,
+            "spendTime": "31.0 s",
+            "status": "成功",
+            "log": [
+                ""
+            ]
+        },
+        {
+            "className": "contractQuery",
+            "methodName": "test_21_ac",
+            "description": null,
+            "spendTime": "29.9 s",
+            "status": "成功",
+            "log": [
+                ""
+            ]
+        },
+        {
+            "className": "contractQuery",
+            "methodName": "test_31_FART",
+            "description": null,
+            "spendTime": "33.4 s",
+            "status": "成功",
+            "log": [
+                ""
+            ]
+        },
+        {
+            "className": "contractQuery",
+            "methodName": "test_41_FARP",
+            "description": null,
+            "spendTime": "31.9 s",
             "status": "成功",
             "log": [
                 ""
@@ -7544,10 +7698,10 @@ body.skin-3 {
         }
     ],
     "testName": "内控易测试报告",
-    "testAll": 28,
-    "testFail": 10,
-    "beginTime": "2019-05-22 11:51:00",
-    "totalTime": "784s",
+    "testAll": 34,
+    "testFail": 20,
+    "beginTime": "2019-06-27 14:33:55",
+    "totalTime": "1042s",
     "testSkip": 0,
     "testError": 0
 };

@@ -36,7 +36,7 @@ def send_report():
     msg['Subject'] = Header('自动化测试用例执行情况', 'utf-8').encode()#标题
     msg.attach(MIMEText('用例执行情况，可见附件' ))
     #此处为测试报告的存放路径，如要运行代码，则要修改为当前path的文件
-    att1 = MIMEText(open(r'D:\eclipse\work\neikongyi\TestReport1.html', 'rb').read(),'base64', 'utf-8')
+    att1 = MIMEText(open(r'D:\eclipse\work\neikongyi\TestReport.html', 'rb').read(),'base64', 'utf-8')
     att1["Content-Type"] = 'application/octet-stream'
     att1["Content-Disposition"] = 'attachment; filename="TestReport.html"' #这里的filename可以任意写，写什么名字，邮件中显示什么名字
     msg.attach(att1)

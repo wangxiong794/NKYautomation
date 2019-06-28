@@ -42,7 +42,7 @@ class contractQuery(unittest.TestCase):
         money=contract.contract_before(self.driver,"II前")
         contract.contract2(self.driver,money)
         contract.contract_after(self.driver)
-        contract.contract_change(self.driver,"II后")
+        contract.contract_change(self.driver)
     def test_04_CT(self):#撤销合同+复制
         '''撤销合同+复制'''
         money=contract.contract_before(self.driver,"II前")

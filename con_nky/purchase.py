@@ -2,6 +2,7 @@ import time
 from selenium.webdriver.common.by import By
 import random
 from con_nky.common_funcation import choice_apartment, submit, agree
+from selenium.webdriver.common.keys import Keys
 def choice_PR(driver):
     time.sleep(0.1)
     driver.find_element(By.XPATH,'//span[text()="采购管理"]/..').click()
@@ -19,16 +20,26 @@ def choice_PRAT(driver):
     time.sleep(0.5)
     driver.find_element(By.XPATH,"//tbody/tr[1]/td[1]/span/label/span/input").click()
     driver.find_element(By.XPATH,"//span[text()='下一步']/..").click()
-def edit_detail(driver):
-    time.sleep(1)
+def edit_detail(driver,i):
+    i=str(i)
+    driver.find_element(By.XPATH,"//div[@class='ant-table-body']/table/tbody/tr["+i+"]/td[9]/div").click()
+    time.sleep(0.5)
+    driver.find_element(By.XPATH,"//div[@class='ant-table-body']/table/tbody/tr["+i+"]/td[9]/div").click()
+    time.sleep(0.5)
+    driver.find_element(By.XPATH,"//div[@class='ant-table-body']/table/tbody/tr["+i+"]/td[9]/div/div/div/div/div/div/input").send_keys(Keys.ENTER)
     driver.find_element(By.XPATH,"//span[text()='下一步']/..").click()
+    try:
+        driver.find_element(By.XPATH,"//textarea").send_keys('测试验收'+str(time.time()))
+    except:
+        i=int(i)
+        i=i+1
+        return edit_detail(driver, i)    
 def edit_AT(driver):
-    driver.find_element(By.XPATH,"//textarea[@id='description']").send_keys('AT'+time.strftime('%m%d'))
     driver.find_element(By.XPATH,"//div[text()='+ 新增']").click()
     time.sleep(1)
-    driver.find_element(By.XPATH,"//span[@title='全单位']/../span[2]/span").click()
-    time.sleep(0.1)
-    driver.find_element(By.XPATH,"//span[text()='加入验收']/..").click()
+    driver.find_element(By.XPATH,"//span[@title='校领导']/../span[2]/span").click()
+    time.sleep(1)
+    driver.find_element(By.XPATH,"/html/body/div[6]/div/div[2]/div/div[2]/div[2]/div/div[3]/div[1]/div[2]/div[2]/button[1]").click()
     time.sleep(0.1)
     driver.find_element(By.XPATH,"//span[text()='确 定']/..").click()
 def start_PR(driver):
@@ -36,12 +47,13 @@ def start_PR(driver):
     driver.find_element(By.XPATH,"//span[text()='+ 发起申请']/..").click()
 def choice_BAPR(driver):
     time.sleep(1)
-    driver.execute_script('var q=document.querySelector("#root > div > div > div > div.content___3gQPC.ant-layout-content > div > div:nth-child(4) > div > div > div > div > div > div > div > table > tbody > tr:nth-child(1) > td.ant-table-selection-column > span > label > span > input").click(1)')
+    driver.find_element(By.XPATH,"//div[@class='ant-table-body']/table/tbody/tr[1]/td[1]/span/label/span/input").click()
     time.sleep(0.1)
     driver.find_element(By.XPATH,"//span[text()='下一步']/..").click()
 def choice_detail(driver):
     time.sleep(0.1)
     i=random.randint(0,1)
+    i=0
     if i == 0:
         try:
             driver.find_element(By.XPATH,"//span[text()='跳过']/..").click()
@@ -110,11 +122,12 @@ def standard_PR(driver):
     edit_PR(driver)
     submit(driver)
     agree(driver)
+
 def standard_AT(driver):
     choice_AT(driver)
     start_AT(driver)
     choice_BAPR(driver)
-    edit_detail(driver)
+    edit_detail(driver,1)
     edit_AT(driver)
     time.sleep(0.5)
     driver.execute_script('var q=document.querySelector("#root > div > div > div > div.content___3gQPC.ant-layout-content").scrollTo(0,1000)')

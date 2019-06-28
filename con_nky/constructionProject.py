@@ -82,7 +82,7 @@ def choice_companies(driver):#拟选公司
     return p_companies2
 def choice_supplier(driver):#中标单位
     driver.find_element(By.XPATH,"//div[@id='supplierId']/div/div").click()
-    p_supplier=('北京行控科技','政法财务中心','天猫超市','这是一个公司特别长吗这是一个公司特别长吗这是一个公司特别长吗这是一个公司特别长吗')
+    p_supplier=('北京行控科技1','政法财务中心','天猫超市','这是一个公司特别长吗这是一个公司特别长吗这是一个公司特别长吗这是一个公司特别长吗')
     p_supplier1=random.sample(p_supplier,1)
     p_supplier2="".join(p_supplier1)
     time.sleep(1)
@@ -124,8 +124,9 @@ def choice_purchasetype(driver):
     driver.find_element(By.XPATH,"//li[text()='"+purchaseMethod2+"']").click()
 def related_personal(driver):
     time.sleep(1)
-    js='var q=document.querySelector("#root > div > div > div > div.content___3gQPC.ant-layout-content").scrollTo(0,1000)'
+    js='var q=document.querySelector("#root > div > section > section > main").scrollTo(0,1000)'
     driver.execute_script(js)
+    time.sleep(1)
     driver.find_element(By.XPATH,"//div[text()='+ 新增']").click()
     time.sleep(2)
     managerment=('校领导','总务部','安全保卫','人事部','教导处')
@@ -133,7 +134,7 @@ def related_personal(driver):
     managerment2="".join(managerment1)
     driver.find_element(By.XPATH,"//span[text()='"+managerment2+"']/../../span[2]/span").click()
     time.sleep(1)
-    driver.find_element(By.XPATH,"//span[text()='加入通报']/..").click()
+    driver.find_element(By.XPATH,"//span[text()='加入通报 >']/..").click()
     time.sleep(1)
     driver.find_element(By.XPATH,"//span[text()='确 定']/..").click()
     time.sleep(1)
