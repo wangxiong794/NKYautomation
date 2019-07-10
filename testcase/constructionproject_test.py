@@ -10,7 +10,6 @@ from con_nky import common_funcation, constructionProject
 
 class ConstructionProject(unittest.TestCase):
 
-
     def setUp(self):
         chrome_options = Options()
         chrome_options.add_argument('--headless')

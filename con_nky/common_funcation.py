@@ -34,6 +34,11 @@ def agree(driver):
     driver.find_element(By.XPATH,"//span[text()='同 意']/..").click()
     time.sleep(1)
     driver.find_element(By.XPATH,"//span[text()='确 定']/..").click()
+def agree_new(driver):
+    time.sleep(1)
+    driver.find_element(By.XPATH,"//button[text()='同意']").click()
+    time.sleep(1)
+    driver.find_element(By.XPATH,"//span[text()='确 定']/..").click()
 def refuse(driver):
     time.sleep(1)
     driver.find_element(By.XPATH,"//span[text()='驳 回']/..").click()

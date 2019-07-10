@@ -14,15 +14,27 @@ def start_BA(driver):
     driver.find_element(By.XPATH,"//span[text()='+ 发起申请']/..").click()
 def choice_budget(driver):#选预算项
     time.sleep(0.5)
-    driver.find_element(By.XPATH,"//tbody[@class='ant-table-tbody']/tr[3]/td[1]/span[2]").click()
-    driver.find_element(By.XPATH,"//tbody[@class='ant-table-tbody']/tr[4]/td[1]/label/span[1]/input").click()
+    driver.find_element(By.XPATH,"//tbody[@class='ant-table-tbody']/tr[1]/td[1]/span[2]").click()
+    driver.find_element(By.XPATH,"//tbody[@class='ant-table-tbody']/tr[2]/td[1]/label/span[1]/input").click()
     time.sleep(0.5)
     driver.find_element(By.XPATH,"//span[text()='下一步']/..").click()
 def edit_money(driver):
     driver.find_element(By.XPATH,"//input[@placeholder='请输入申请金额']").send_keys('100')
     driver.find_element(By.XPATH,"//span[text()='下一步']/..").click()
-def edit_matter(driver,testmoney):
-    BA_matter="六月零食经费"+str(time.strftime('%m%d%H%M%S'))+testmoney
+def edit_matter(driver,ba_name):
+    try:
+        #是否申请采购
+        driver.find_element(By.XPATH,"//div[@id='isPurchase']/div/div").click()
+        time.sleep(0.1)
+        driver.find_element(By.XPATH,"//li[text()='是']").click()
+        #是否申请合同
+        driver.find_element(By.XPATH,"//div[@id='isContract']/div/div").click()
+        time.sleep(0.1)
+        driver.find_element(By.XPATH,"//body/div[5]/div/div/div/ul/li[1]").click()
+        
+    except:
+        pass
+    BA_matter=ba_name+str(time.strftime('%m%d%H%M%S'))
     driver.find_element(By.XPATH,"//textarea[@id='description']").send_keys(BA_matter)
 def fund_train(driver):#在培训经费页面增加培训费
     #培训费
@@ -82,6 +94,32 @@ def fund_labor(driver):#填经费页面加劳务费，labor:劳务
     #保存
     time.sleep(1)
     driver.find_element(By.XPATH,"//a[text()='保存']").click()
+def start_BA_RI(driver):
+    time.sleep(0.1)
+    driver.find_element(By.XPATH,"//span[text()='+ 发起报销']/..").click()
+    time.sleep(0.1)
+    driver.find_element(By.XPATH,"//div[@class='ant-spin-container']/ul/li[1]/ul/li/a").click()
+def edit_BA_RI(driver,BA_RI_des):
+    time.sleep(1)
+    #选流程
+    driver.find_element(By.XPATH,"//div[@id='billFlowDefineId']/div/div").click()
+    time.sleep(0.1)
+    driver.find_element(By.XPATH,"//li[text()='报销自审']").click()
+    #选择收款单位
+    driver.find_element(By.XPATH,"//div[@id='payee']/div/div").click()
+    time.sleep(0.1)
+    driver.find_element(By.XPATH,"//div[@id='payee']/div/div/ul/li/div/input").send_keys('随意增加')
+    driver.find_element(By.XPATH,"//div[@id='payee']/div/div/ul/li/div/input").send_keys(Keys.ENTER)
+    #重新编辑事由
+    driver.find_element(By.XPATH,"//textarea").clear()
+    driver.find_element(By.XPATH,"//textarea").send_keys(BA_RI_des+str(time.time()))
+    
+def BA_RI(driver):
+    choice_RI(driver)#选菜单
+    start_BA_RI(driver)#选择经费单报销
+    edit_BA_RI(driver,'经费报销')
+    RIsubmit(driver)
+    agree(driver)
 def choice_RI(driver):
     driver.find_element(By.XPATH,'//span[text()="支出管理"]/..').click()
     time.sleep(0.5)
@@ -104,7 +142,45 @@ def choice_paymethod(driver):
     paymethod="".join(paymethod)
     time.sleep(0.1)
     driver.find_element(By.XPATH,"//li[text()='"+paymethod+"']").click()
-def standard_BA(driver):
+def BA_recopy(driver):#复制单据，先撤销再驳回，最后再作废
+    time.sleep(1)
+    driver.find_element(By.XPATH,"//span[text()='撤销申请']/..").click()
+    time.sleep(1)
+    driver.find_element(By.XPATH,"//span[text()='确 定']/..").click()
+    time.sleep(1)
+    driver.find_element(By.XPATH,"//span[text()='复制单据']/..").click()
+    time.sleep(1)
+    driver.find_element(By.XPATH,"//span[text()='下一步']/..").click()
+    submit(driver)
+    time.sleep(1)
+    driver.find_element(By.XPATH,"//span[text()='驳 回']/..").click()
+    time.sleep(1)
+    driver.find_element(By.XPATH,"//span[text()='确 定']/..").click()
+    time.sleep(1)
+    driver.find_element(By.XPATH,'//*[@id="root"]/div/section/section/main/div/div[2]/div[1]/div[1]/div/div[2]/div[2]').click()
+    time.sleep(1)
+    driver.find_element(By.XPATH,"//div[@class='ant-table-body']/table/tbody/tr[1]/td[1]/div").click()
+    driver.find_element(By.XPATH,"//span[text()='复制单据']/..").click()
+    time.sleep(1)
+    driver.find_element(By.XPATH,"//span[text()='下一步']/..").click()
+    driver.find_element(By.XPATH,"//textarea").clear()
+    driver.find_element(By.XPATH,"//textarea").send_keys("作废验证"+str(time.time()))
+    submit(driver)
+    agree(driver)
+    time.sleep(1)
+    driver.find_element(By.XPATH,'//*[@id="root"]/div/section/section/main/div/div[2]/div[1]/div[1]/div/div[2]/div[2]').click()
+    time.sleep(1)
+    driver.find_element(By.XPATH,"//div[@class='ant-table-body']/table/tbody/tr[1]/td[1]/div").click()
+    driver.find_element(By.XPATH,"//span[text()='作 废']/..").click()
+    time.sleep(1)
+    driver.find_element(By.XPATH,"//span[text()='确 定']/..").click()
+    time.sleep(1)
+    d_text=driver.find_element(By.XPATH,'//*[@id="root"]/div/section/section/main/div/div[1]/div[1]/div/div[2]').text
+    if d_text == '已作废':
+        print('作废成功')
+    else:
+        print('作废失败')
+def standard_BA(driver):#标准无测算的经费单
     choice_BA(driver)
     start_BA(driver)
     choice_budget(driver)
@@ -113,7 +189,16 @@ def standard_BA(driver):
     edit_matter(driver,'')
     submit(driver)
     agree(driver)
-def choice_one_BA(driver):
+def standard_BA_copy(driver):#标准无测算的经费单复制单据
+    choice_BA(driver)
+    start_BA(driver)
+    choice_budget(driver)
+    edit_money(driver)
+    choice_apartment(driver)
+    edit_matter(driver,'无测算经费')
+    submit(driver)
+    BA_recopy(driver)
+def choice_one_BA(driver):#选一样测算非的经费单
     choice_BA(driver)
     start_BA(driver)
     choice_budget(driver)
@@ -147,10 +232,10 @@ def standard_NORI(driver):
     choice_budget(driver)
     i=random.randint(0,1)
     if i == 0:
-        mades=''
+        mades='无申请'
     if i == 1:
         choice_MA(driver)
-        mades='AG'
+        mades='无申请带事项'
     edit_money(driver)
     choice_apartment(driver)
     choice_paymethod(driver)
@@ -163,10 +248,10 @@ def standart_AGRI(driver):
     choice_budget(driver) 
     i=random.randint(0,1)
     if i == 0:
-        mades='AG'
+        mades='协议报销'
     if i == 1:
         choice_MA(driver)
-        mades='AGMA'
+        mades='协议报销带事项'
     edit_money(driver)
     choice_apartment(driver)
     choice_paymethod(driver)

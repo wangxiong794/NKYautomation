@@ -1,7 +1,7 @@
 '''资产卡片'''
 from selenium.webdriver.common.by import By
 import time
-from con_nky.common_funcation import submit, agree, choice_apartment
+from con_nky.common_funcation import submit, agree, choice_apartment,agree_new
 import random
 from selenium.webdriver.common.keys import Keys
 def choice_ac(driver):#选建卡菜单
@@ -53,7 +53,7 @@ def edit_FASI(driver):#编辑入库单
     #选审批流程
     driver.find_element(By.XPATH,"//div[@id='billFlowDefineId']/div/div").click()
     time.sleep(0.1)
-    driver.find_element(By.XPATH,"//li[text()='入库单自审']").click()
+    driver.find_element(By.XPATH,"//li[text()='固定资产入库单自审']").click()
 def edit_FASI_detail(driver):#手动新增入库明细
     driver.find_element(By.XPATH,"//*[@id='root']/div/section/section/main/div/div[3]/\
     div[2]/div/div/div/div/div/div/div[1]/div/table/tbody/tr/td[2]/div").click()
@@ -189,19 +189,116 @@ def edit_FARP(driver):#编辑领用单
     time.sleep(0.1)
     driver.find_element(By.XPATH,'//*[@id="root"]/div/section/section/main/div/div[3]/div[2]/\
     div/div/div/div/div/div/div[1]/div/table/tbody/tr/td[8]/div/div/div/div/div[2]/div/input').send_keys(Keys.ENTER)
-def choice_LCSI(driver):#低值易耗品入库-选菜单
+
+def choice_FADT(driver):#固定处置单
+    time.sleep(0.1)
+    driver.find_element(By.XPATH,"//span[text()='固定资产']").click()
+    time.sleep(0.5)
+    driver.find_element(By.XPATH,"//a[text()='资产处置']").click()
+    time.sleep(0.1)
+    driver.find_element(By.XPATH,"//div[text()='处置单']").click()
+def start_FADT(driver):#新增固定资产处置单
+    driver.find_element(By.XPATH,"//span[text()='新增处置']/..").click()
+def edit_FADT(driver):#编辑基本信息
+    time.sleep(0.5)
+    driver.find_element(By.XPATH,"//textarea").send_keys('资产处置'+str(time.time()))
+def edit_FADT_detail(driver):#处置明细
+    #点资产明细
+    driver.find_element(By.XPATH,"//div[@class='ant-table-content']/div[1]/div/table/tbody/tr/td[3]/div").click()
+    time.sleep(1)
+    #选第一条资产
+    driver.find_element(By.XPATH,"//span[text()='资产编号']/../../../../../../../../div[2]/table/tbody/tr[1]/td[1]/span/label/span/input").click()
+    time.sleep(0.5)
+    driver.find_element(By.XPATH,"//span[text()='确 定']/..").click()
+    time.sleep(1)
+    try:
+        driver.find_element(By.XPATH,"//div[@role='document' and @class='ant-modal ant-modal-confirm ant-modal-confirm-confirm']/div[2]/div/div/div[2]/button[2]").click()
+    except:
+        pass
+def lowcost_project(driver,assetProperty):#新增产品目录
+    #新增在一款产品目录
+    time.sleep(0.1)
+    driver.find_element(By.XPATH,"//span[text()='基础数据']").click()
+    time.sleep(0.1)
+    driver.find_element(By.XPATH,"//a[text()='产品目录']").click()
+    driver.find_element(By.XPATH,"//span[text()='新 增']/..").click()
+    time.sleep(0.5)
+    #编辑产品目录
+    driver.find_element(By.XPATH,"//input[@id='name']").send_keys(assetProperty+str(time.time()))
+    time.sleep(0.1)
+    driver.find_element(By.XPATH,"//textarea[@id='specification']").send_keys('型号'+str(time.time()))
+    #计量单位
+    driver.find_element(By.XPATH,"//div[@id='unitId']/div/div").click()
+    time.sleep(0.1)
+    driver.find_element(By.XPATH,"//div[@id='unitId']/div/div/div[3]/div/input").send_keys(Keys.ENTER)
+    #库存单位
+    driver.find_element(By.XPATH,"//div[@id='invenUnitId']/div/div").click()
+    time.sleep(0.1)
+    driver.find_element(By.XPATH,"//div[@id='invenUnitId']/div/div/div[3]/div/input").send_keys(Keys.ENTER)
+    #参考单价
+    driver.find_element(By.XPATH,"//input[@id='price']").send_keys('100')
+    #政采目录
+    driver.find_element(By.XPATH,"//div[@id='governmentPurchaseCatalogueId']/div/div").click()
+    time.sleep(0.1)
+    driver.find_element(By.XPATH,"//input[@id='governmentPurchaseCatalogueId']").send_keys(Keys.ENTER)
+    #资产性质--低值易耗品
+    driver.find_element(By.XPATH,"//div[@id='assetPropertyId']/div/div").click()
+    time.sleep(0.1)
+    driver.find_element(By.XPATH,"//li[text()='"+assetProperty+"']").click()
+    #保存并新增
+    driver.find_element(By.XPATH,"//span[text()='保 存']/..").click()
+def LCSI_01(driver):#低值易耗品入库单
     time.sleep(0.1)
     driver.find_element(By.XPATH,"//span[text()='低值易耗品']").click()
-    time.sleep(0.5)
+    time.sleep(0.1)
     driver.find_element(By.XPATH,"//a[text()='入库管理']").click()
     time.sleep(0.1)
     driver.find_element(By.XPATH,"//div[text()='入库单']").click()
-def start_LCSI(driver):#新增入库单
-    driver.find_element(By.XPATH,"//span[text()='新增入库单']").click()
+    driver.find_element(By.XPATH,"//span[text()='新增入库单']/..").click()
+    time.sleep(0.5)
+    #经办人
+    driver.find_element(By.XPATH,"//div[@id='operUserId']/div/div").click()
+    p_operuser=('陈东雪','雷军','张小龙','马云')
+    p_operuser=random.sample(p_operuser,1)
+    p_operuser="".join(p_operuser)
+    time.sleep(0.5)
+    driver.find_element(By.XPATH,"//li[text()='"+ p_operuser +"']").click()
+    #备注
+    driver.find_element(By.XPATH,"//textarea[@id='remark']").send_keys('自动化'+str(time.time()))
+    #入库明细
+    driver.find_element(By.XPATH,"//div[@class='ant-table-content']/div[1]/div/table/tbody/tr/td[3]/div").click()
+    time.sleep(1)
+    driver.find_element(By.XPATH,"/html/body/div[4]/div/div[2]/div/div[2]/div[2]/div[2]/div/div/div/div/div/div[2]/\
+    div/div/table/tbody/tr[1]/td/span/label/span/input").click()
+    time.sleep(0.1)
+    driver.find_element(By.XPATH,"//span[text()='确 定']/..").click()
+    time.sleep(0.5)
+    driver.find_element(By.XPATH,"//div[@class='ant-table-content']/div[1]/div/table/tbody/tr/td[9]/div").click()
+    driver.find_element(By.XPATH,"//div[@class='ant-table-content']/div[1]/div/table/tbody/tr/td[9]/div/div/div[2]/input").send_keys('100')
+    submit(driver)
+    agree_new(driver)
+def LCSO_01(driver):#新增领用出库单
+    time.sleep(0.1)
+    driver.find_element(By.XPATH,"//span[text()='低值易耗品']").click()
+    time.sleep(0.1)
+    driver.find_element(By.XPATH,"//a[text()='领用出库']").click()
+    time.sleep(0.1)
+    driver.find_element(By.XPATH,"//span[text()='+ 新增出库']/..").click()
+    #备注
+    driver.find_element(By.XPATH,"//textarea[@id='remark']").send_keys('自动化'+str(time.time()))
+    #出库明细
+    driver.find_element(By.XPATH,"//div[@class='ant-table-content']/div[1]/div/table/tbody/tr/td[3]/div").click()
+    time.sleep(1)
+    driver.find_element(By.XPATH,"/html/body/div[3]/div/div[2]/div/div[2]/div[2]/div/div/div/div/div/div/div[2]/div/\
+    div/table/tbody/tr[1]/td/span/label/span/input").click()
+    time.sleep(0.1)
+    driver.find_element(By.XPATH,"//span[text()='确 定']/..").click()
+    time.sleep(0.5)
+    driver.find_element(By.XPATH,"//div[@class='ant-table-content']/div[1]/div/table/tbody/tr/td[6]/div").click()
+    driver.find_element(By.XPATH,"//div[@class='ant-table-content']/div[1]/div/table/tbody/tr/td[6]/div/div/div[2]/input").send_keys('100')
+    submit(driver)
+    agree_new(driver)
 
-def LCSI_01(driver):#低值易耗品入库单
-    choice_LCSI(driver)
-    start_LCSI(driver)
 def FART_01(driver):#固定资产出库单
     choice_FART(driver)
     start_FART(driver)
@@ -214,6 +311,13 @@ def FARP_01(driver):#固定资产领用单
     start_FARP(driver)
     edit_FARP(driver)
     time.sleep(1)
+    submit(driver)
+    agree(driver)
+def FADT_01(driver):#固定资产处置单
+    choice_FADT(driver)
+    start_FADT(driver)
+    edit_FADT(driver)
+    edit_FADT_detail(driver)
     submit(driver)
     agree(driver)
 def FASI_01(driver):#固定资产入库单

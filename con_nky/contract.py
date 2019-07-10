@@ -1,6 +1,7 @@
 ''''''
 from con_nky.constructionProject import choice_apartment
-from con_nky.common_funcation import agree, submit
+from con_nky.common_funcation import agree, submit, RIsubmit
+from con_nky.pay import choice_RI,edit_BA_RI, start_BA_RI
 import random
 '''
 Created on 2019年1月30日
@@ -220,3 +221,16 @@ def CT_refuse(driver,new_reason):#驳回+复制单据
     time.sleep(1)
     n_text=driver.find_element(By.XPATH,"//span[text()='同 意']/..").text
     return n_text
+def start_CT_RI(driver):#选合同发起报销
+    time.sleep(0.1)
+    driver.find_element(By.XPATH,"//span[text()='+ 发起报销']/..").click()
+    time.sleep(0.1)
+    driver.find_element(By.XPATH,"//div[@class='ant-tabs-nav ant-tabs-nav-animated']/div[1]/div[2]").click()
+    time.sleep(1)
+    driver.find_element(By.XPATH,"//div[@class='ant-spin-container']/ul/li[1]/ul/li/a").click()
+def CT_RI(driver):
+    choice_RI(driver)
+    start_BA_RI(driver)
+    edit_BA_RI(driver, '合同报销')
+    RIsubmit(driver)
+    agree(driver)

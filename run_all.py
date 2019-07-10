@@ -16,7 +16,7 @@ def run_all():
     suite7=unittest.defaultTestLoader.loadTestsFromModule(budget_test)
     suite8=unittest.defaultTestLoader.loadTestsFromModule(asset_test)
     suite.addTests([suite1,suite2,suite3,suite4,suite5,suite6,suite7,suite8])
-    BeautifulReport(suite).report(filename='TestReport', description='内控易测试报告',report_dir=".")    #log_path='.'把report放到当前目录下   
+    BeautifulReport(suite).report(filename='TestReport1', description='内控易测试报告',report_dir=".")    #log_path='.'把report放到当前目录下   
 def send_report():
     from email.header import Header
     from email.mime.text import MIMEText
@@ -47,5 +47,5 @@ def send_report():
     server.quit()
 if __name__ == '__main__':
     run_all()
-    send_report()
+#     send_report()
     

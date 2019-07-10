@@ -27,40 +27,42 @@ class contractQuery(unittest.TestCase):
     def tearDown(self):
         self.driver.quit()
         #合同申请--报销申请--经费核销 
-    def test_01_contract(self):#1期付款计划合同
-        '''1期付款计划合同'''
-        money=contract.contract_before(self.driver,'I') 
-        contract.contract1(self.driver,money)
-        contract.contract_after(self.driver) 
-    def test_02_contract(self):#2期付款计划合同
-        '''2期付款计划合同'''
-        money=contract.contract_before(self.driver, "II")
-        contract.contract2(self.driver,money)
-        contract.contract_after(self.driver)
-    def test_03_CT(self):#两期合同+变更
-        '''两期合同+变更'''
-        money=contract.contract_before(self.driver,"II前")
-        contract.contract2(self.driver,money)
-        contract.contract_after(self.driver)
-        contract.contract_change(self.driver)
-    def test_04_CT(self):#撤销合同+复制
-        '''撤销合同+复制'''
-        money=contract.contract_before(self.driver,"II前")
-        contract.contract2(self.driver,money)
-        n_text=contract.CT_copy(self.driver,"II后")
-        self.assertEqual(n_text,'同 意',msg='复制失败')
-    def test_05_CT(self):#驳回+复制
-        '''驳回合同+复制'''
-        money=contract.contract_before(self.driver,'II前')
-        contract.contract2(self.driver,money)
-        n_text=contract.CT_refuse(self.driver,'II后')
-        self.assertEqual(n_text,'同 意',msg='复制失败')
-    def test_06_CT(self):#撤销+复制+讨论
-        '''撤销+复制+讨论'''
-        money=contract.contract_before(self.driver,"II前")
-        contract.contract2(self.driver,money)
-        n_text=contract.CT_copy_discussion(self.driver,'II后')
-        self.assertEqual(n_text,'暂无数据',msg='复制合同将讨论复制过来了')
-
+#     def test_01_contract(self):#1期付款计划合同
+#         '''1期付款计划合同'''
+#         money=contract.contract_before(self.driver,'I') 
+#         contract.contract1(self.driver,money)
+#         contract.contract_after(self.driver) 
+#     def test_02_contract(self):#2期付款计划合同
+#         '''2期付款计划合同'''
+#         money=contract.contract_before(self.driver, "II")
+#         contract.contract2(self.driver,money)
+#         contract.contract_after(self.driver)
+#     def test_03_CT(self):#两期合同+变更
+#         '''两期合同+变更'''
+#         money=contract.contract_before(self.driver,"II前")
+#         contract.contract2(self.driver,money)
+#         contract.contract_after(self.driver)
+#         contract.contract_change(self.driver)
+#     def test_04_CT(self):#撤销合同+复制
+#         '''撤销合同+复制'''
+#         money=contract.contract_before(self.driver,"II前")
+#         contract.contract2(self.driver,money)
+#         n_text=contract.CT_copy(self.driver,"II后")
+#         self.assertEqual(n_text,'同 意',msg='复制失败')
+#     def test_05_CT(self):#驳回+复制
+#         '''驳回合同+复制'''
+#         money=contract.contract_before(self.driver,'II前')
+#         contract.contract2(self.driver,money)
+#         n_text=contract.CT_refuse(self.driver,'II后')
+#         self.assertEqual(n_text,'同 意',msg='复制失败')
+#     def test_06_CT(self):#撤销+复制+讨论
+#         '''撤销+复制+讨论'''
+#         money=contract.contract_before(self.driver,"II前")
+#         contract.contract2(self.driver,money)
+#         n_text=contract.CT_copy_discussion(self.driver,'II后')
+#         self.assertEqual(n_text,'暂无数据',msg='复制合同将讨论复制过来了')
+    def test_11_CT_RI(self):
+        '''合同报销单'''
+        contract.CT_RI(self.driver)
 if __name__ == '__main__':
     unittest.main()
