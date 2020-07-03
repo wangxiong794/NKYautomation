@@ -1,0 +1,16 @@
+method: POST
+uri: /nky/service/Reimburse
+
+单支付明细正常提交:
+  data: {
+      amount: 10,
+      paySettingId: 303,
+      billFlowDefineId: 10001,
+      description: "10",
+      reimbursePayItems: [{amount: 10, paySettingId: 303}],
+      fiscalYearId: 10000,
+      contractItemId: null,
+      srcBillId: null,
+      budgetApplicationId: null,
+      reimburseItems: [{budgetItemId: 10000, amount: 10, actual: 0}]
+  }

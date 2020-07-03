@@ -1,0 +1,122 @@
+method: POST
+uri: /nky/service/BudgetApplication
+
+无任何明细正常提交事前单:
+  data: {
+         'departmentId': 10008,
+         'amount': ' 10',
+         'billFlowDefineId': 10000,
+         'fiscalYearId': 10000,
+         'schoolYearId': ' null',
+         'budgetApplicationItems': [{"budgetItemId": 10000, "amount": 10}],
+         'isPurchase': ' true',
+         'isContract': ' true',
+         'isReimburse': ' true'}
+  check: 单据号
+
+事前单主表与预算明细金额不一致:
+  data: {
+         'departmentId': 10008,
+         'amount': ' 100',
+         'billFlowDefineId': 10000,
+         'fiscalYearId': 10000,
+         'schoolYearId': ' null',
+         'budgetApplicationItems': [{"budgetItemId": 10000, "amount": 10}],
+         'isPurchase': ' true',
+         'isContract': ' true',
+         'isReimburse': ' true'}
+  check: {"code":"10109",
+       "description":"申请金额不能为空或者申请金额和预算项明细金额不一致！",
+       "message":"申请金额不能为空或者申请金额和明细金额不一致！"}
+
+申请金额超过预算项可用金额:
+  data: {
+    'departmentId': 10008,
+    'amount': ' 99999999',
+    'billFlowDefineId': 10000,
+    'fiscalYearId': 10000,
+    'schoolYearId': ' null',
+    'budgetApplicationItems': [{"budgetItemId": 10000, "amount": 99999999}],
+    'isPurchase': ' true',
+    'isContract': ' true',
+    'isReimburse': ' true'}
+  check: {"code":"10002",
+          "description":"check BudgetItem failed for id=10000",
+          "message":"申请金额不能超过可用预算"}
+
+带申请明细正常提交事前单:
+  data: {
+    'departmentId': 10008,
+    'amount': ' 100',
+    'billFlowDefineId': 10000,
+    'fiscalYearId': 10000,
+    'schoolYearId': ' null',
+    'budgetApplicationItems': [{"budgetItemId": 10000, "amount": 100}],
+    'budgetApplicationDetails': [{name: "10",
+            'amount': 100,
+            'specification': "10",
+            'unitId': 2,
+            'quantity': 10,
+            'price': 10,
+            'supplierId': 10000,
+            'governmentPurchaseCatalogueId': 1,
+            'description': "10"}],
+    'isPurchase': ' true',
+    'isContract': ' true',
+    'isReimburse': ' true',}
+  check: 单据号
+
+申请金额为0提交事前单:
+  data: {
+      departmentId: 10008,
+      amount: 0,
+      billFlowDefineId: 10000,
+      description: "10",
+      fiscalYearId: 10000,
+      schoolYearId: null,
+      budgetApplicationItems: [{budgetItemId: 10000, amount: 0}],
+      isPurchase: true,
+      isContract: true,
+      isReimburse: true,
+  }
+  check: 单据号
+
+申请金额为负数提交事前单:
+  data: {
+      departmentId: 10008,
+      amount: -10,
+      billFlowDefineId: 10000,
+      description: "10",
+      fiscalYearId: 10000,
+      schoolYearId: null,
+      budgetApplicationItems: [{budgetItemId: 10000, amount: -10}],
+      isPurchase: true,
+      isContract: true,
+      isReimburse: true,
+  }
+  check: 单据号
+
+申请金额小于申请明细金额合计事前单:
+  data: {
+    departmentId: 10008,
+    amount: 10,
+    billFlowDefineId: 10000,
+    description: "10",
+    fiscalYearId: 10000,
+    schoolYearId: null,
+    budgetApplicationItems: [{budgetItemId: 10000, amount: 10}],
+    budgetApplicationDetails: [{name: "10",
+                                  'amount': 100,
+                                  'specification': "10",
+                                  'unitId': 2,
+                                  'quantity': 10,
+                                  'price': 10,
+                                  'supplierId': 10000,
+                                  'governmentPurchaseCatalogueId': 1,
+                                  'description': "10"}],
+    isPurchase: true,
+    isContract: true,
+    isReimburse: true,
+  }
+  check: 单据号
+

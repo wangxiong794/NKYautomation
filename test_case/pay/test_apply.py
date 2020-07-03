@@ -1,0 +1,74 @@
+# coding=utf-8
+import datetime
+import os
+
+from ddt import ddt, data
+import unittest
+import json
+from config import ip, user_id, common_header
+from get_root_path import root_dir
+from service import login, check
+from service.check import Check
+from service.readYaml import operYaml
+from service.send import sendRequest
+from service.writeLog import writeLog
+
+@ddt
+class test_Apply(unittest.TestCase):
+    yamlPath = ['pay', 'apply.yaml']
+    yaml_path = os.path.join(root_dir, "yamlCase")
+    for dir in yamlPath:
+        yaml_path = os.path.join(yaml_path, dir)
+    oper_yaml = operYaml(yaml_path)
+    case_list = oper_yaml.caseList()
+
+    method = case_list[0]["method"]
+    uri = case_list[1]["uri"]
+
+    # 跳过说明
+    # reason = confParam("skip_reason")
+
+    @classmethod
+    def setUpClass(cls):
+
+        # 拼接接口地址
+        cls.cook = login.get_cookie_login()
+        cls.url = 'http://' + ip + cls.uri
+
+        # 请求信息头
+        cls.headers = common_header
+        cls.headers['Cookie'] = cls.cook
+
+    # case_list传进去做数据驱动
+    @data(*case_list[2:])
+    def test_Apply(self, cases):
+
+        for caseName, caseInfo in cases.items():
+            caseName = caseName
+            data = caseInfo["data"]
+            check = caseInfo["check"]
+            self.__dict__['_testMethodDoc'] = caseName
+            data['modifiedUserId'] = user_id
+            data['applyDate'] = str(datetime.datetime.utcnow().isoformat())
+            data['description'] = str(caseName)
+
+        # 发送请求
+        response = sendRequest(self.method, self.url, self.headers, json.dumps(data))
+
+        # 接口返回文本信息
+        text = response.text
+        text_dict = json.loads(text)
+
+        # 写日志
+        writeLog(caseName, self.url, data, check, text)
+
+        # 断言
+        Check().check_bill(check, text_dict)
+
+    @classmethod
+    def tearDownClass(cls):
+        pass
+
+
+if __name__ == "__main__":
+    unittest.main()

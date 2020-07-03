@@ -1,0 +1,18 @@
+method: POST
+uri: /nky/service/session/login
+
+输入不存在用户名登录:
+  data: {"userName": "1",
+          "password": "olXQDo5ZTjQEJTOWG6gfl+5yblZkGdoiIWddktFXVE8=,BmgfSsDsMCr1fVw2MU9cDCC9KAfCb7PG,cHpQZmuKrQDEiwhhFq2+xOAq/4zG9la/2QtTI/eviFVc0/kA9fug1ldu/KnoZpHtwaxZVzjw/aPfjNFfG7U4VFtFQ3KM8bjDQbdnz+ZnOO8=",
+           "round": "14880"}
+  check:
+    errors: {"errcode":-1}
+
+输入用户名为空登陆:
+  data: {"userName": "",
+         "password": "olXQDo5ZTjQEJTOWG6gfl+5yblZkGdoiIWddktFXVE8=,BmgfSsDsMCr1fVw2MU9cDCC9KAfCb7PG,cHpQZmuKrQDEiwhhFq2+xOAq/4zG9la/2QtTI/eviFVc0/kA9fug1ldu/KnoZpHtwaxZVzjw/aPfjNFfG7U4VFtFQ3KM8bjDQbdnz+ZnOO8=",
+         "round": "14880"}
+  check:
+    errors: {'errcode':-1}
+
+
