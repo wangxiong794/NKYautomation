@@ -2,11 +2,11 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import time
-
+import unittest
 from service.bpm_service import common_funcation
 from service.bpm_service.common_funcation import choice_apartment, submit, agree, RIsubmit, enter_apartment, \
     choice_path, invalid, \
-    cancel, choice_menu, delete_bill, refuse
+    cancel, choice_menu, delete_bill, refuse, choice_calendar, con
 from selenium.webdriver.common.keys import Keys
 import random
 import datetime
@@ -38,16 +38,19 @@ def choice_budget(driver):  # 选预算项
     elif l1 == "关闭行":
         l2 = str(driver.find_element(By.XPATH, "//tbody[@class='ant-table-tbody']/tr[2]/td[1]/div").get_attribute(
             "aria-label"))
+        time.sleep(0.5)
         if l2 == "展开行":
             driver.find_element(By.XPATH, "//tbody[@class='ant-table-tbody']/tr[2]/td[1]").click()
             time.sleep(0.1)
             driver.find_element(By.XPATH, "//tbody[@class='ant-table-tbody']/tr[3]/td[1]").click()
-        else:
+        elif l2 == "关闭行":
             driver.find_element(By.XPATH, "//tbody[@class='ant-table-tbody']/tr[3]/td[1]").click()
             time.sleep(0.1)
             driver.find_element(By.XPATH, "//tbody[@class='ant-table-tbody']/tr[4]/td[1]").click()
+        else:
+            print("预算项层级太深,暂不支持")
     else:
-        print("预算项层级太深")
+        print("预算项层级太深，暂不支持")
     time.sleep(0.5)
     driver.find_element(By.XPATH, "//span[text()='下一步']/..").click()
 
@@ -93,13 +96,7 @@ def train(driver):  # 增加培训费
     # 日历
     driver.find_element(By.XPATH, "//span[@id='date']/span/input[1]").click()
     time.sleep(0.5)
-    driver.find_element(By.XPATH,
-                        "//td[@class='ant-calendar-cell ant-calendar-today ant-calendar-selected-date "
-                        "ant-calendar-last-day-of-month']/div").click()
-    time.sleep(1)
-    driver.find_element(By.XPATH, "//td[@class='ant-calendar-cell ant-calendar-today ant-calendar-selected-start-date "
-                                  "ant-calendar-selected-date ant-calendar-last-day-of-month "
-                                  "ant-calendar-selected-day']/div").click()
+    choice_calendar(driver)
     # 地点
     driver.find_element(By.XPATH, "//input[@id='location']").send_keys('培训地点' + time.strftime('%m%d%H%M%S'))
     # 培训类别
@@ -181,14 +178,7 @@ def travel(driver):  # 差旅费测算
     # 日历
     time.sleep(1)
     driver.find_element(By.XPATH, "//div[@title='出差时间']/../div[3]/div/div/div/span/span/span/input[1]").click()
-    time.sleep(0.5)
-    driver.find_element(By.XPATH,
-                        "//td[@class='ant-calendar-cell ant-calendar-today ant-calendar-selected-date "
-                        "ant-calendar-last-day-of-month']/div").click()
-    time.sleep(1)
-    driver.find_element(By.XPATH, "//td[@class='ant-calendar-cell ant-calendar-today ant-calendar-selected-start-date "
-                                  "ant-calendar-selected-date ant-calendar-last-day-of-month "
-                                  "ant-calendar-selected-day']/div").click()
+    choice_calendar(driver)
 
     # 出差地点--第一个地区北京
     driver.find_element(By.XPATH, "//div[@title='出差地点']/../div[3]/div/div/div/span/span").click()
@@ -269,14 +259,7 @@ def meeting(driver):  # 会议费测算
     driver.find_element(By.XPATH, "//button[@testid='3']").click()
     driver.find_element(By.XPATH, "//input[@id='meetingName']").send_keys('会议一')
     driver.find_element(By.XPATH, "//span[@id='dateRange']/span/input[1]").click()
-    time.sleep(0.5)
-    driver.find_element(By.XPATH,
-                        "//td[@class='ant-calendar-cell ant-calendar-today ant-calendar-selected-date "
-                        "ant-calendar-last-day-of-month']/div").click()
-    time.sleep(1)
-    driver.find_element(By.XPATH, "//td[@class='ant-calendar-cell ant-calendar-today ant-calendar-selected-start-date "
-                                  "ant-calendar-selected-date ant-calendar-last-day-of-month "
-                                  "ant-calendar-selected-day']/div").click()
+    choice_calendar(driver)
     # 参会人数
     driver.find_element(By.XPATH, "//input[@id='meetingAddress']").send_keys('地点一')
     driver.find_element(By.XPATH, "//div[@id='meetingLevelId']/div/div").click()
@@ -335,6 +318,7 @@ def BA_RI(driver):
 
 
 def choice_RI(driver):
+    time.sleep(0.1)
     driver.find_element(By.XPATH, '//span[text()="支出管理"]/..').click()
     time.sleep(0.5)
     driver.find_element(By.XPATH, "//a[text()='报销申请']").click()
@@ -384,6 +368,8 @@ def BA_recopy(driver):  # 复制单据，先撤销再驳回，最后再作废
     time.sleep(1)
     driver.find_element(By.XPATH, "//span[text()='确 定']/..").click()
     time.sleep(1)
+    driver.find_element(By.XPATH,"//span[text()='确认驳回该单据？']/../../div[2]/button[2]").click()
+    time.sleep(1)
     choice_BA(driver)
     time.sleep(1)
     driver.find_element(By.XPATH, "//div[@class='ant-table-body']/table/tbody/tr[1]/td[1]/div").click()
@@ -411,13 +397,7 @@ def official(driver):  # 接待费标准测算
     driver.find_element(By.XPATH, "//span[@id='receptionDate']").click()
     time.sleep(1)
     time.sleep(0.5)
-    driver.find_element(By.XPATH,
-                        "//td[@class='ant-calendar-cell ant-calendar-today ant-calendar-selected-date "
-                        "ant-calendar-last-day-of-month']/div").click()
-    time.sleep(1)
-    driver.find_element(By.XPATH, "//td[@class='ant-calendar-cell ant-calendar-today ant-calendar-selected-start-date "
-                                  "ant-calendar-selected-date ant-calendar-last-day-of-month "
-                                  "ant-calendar-selected-day']/div").click()
+    choice_calendar(driver)
     driver.find_element(By.XPATH, "//input[@id='receptionNumber']").send_keys(1)
     driver.find_element(By.XPATH, "//input[@id='guestNumber']").send_keys(1)
     driver.find_element(By.XPATH, "//input[@id='accompanyNumber']").send_keys(1)
@@ -431,6 +411,7 @@ def official(driver):  # 接待费标准测算
 def start_BA_RI(driver):
     choice_BA(driver)
     time.sleep(0.1)
+    driver.refresh()
     driver.find_element(By.XPATH, "//div[@class='ant-table-body']/table/tbody/tr[1]/td[1]/div").click()
     time.sleep(0.5)
     driver.find_element(By.XPATH, "//button[text()='更多']").click()
@@ -463,6 +444,7 @@ def RI_official(driver):
     driver.find_element(By.XPATH, "//div[@id='staffRankIdAccompany_0']/div").click()
     time.sleep(0.1)
     driver.find_element(By.XPATH, "//input[@id='staffRankIdAccompany_0']").send_keys(Keys.ENTER)
+    driver.find_element(By.XPATH, "//input[@id='guestUnitAccompany_0']").send_keys('test')
     # 工作餐
     js = 'var q =document.querySelector("#globalLayoutContent").scrollTo(0,1000)'
     driver.execute_script(js)
@@ -589,6 +571,7 @@ def RI_labor(driver):  # 劳务费报销
     driver.find_element(By.XPATH, "//input[@placeholder='请输入专家姓名']").send_keys('叶安世')
     time.sleep(0.5)
     driver.find_element(By.XPATH, "//td[text()='叶安世']/..").click()
+    time.sleep(0.2)
     driver.find_element(By.XPATH, "//span[text()='确 定']/..").click()
     time.sleep(0.5)
     # 劳务分类
@@ -882,13 +865,17 @@ def train_BA_RI(driver):  # 培训费测算与报销
 
 def choice_MA(driver):
     time.sleep(0.1)
-
-    driver.find_element(By.XPATH, "//span[text()='关联单据']/..").click()
-    time.sleep(0.2)
-    driver.find_element(By.XPATH,
-                        "//div[@class='ant-table-scroll']/div[2]/table/tbody/tr[1]/td[1]/span/label/span/input").click()
+    driver.find_element(By.XPATH,"//button[@testid='relatedBill']").click()
     time.sleep(0.1)
-    driver.find_element(By.XPATH, "//span[text()='确认选择']/..").click()
+
+    driver.find_element(By.XPATH, "//button[text()='关联单据']").click()
+    time.sleep(0.2)
+    # TODO 若没有事项申请单，此处会报错，应该要写断言，还不知道咋写
+    ma_path = driver.find_element(By.XPATH,"//div[@class='ant-modal-body']/div/div/div/div/div/div/div/div[2]/table/tbody/tr[1]")
+
+    ma_path.click()
+    time.sleep(0.1)
+    driver.find_element(By.XPATH, "//span[text()='确 定']/..").click()
 
 
 def standard_NORI(driver):
@@ -941,7 +928,8 @@ def standard_NORI2(driver):
     choice_budget(driver)
     # choice_MA(driver) # 选关联事项申请单
     # RI_labor(driver)
-    driver.find_element(By.XPATH, "//button[@testid='official']")
+
+    driver.find_element(By.XPATH, "//button[@testid='official']").click()
     time.sleep(0.5)
     RI_official(driver)
     edit_money1(driver, '500')
@@ -965,8 +953,9 @@ def standard_NORI3(driver):
     start_NORI(driver)
     choice_budget(driver)
     choice_MA(driver)  # 选关联事项申请单
+    time.sleep(0.1)
     js = 'var q = document.querySelector("#globalLayoutContent").scrollTo(0,-400)'
-    RI_labor(driver)
+    # RI_labor(driver)
     driver.execute(js)
     RI_official(driver)
     driver.find_element(By.XPATH, "//button[@testid='official']")
@@ -1056,6 +1045,7 @@ def invalid_NO_RI2(driver):  # 作废报销单
     choice_budget(driver)
     # choice_MA(driver) # 选关联事项申请单
     # RI_labor(driver)
+    driver.find_element(By.XPATH, "//button[@testid='official']").click()
     RI_official(driver)
     edit_money1(driver, '500')
     enter_apartment(driver)
@@ -1288,11 +1278,78 @@ def IM3(driver):  # 从详情页
     submit(driver)
     refuse(driver)
     time.sleep(0.5)
-    choice_menu(driver,"支出管理","预付申请")
+    choice_menu(driver,"支出管理", "预付申请")
     time.sleep(0.5)
     driver.find_element(By.XPATH, "//div[@class='ant-table-body']/table/tbody/tr[1]/td[1]/div").click()
     time.sleep(0.5)
     delete_bill(driver)
+
+
+class Pay(con):
+
+    def menu(self):
+        self.choice_menu('支出管理', '事前申请')
+
+    def add(self):
+        time.sleep(0.5)
+        self.dr("//span[text()='+ 发起申请']/..").click()
+
+    def editMoney(self, money='500',placeholder='请输入申请金额'):
+        self.dr("//input[@placeholder='"+placeholder+"']").send_keys(money)
+        self.dr("//span[text()='下一步']/..").click()
+        time.sleep(1)
+        self.dr("//span[text()='继续留下']/..").click()
+
+    def viewAddReimburse(self):
+        # from budgetApplication billView add reimburse
+        self._more()
+        self.dr("//li[text()='发起报销']").click()
+
+    def payDetail(self):
+        # 需要先判断是否开启多支付明细，默认不开启
+        self.dr("//div[@id='paySettingId_0']/div/div").click()
+        time.sleep(0.1)
+        self.dr("//input[@id='paySettingId_0']").send_keys(Keys.ENTER)
+        time.sleep(1)
+        self.dr("//div[@id='payeeFullName_0']/div/div/ul/li/div/input").send_keys("单位")
+
+    def editReimburse(self,money="500"):
+        # self.dr("//input[@placeholder='请输入报销金额']").send_keys(money)
+        self._nextPage()
+        # self.enterDepart()
+        self.choicePath('报销申请单自审')
+        self.payDetail()
+
+    def submitReimburse(self):
+        time.sleep(0.1)
+        self.dr("//span[text()='确认提交']/..").click()
+        time.sleep(0.5)
+        self.dr("//span[text()='确 认']/..").click()
+        time.sleep(0.1)
+        self.dr("//span[text()='查看详情']/..").click()
+
+    def check(self):
+        # reimburse bill use
+        self._more()
+        self.dr("//button[text()='资金领用']").click()
+        time.sleep(1)
+        self.dr("//div[@id='checkOwnerId']/div/div").click()
+        time.sleep(0.5)
+        self.dr("//input[@id='checkOwnerId']").send_keys(Keys.ENTER)
+        self.dr("//div[@id='checkNumber']/div").click()
+        time.sleep(0.5)
+        check_number = '支票号' + time.strftime('%m%d%H%M%S')
+        self.dr("//input[@id='checkNumber']").send_keys(check_number)
+        self.dr("//li[text()='" + check_number + "']").click()
+        self.dr("//span[text()='确认领用']/..").click()
+
+    def useCheck(self):
+        self.choice_menu('支出管理', "报销申请")
+        self.inView()
+        self.check()
+        self._more()
+        self.dr("//button[text()='经费核销']").click()
+        self._sure()
 
 
 if __name__ == "__main__":

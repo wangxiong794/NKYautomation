@@ -4,7 +4,7 @@ import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
-from service.bpm_service.common_funcation import choice_menu, start_add, choice_path, enter_apartment, submit, cancel, deletebill, \
+from service.bpm_service.common_funcation import choice_menu, start_add, choice_path, enter_apartment, submit, cancel, delete_bill, \
     refuse, agree, invalid
 from service.bpm_service.pay import edit_matter, edit_matter1
 
@@ -55,7 +55,7 @@ def cancel_MA(driver):  # 撤销删除
     edit_matter(driver,'事项申请')
     submit(driver)
     cancel(driver)
-    deletebill(driver)
+    delete_bill(driver)
 
 
 def copy_MA(driver):    # 驳回复制 通过

@@ -1,3 +1,8 @@
+import json
+
+import requests
+from selenium.webdriver import ActionChains
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 import time
 from selenium.webdriver.common.keys import Keys
@@ -7,9 +12,228 @@ from selenium.common.exceptions import NoSuchElementException
 
 # http://39.106.158.149/nky
 # dev3 47.93.245.21
-nky_url = 'http://123.56.223.19/nky'
+from config import common_header
+
+# 123.56.223.19
+nky_url = 'http://47.93.196.74/nky'
 username = 'chendongxue'
 password = 'nky2018'
+chrome_options = Options()
+chrome_options.add_argument('--headless')
+chrome_options.add_argument('--disable-gpu')
+driver = webdriver.Chrome(chrome_options=chrome_options)
+# driver = webdriver.Chrome()
+
+
+class con(object):
+    def __init__(self, driver):  # 如果不传driver，就默认这个值
+        self.dr = driver.find_element_by_xpath
+        self.driver = driver
+        self._ip = "47.93.196.74"
+
+    def login(self):
+        self.driver.get(nky_url)
+        self.dr("//input[@id='userName']").send_keys(username)
+        self.dr("//input[@id='password']").send_keys(password)
+        self.dr("//button[@data-test-id='LogInButton']").click()
+        time.sleep(5)
+
+    def submit(self):
+        time.sleep(0.5)
+        self.dr("//span[text()='确认提交']/..").click()
+        time.sleep(1)
+        self.dr("//span[text()='查看详情']/..").click()
+
+    def agree(self):
+        time.sleep(1)
+        self.dr("//button[text()='同意']").click()
+        time.sleep(1)
+        self.dr("//span[text()='确 定']/..").click()
+
+    def void(self):
+        time.sleep(0.5)
+        self.dr("//button[text()='更多']").click()
+        time.sleep(0.5)
+        self.dr("//button[text()='作废']").click()
+        time.sleep(0.5)
+        self.dr("//span[text()='确 定']/..").click()
+        self.driver.refresh()
+        time.sleep(1)
+
+    def delBill(self):
+        time.sleep(1)
+        self.dr("//button[text()='更多']").click()
+        self.dr("//button[text()='删除']").click()
+        time.sleep(0.5)
+        self.dr("//span[text()='确 定']/..").click()
+        time.sleep(0.5)
+
+    def choice_menu(self, menu1, menu2):
+        time.sleep(0.5)
+        self.dr('//span[text()="' + menu1 + '"]/..').click()
+        time.sleep(0.5)
+        self.dr("//a[text()='" + menu2 + "']").click()
+
+    def remark(self, remark="remark"):
+        self.dr("//textarea[@id='remark']").send_keys(remark)
+
+    def inView(self):
+        # from bill list choice the fist bill into view
+        time.sleep(1)
+        self.dr("//div[@class='ant-table-body']/table/tbody/tr[1]/td[1]/div").click()
+
+    def cancel(self):
+        time.sleep(0.5)
+        self.dr("//button[text()='更多']").click()
+        time.sleep(0.1)
+        self.dr("//button[text()='撤销申请']").click()
+        time.sleep(0.5)
+        self.dr("//span[text()='确 认']/..").click()
+        self.driver.refresh()
+
+    def refuse(self):
+        time.sleep(1)
+        self.dr("//button[text()='驳回']").click()
+        time.sleep(1)
+        self.dr("//span[text()='确 定']/..").click()
+
+    def operator(self):
+        # the first user in the list is the purchase operator by default
+        self.dr("//div[@id='operUserId']/div").click()
+        time.sleep(0.1)
+        self.dr("//input[@id='operUserId']").send_keys(Keys.ENTER)
+
+    def enterDepart(self):
+        # from department list choice the fist one
+        time.sleep(0.5)
+        self.dr("//div[@id='departmentId']/div/div").click()
+        time.sleep(0.1)
+        self.dr("//input[@id='departmentId']").send_keys(Keys.ENTER)
+
+    def _save(self):
+        self.dr("//span[text()='保 存']/..").click()
+        time.sleep(0.5)
+
+    def _sure(self):
+        time.sleep(0.1)
+        self.dr("//span[text()='确 定']/..").click()
+
+    def _more(self):
+        time.sleep(0.3)
+        self.dr("//button[text()='更多']").click()
+        time.sleep(0.3)
+
+    def _nextPage(self):
+        self.dr("//span[text()='下一步']/..").click()
+
+    def _choicePath(self, pathName):
+        self.dr("//div[@id='billFlowDefineId']/div/div").click()
+        time.sleep(0.5)
+        self.dr("//li[text()='" + pathName + "']").click()
+
+    def quit(self):
+        time.sleep(3)
+        self.dr('//*[@id="root"]/div/div/div/div[1]/div/span[3]').click()
+        time.sleep(0.1)
+        self.dr("//li[text()='退出登录']").click()
+
+    def reLogin(self, userName):
+        self.dr("//input[@id='userName']").send_keys(userName)
+        self.dr("//input[@id='password']").send_keys(password)
+        self.dr("//button[@data-test-id='LogInButton']").click()
+        time.sleep(5)
+
+    def choiceBudget(self):
+        time.sleep(1)
+        l1 = str(
+            self.dr("//tbody[@class='ant-table-tbody']/tr[1]/td[1]/div").get_attribute(
+                "aria-label"))
+        if l1 == "展开行":
+            self.dr("//tbody[@class='ant-table-tbody']/tr[1]/td[1]").click()
+            time.sleep(0.1)
+            self.dr("//tbody[@class='ant-table-tbody']/tr[2]/td[1]").click()
+        elif l1 == "关闭行":
+            l2 = str(self.dr("//tbody[@class='ant-table-tbody']/tr[2]/td[1]/div").get_attribute(
+                "aria-label"))
+            if l2 == "展开行":
+                self.dr("//tbody[@class='ant-table-tbody']/tr[2]/td[1]").click()
+                time.sleep(0.1)
+                self.dr("//tbody[@class='ant-table-tbody']/tr[3]/td[1]").click()
+            else:
+                self.dr("//tbody[@class='ant-table-tbody']/tr[3]/td[1]").click()
+                time.sleep(0.1)
+                self.dr("//tbody[@class='ant-table-tbody']/tr[4]/td[1]").click()
+        else:
+            print("预算项层级太深")
+        time.sleep(0.5)
+        self.dr("//span[text()='下一步']/..").click()
+
+    def choicePath(self, pathName):
+        time.sleep(0.5)
+        self.dr("//div[@id='billFlowDefineId']/div/div").click()
+        time.sleep(0.1)
+        self.dr("//li[text()='" + pathName + "']").click()
+
+    def editDescription(self, baName):
+        self.dr("//textarea[@id='description']").send_keys(baName + str(time.strftime('%m%d%H%M%S')))
+
+    def _cookie(self):
+        return self.driver.get_cookies()
+
+    def gqlBillStatus(self, billId):
+        g_url = "http://" + self._ip + "/nky/service/graphql"
+        check_bill = {
+            "query": "{↵  BudgetApplication(criteriaStr: \"(id =" + billId + ")\") {↵    statusId↵  }↵}↵"
+        }
+        common_header['cookies'] = self._cookie()
+        print(common_header['cookies'])
+        gql_check_result = requests.request('POST', g_url, headers=common_header, data=json.dumps(check_bill)).json()
+        bill_status = str(gql_check_result['data']['BudgetApplication'][0]['statusId'])
+        return bill_status
+
+    def budgetMoney(self, money="500"):
+        self.dr("//input[@placeholder='请输入申请金额']").send_keys(money)
+        self.dr("//span[text()='下一步']/..").click()
+        time.sleep(1)
+        self.dr("//span[text()='继续留下']/..").click()
+
+    def assertNkyUrl(self, pageUrl):
+        Url = self.driver.current_url
+        count = 0
+        if count < 5:
+            while pageUrl in Url:
+                pass
+            else:
+                time.sleep(1)
+                count += 1
+        else:
+            print("current url error!")
+
+    def nextReviewer(self, rolename):
+        reviewName = self.dr("//span[text()='"+rolename+"']/../div/div").text
+        # self.choice_menu('单位内控设置', '人员管理')
+        userDict = {
+            '马化腾': 'mahuateng',
+            '马云': 'mayun',
+            '李彦宏': 'liyanhong',
+            '丁磊': 'dinglei',
+            '张小龙': 'zhangxiaolong',
+            '张小虎': 'zhangxiaohu',
+            '张小军': 'zhangxiaojun',
+            '王兴': 'wangxing',
+            '王文京': 'wangwenjing',
+            '赵小云': 'zhaoxiaoyun',
+            '赵小风': 'zhaoxiaofeng',
+            '赵小雨': 'zhaoxiaoyu',
+            '赵小雷': 'zhaoxiaolei',
+            '赵小电': 'zhaoxiaodian',
+            '董明珠': 'dongmingzhu',
+            '雷军': 'leijun',
+            '雷鸣': 'leiming',
+            '陈东雪': 'chendongxue'
+        }
+        useName = userDict[reviewName]
+        return useName
 
 
 def login_code(driver):
@@ -18,8 +242,7 @@ def login_code(driver):
     driver.find_element(By.XPATH, "//input[@id='password']").send_keys(password)
     driver.find_element_by_xpath("//button[@data-test-id='LogInButton']").click()
     time.sleep(5)
-    driver.refresh()
-    
+
 
 def submit(driver):
     time.sleep(0.5)
@@ -42,16 +265,16 @@ def login_again(driver):
     time.sleep(5)
 
 
-def choice_menu(driver,menu1,menu2):
+def choice_menu(driver, menu1, menu2):
     time.sleep(0.1)
-    driver.find_element(By.XPATH, '//span[text()="'+menu1+'"]/..').click()
+    driver.find_element(By.XPATH, '//span[text()="' + menu1 + '"]/..').click()
     time.sleep(0.5)
-    driver.find_element(By.XPATH, "//a[text()='"+menu2+"']").click()
+    driver.find_element(By.XPATH, "//a[text()='" + menu2 + "']").click()
 
 
-def start_add(driver,button_name):
+def start_add(driver, button_name):
     time.sleep(0.5)
-    driver.find_element(By.XPATH, "//span[text()='"+button_name+"']/..").click()
+    driver.find_element(By.XPATH, "//span[text()='" + button_name + "']/..").click()
 
 
 def RIsubmit(driver):
@@ -73,6 +296,7 @@ def agree(driver):
 def cancel(driver):
     time.sleep(0.5)
     driver.find_element(By.XPATH, "//button[text()='更多']").click()
+    time.sleep(0.5)
     driver.find_element(By.XPATH, "//button[text()='撤销申请']").click()
     time.sleep(0.5)
     driver.find_element(By.XPATH, "//span[text()='确 认']/..").click()
@@ -99,6 +323,9 @@ def refuse(driver):
     driver.find_element(By.XPATH, "//button[text()='驳回']").click()
     time.sleep(1)
     driver.find_element(By.XPATH, "//span[text()='确 定']/..").click()
+    time.sleep(0.5)
+    driver.find_element(By.XPATH, "//span[text()='确认驳回该单据？']/../../div[2]/button[2]").click()
+    time.sleep(1)
 
 
 def creatuser(driver):
@@ -184,9 +411,9 @@ def fund_travel(driver):  # 填经费页面增加 差旅费
     # 日历
     driver.find_element(By.XPATH, "//span[@class='ant-calendar-picker-input ant-input']/input[1]").click()
     driver.find_element(By.XPATH, "//div[@class='ant-calendar-range-part ant-calendar-range-left']/div[2]/div["
-                                 "2]/table/tbody/tr[2]/td[5]/div").click()
+                                  "2]/table/tbody/tr[2]/td[5]/div").click()
     driver.find_element(By.XPATH, "//div[@class='ant-calendar-range-part ant-calendar-range-left']/div[2]/div["
-                        "2]/table/tbody/tr[2]/td[5]/div").click()
+                                  "2]/table/tbody/tr[2]/td[5]/div").click()
     # 出差地点--第一个地区北京
     driver.find_element(By.XPATH, "//input[@id='addressId']").click()
     time.sleep(1)
@@ -266,11 +493,20 @@ def choice_apartment(driver):  # 选部门
     # return p_department2
 
 
-def enter_apartment(driver): # 输入第一个部门
+def enter_apartment(driver):  # 输入第一个部门
     time.sleep(1)
     driver.find_element(By.XPATH, "//div[@id='departmentId']/div/div").click()
     time.sleep(0.1)
     driver.find_element(By.XPATH, "//input[@id='departmentId']").send_keys(Keys.ENTER)
+
+
+def choice_calendar(driver):
+    time.sleep(0.5)
+    driver.find_element(By.XPATH,
+                        "//td[@class='ant-calendar-cell ant-calendar-today ant-calendar-selected-date']/div").click()
+    time.sleep(1)
+    driver.find_element(By.XPATH, "//td[@class='ant-calendar-cell ant-calendar-today ant-calendar-selected-start-date "
+                                  "ant-calendar-selected-date ant-calendar-selected-day']/div").click()
 
 
 def choice_path(driver, path_name):
@@ -278,13 +514,14 @@ def choice_path(driver, path_name):
     time.sleep(0.1)
     driver.find_element(By.XPATH, "//li[text()='" + path_name + "']").click()
 
+
 def choiceapartment(driver):
     driver.find_element(By.XPATH, "//div[@id='departmentId']/div/div").click()
     time.sleep(0.1)
     driver.find_element(By.XPATH, "//input[@id='departmentId']").send_keys(Keys.ENTER)
 
 
-def input_apartment(driver):    # 第一个部门
+def input_apartment(driver):  # 第一个部门
     # noinspection PyBroadException
     try:
         time.sleep(0.5)
@@ -293,6 +530,7 @@ def input_apartment(driver):    # 第一个部门
         driver.find_element(By.XPATH, "//input[@id='departmentId']").send_keys(Keys.ENTER)
     except Exception:
         print("无部门可选")
+
 
 def choice_supplier(driver):
     a = str(random.randint(10001, 10003))
@@ -337,8 +575,8 @@ def choice_contractPurchaseCatalog(driver):  # 采购类型
 def choice_contractType(driver):
     driver.find_element(By.XPATH, "//div[@id='contractTypeId']/div/div").click()
     ct_type = (
-    '财产租赁合同', '仓储保管合同', '加工承揽合同', '建设工程勘察设计合同', '货物运输合同', '产权转移合同', '营业资金帐薄', '购销合同', '建筑安装工程承包合同', '技术合同', '借款合同',
-    '财产保险合同', '零印花税合同')
+        '财产租赁合同', '仓储保管合同', '加工承揽合同', '建设工程勘察设计合同', '货物运输合同', '产权转移合同', '营业资金帐薄', '购销合同', '建筑安装工程承包合同', '技术合同', '借款合同',
+        '财产保险合同', '零印花税合同')
     ct_type1 = random.sample(ct_type, 1)
     ct_type2 = "".join(ct_type1)
     time.sleep(1)
@@ -420,7 +658,7 @@ def enter_ct_type(driver):  # 选第一个合同类型
     driver.find_element(By.XPATH, "//input[@id='contractTypeId']").send_keys(Keys.ENTER)
 
 
-def enter_b_supplier(driver):   # 乙方选第一个供应商
+def enter_b_supplier(driver):  # 乙方选第一个供应商
     driver.find_element(By.XPATH, "//div[@id='bSupplierId']/div").click()
     time.sleep(0.5)
     driver.find_element(By.XPATH, "//tr[@data-row-key='10000']").click()
@@ -430,25 +668,25 @@ def enter_b_supplier(driver):   # 乙方选第一个供应商
     # driver.find_element(By.XPATH, "//input[@id='bSupplierId']").send_keys(Keys.ENTER)
 
 
-def enter_sign_user(driver):    # 签订人选第一条
+def enter_sign_user(driver):  # 签订人选第一条
     driver.find_element(By.XPATH, "//div[@id='signUsers']/div").click()
     time.sleep(0.1)
     driver.find_element(By.XPATH, "//input[@id='signUsers']").send_keys(Keys.ENTER)
 
 
-def ag_enter_sign_user(driver): # 协议与合同不一样
+def ag_enter_sign_user(driver):  # 协议与合同不一样
     driver.find_element(By.XPATH, "//div[@id='signUserId']/div").click()
     time.sleep(0.5)
     driver.find_element(By.XPATH, "//input[@id='signUserId']").send_keys(Keys.ENTER)
 
 
-def enter_pc_type(driver):      # 采购类型选第一个
+def enter_pc_type(driver):  # 采购类型选第一个
     driver.find_element(By.XPATH, "//div[@id='contractPurchaseCatalogId']/div").click()
     time.sleep(0.1)
     driver.find_element(By.XPATH, "//input[@id='contractPurchaseCatalogId']").send_keys(Keys.ENTER)
 
 
-def invalid(driver):    # 作废
+def invalid(driver):  # 作废
     time.sleep(0.5)
     driver.find_element(By.XPATH, "//button[text()='更多']").click()
     time.sleep(0.5)
@@ -459,7 +697,8 @@ def invalid(driver):    # 作废
 
 
 if __name__ == '__main__':
-    driver = webdriver.Chrome()
-    driver.implicitly_wait(15)
-    login_code(driver)
-    all_main(driver)
+    br = webdriver.Chrome()
+    br.maximize_window()
+    br.implicitly_wait(15)
+    c = con(br)
+    c.login()

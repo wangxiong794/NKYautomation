@@ -177,7 +177,9 @@ def choice_supplier(driver):  # 选供应商
     time.sleep(0.5)
     driver.find_element(By.XPATH, tbody+"tr/td[5]/div").click()
     time.sleep(0.5)
-    driver.find_element(By.XPATH, "//li[text()='丁磊']").click()
+    # driver.find_element(By.XPATH, "//li[text()='丁磊']").click()
+    driver.find_element(By.XPATH, tbody + "tr/td[5]/div/div/div/div/ul/li/div/input").send_keys(Keys.ENTER)
+    time.sleep(0.1)
     driver.find_element(By.XPATH, "//a[text()='采选']").click()
 
 
@@ -204,7 +206,7 @@ def start_BA_PR(driver):  # 从详情页发起采购
     driver.find_element(By.XPATH, "//div[@class='ant-table-body']/table/tbody/tr[1]/td[1]/div").click()
     time.sleep(0.5)
     driver.find_element(By.XPATH, "//button[text()='更多']").click()
-    time.sleep(0.1)
+    time.sleep(0.5)
     driver.find_element(By.XPATH, "//li[text()='申请采购']").click()
 
 
@@ -267,9 +269,8 @@ def apply_detail_BA_PR(driver):  # 事前申请有明细
     driver.find_element(By.XPATH, "//span[text()='下一步']/..").click()
     edit_AT(driver)
     time.sleep(0.5)
-    # driver.execute_script(
-    #     'var q=document.querySelector("#root > div > div > div > div.content___3gQPC.ant-layout-content").scrollTo(0,1000)')
     submit(driver)
+
 
 
 def no_detail_BA_PR(driver):  # 无明细采购
@@ -290,20 +291,15 @@ def no_detail_BA_PR(driver):  # 无明细采购
     time.sleep(0.5)
     driver.find_element(By.XPATH, "//button[text()='更多']").click()
     time.sleep(0.5)
-    driver.find_element(By.XPATH, "//button[text()='驳回']").click()
+    driver.find_element(By.XPATH, "//button[text()='作废']").click()
     time.sleep(0.5)
     driver.find_element(By.XPATH, "//span[text()='确 定']/..").click()
     time.sleep(1)
-    choice_menu(driver, "采购管理", "采购审批")
-    time.sleep(0.1)
-    driver.find_element(By.XPATH, "//div[@class='ant-table-body']/table/tbody/tr[1]/td[1]/div").click()
-    time.sleep(0.1)
-    driver.find_element(By.XPATH, "//button[text()='更多']").click()
-    time.sleep(0.5)
     driver.find_element(By.XPATH, "//button[text()='删除']").click()
     time.sleep(0.5)
     driver.find_element(By.XPATH, "//span[text()='确 定']/..").click()
-
+    time.sleep(5)
+    # 等待右上角的提示消失
 
 def no_detail_BA_PR1(driver):  # 无明细采购
     BA_for_PR(driver)

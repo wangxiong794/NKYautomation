@@ -5,6 +5,7 @@ import unittest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from service.bpm_service import common_funcation, pay
+from service.bpm_service.pay import Pay
 
 
 class apply(unittest.TestCase):
@@ -17,7 +18,8 @@ class apply(unittest.TestCase):
         cls.driver = webdriver.Chrome(chrome_options=chrome_options)
         # cls.driver = webdriver.Chrome()
         cls.driver.implicitly_wait(15)
-        cls.driver.set_window_size(1366, 1000)
+        cls.ba = Pay(cls.driver)
+        cls.driver.set_window_size(1920, 1080)
         common_funcation.login_code(cls.driver)
 
     @classmethod
@@ -33,6 +35,13 @@ class apply(unittest.TestCase):
     def test_00_BA(self):  # 20.4.28
         """事前申请单发起、撤回、复制、驳回、复制、作废"""
         pay.standard_BA_copy(self.driver)
+        # self.ba.menu()
+        # self.ba.add()
+        # self.ba.choiceBudget()
+        # self.ba.editMoney()
+        # self.ba.choicePath('事前申请单自审')
+        # self.ba.editDescription('事前申请单发起、撤回、复制、驳回、复制、作废')
+        # self.ba.
 
     def test_01_BA(self):  # 20.4.28
         """无测算事前申请单发起、通过、报销、核销"""
@@ -51,7 +60,7 @@ class apply(unittest.TestCase):
         pay.meeting_BA_RI(self.driver)
 
     def test_05_BA(self):   # 20.4.28
-        """差旅费测算事前申请单发起、通过、报销、核销""" 
+        """差旅费测算事前申请单发起、通过、报销、核销"""
         pay.travel_BA_RI(self.driver)
 
     def test_06_BA(self):   # 20.4.28
@@ -75,7 +84,7 @@ class apply(unittest.TestCase):
         pay.standard_NORI2(self.driver)
 
     def test_14_RI(self):
-        """无申请+劳务报销+公务接待+关联事项报销单发起、撤销、复制、通过、核销"""
+        """无申请+公务接待+关联事项报销单发起、撤销、复制、通过、核销"""
         pay.standard_NORI3(self.driver)
 
     def test_15_RI(self):   # 20.4.28
@@ -114,6 +123,53 @@ class apply(unittest.TestCase):
         """发起事前、通过、详情页发起预付、驳回、删除"""
         pay.IM3(self.driver)
 
+    def test_41_BA(self):   # TODO
+        """标准流程审批"""
+        self.ba.menu()
+        self.ba.add()
+        self.ba.choiceBudget()
+        self.ba.budgetMoney()
+        self.ba.choicePath('事前申请单')
+        self.ba.editDescription('标准流程')
+        self.ba.submit()
+        name1 = self.ba.nextReviewer('部门负责人')
+        self.ba.quit()
+        self.ba.reLogin(name1)
+        self.ba.menu()
+        self.ba.inView()
+        self.ba.agree()
+        self.ba.assertNkyUrl('dashboard/prcptodo')
+        self.ba.menu()
+        self.ba.inView()
+        name2 = self.ba.nextReviewer('财务负责人')
+        self.ba.quit()
+        self.ba.reLogin(name2)
+        self.ba.menu()
+        self.ba.inView()
+        self.ba.agree()
+        self.ba.assertNkyUrl('dashboard/prcptodo')
+        self.ba.menu()
+        self.ba.inView()
+        name3 = self.ba.nextReviewer('校长')
+        self.ba.quit()
+        self.ba.reLogin(name3)
+        self.ba.menu()
+        self.ba.inView()
+        self.ba.agree()
+        self.ba.menu()
+        self.ba.inView()
+        self.ba.viewAddReimburse()
+        self.ba.editReimburse()
+        self.ba.submitReimburse()
+        self.ba.agree()
+        self.ba.useCheck()
+
 
 if __name__ == '__main__':
     unittest.main()
+    # a = apply()
+    # a.setUpClass()
+    # a.setUp()
+    # a.test_41_BA()
+    # a.tearDown()
+    # a.tearDownClass()

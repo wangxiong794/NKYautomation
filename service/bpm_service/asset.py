@@ -1,7 +1,7 @@
 """资产卡片"""
 from selenium.webdriver.common.by import By
 import time
-from service.bpm_service.common_funcation import submit, agree, choice_apartment, agree_new
+from service.bpm_service.common_funcation import submit, agree, choice_apartment, agree_new, con
 import random
 from selenium.webdriver.common.keys import Keys
 
@@ -264,7 +264,7 @@ def lowcost_project(driver, assetProperty):  # 新增产品目录
     driver.find_element(By.XPATH, "//span[text()='新 增']/..").click()
     time.sleep(0.5)
     # 编辑产品目录
-    driver.find_element(By.XPATH, "//input[@id='name']").send_keys(assetProperty + str(time.strftime("%m$d$H%M%S")))
+    driver.find_element(By.XPATH, "//input[@id='name']").send_keys(assetProperty + str(time.strftime("%m%d%H%M%S")))
     time.sleep(0.1)
     driver.find_element(By.XPATH, "//input[@id='specification']").send_keys('型号' + str(time.strftime("%M%S")))
     # 计量单位
@@ -390,3 +390,126 @@ def ac_01(driver):
     edit_ac(driver)
     submit(driver)
     time.sleep(5)
+
+
+class LowCost(con):
+
+    def menu(self):
+        self.driver.refresh()
+        self.choice_menu("低值易耗品","入库管理")
+
+    def add(self):
+        time.sleep(0.5)
+        self.dr("//span[text()='新增入库单']/..").click()
+
+    def detail(self, number=10):
+        # if number is null,the default value is 10
+        self.dr("//td[@id='0_productName']/div").click()
+        time.sleep(0.5)
+        self.dr('//div[text()="产品目录"]/../../../div[2]/div/div/div/div/div/div[1]/div[2]/table/tbody/tr[1]').click()
+        self.dr('//span[text()="确 定"]/..').click()
+        time.sleep(0.5)
+        self.dr("//td[@id='0_inNumber']/div").click()
+        self.dr("//td[@id='0_inNumber']/div/div/div/div[2]/input").send_keys(str(number))
+
+    def menuOut(self):
+        self.choice_menu("低值易耗品","领用出库")
+
+    def addOut(self):
+        time.sleep(0.5)
+        self.dr("//span[text()='+ 新增出库']/..").click()
+
+    def detailOut(self,number=10):
+        self.dr("//div[@class='antd-pro-pages-low-cost-put-storage-edit-productNameBox']").click()
+        time.sleep(0.5)
+        self.dr("//div[@class='ant-modal-root']/div[2]/div/div[2]/div[2]/div/div/div/div/div/div/div[1]/div["
+                "2]/table/tbody/tr[1]").click()
+        self.dr("//span[text()='确 定']/..").click()
+        self.dr("//div[@class='antd-pro-pages-low-cost-put-storage-edit-productNameBox']/../../td[6]/div").click()
+        self.dr("//div[@class='antd-pro-pages-low-cost-put-storage-edit-productNameBox']/../../td[6]/div/div/div["
+                "2]/input").send_keys(str(number))
+
+
+class asset(con):
+    def menuIn(self):
+        self.choice_menu("固定资产", "资产入库")
+
+    def addIn(self):
+        self.dr("//div[text()='入库单']").click()
+        self.dr("//span[text()='新增入库']/..").click()
+
+    def detailIn(self,number=10,remark='remark'):
+        body = "//div[text()='资产名称']/../../../../../../../tbody/tr/"
+        self.dr(body + "td[2]/div").click()
+        self.dr(body + "td[2]/div/span/i").click()
+        self.dr("//div[@class='ant-modal-root']/div[2]/div/div[2]/div[2]/div/div/div/div/div/div/div[1]/div["
+                "2]/table/tbody/tr[1]").click()
+        self.dr("//span[text()='确 定']/..").click()
+        time.sleep(0.5)
+        self.dr(body + "td[4]/div").click()
+        self.dr(body + "td[4]/div/div/div[2]/input").send_keys(str(number))
+        self.dr(body + "td[4]/div/div/div[2]/input").send_keys(Keys.ENTER)
+        # there have a problem ,can`t click
+        # self.dr(body + "td[7]/div").click()
+        # self.dr(body + "td[7]/div/input").send_keys(remark)
+
+
+class dataAsset(con):
+    def menu(self):
+        self.choice_menu('基础数据','产品目录设置')
+
+    def add(self, assetProperty='固定资产'):
+        time.sleep(0.1)
+        self.dr("//span[text()='新 增']/..").click()
+        time.sleep(0.5)
+        self.dr("//input[@id='name']").send_keys(assetProperty+str(time.time()))
+        self.dr("//input[@id='specification']").send_keys('型号'+str(time.time()))
+        self.dr("//div[@id='unitId']/div/div").click()
+        time.sleep(0.1)
+        self.dr("//div[@id='unitId']/div/div/div/div/input").send_keys(Keys.ENTER)
+        # 库存单位
+        self.dr("//div[@id='invenUnitId']/div/div").click()
+        time.sleep(0.1)
+        self.dr("//div[@id='invenUnitId']/div/div/div/div/input").send_keys(Keys.ENTER)
+        # 参考单价
+        self.dr("//input[@id='price']").send_keys('100')
+        # 政采目录
+        self.dr("//div[@id='governmentPurchaseCatalogueId']/div/div").click()
+        time.sleep(0.1)
+        self.dr("//input[@id='governmentPurchaseCatalogueId']").send_keys(Keys.ENTER)
+        # 资产性质--低值易耗品
+        self.dr("//div[@id='assetPropertyId']/div/div").click()
+        time.sleep(0.1)
+        self.dr("//li[text()='" + assetProperty + "']").click()
+        nameProduct = self.dr("//input[@id='name']").text
+        # 保存
+        self._save()
+        return nameProduct
+
+    def select(self, name):
+        time.sleep(0.1)
+        self.dr("//button[@id='AdvancedQueryButton']/../../div[1]/form/div[1]/div/div[2]/div/span/span/input").click()
+        self.dr("//button[@id='AdvancedQueryButton']/../../div[1]/form/div[1]/div/div[2]/div/span/span/input").send_keys(name)
+        time.sleep(1)
+        self.dr("//button[@id='AdvancedQueryButton']").click()
+
+    def _more(self):
+        time.sleep(0.5)
+        self.dr("//div[@class='ant-table-body-inner']/table/tbody/tr/td/a[2]").click()
+        time.sleep(0.1)
+
+    def edit(self, p):
+        self.select(p)
+        self._more()
+        time.sleep(0.5)
+        self.dr("//a[text()='编辑']").click()
+        time.sleep(0.5)
+        self.dr("//input[@id='remark']").send_keys('修改')
+        self._save()
+
+    def delProduct(self):
+        self._more()
+        self.dr("//a[text()='删除']").click()
+        self._sure()
+        noMessage = self.dr('//*[@id="globalLayoutContent"]/div[2]/div[2]/div/div[3]/div').text
+        return noMessage

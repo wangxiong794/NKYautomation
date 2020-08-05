@@ -16,7 +16,7 @@ class Purchase(unittest.TestCase):
         cls.driver = webdriver.Chrome(chrome_options=chrome_options)
         cls.driver = webdriver.Chrome()
         cls.driver.implicitly_wait(15)
-        cls.driver.set_window_size(1400, 900)
+        cls.driver.set_window_size(1920,1080)
         common_funcation.login_code(cls.driver)
 
     @classmethod
@@ -32,14 +32,24 @@ class Purchase(unittest.TestCase):
     def test_01_PR(self):
         """发起有明细事前单通过、发起采购、通过、验收"""
         purchase.apply_detail_BA_PR(self.driver)
+        print('成功了')
 
     def test_02_PR(self):
         """无明事前单发起、通过、发起采购、通过、作废、删除"""
         purchase.no_detail_BA_PR(self.driver)
+        print('成功了')
 
     def test_03_PR(self):
         """无明事前单发起、通过、发起采购、通过、驳回、删除"""
         purchase.no_detail_BA_PR1(self.driver)
+        print('成功了')
+
 
 if __name__ == '__main__':
     unittest.main()
+    # a = Purchase()
+    # a.setUpClass()
+    # a.setUp()
+    # a.test_02_PR()
+    # a.tearDown()
+    # a.tearDownClass()

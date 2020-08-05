@@ -4,7 +4,7 @@ import time
 
 from selenium.webdriver.common.keys import Keys
 
-from service.bpm_service.common_funcation import submit, cancel, input_apartment, agree, deletebill, refuse
+from service.bpm_service.common_funcation import submit, cancel, input_apartment, agree, delete_bill, refuse
 
 from selenium.webdriver.common.by import By
 
@@ -151,9 +151,7 @@ def cancel_CS(driver):  # 撤销、修改、复制会签
     meet_related_personal(driver)
     editcs(driver)
     submit(driver)
-    time.sleep(1)
-    driver.find_element(By.XPATH, "//button[text()='更多']").click()
-    driver.find_element(By.XPATH, "//button[text()='撤销申请']").click()
+    cancel(driver)
     modify(driver)
     copycs(driver)
     submit(driver)
@@ -208,7 +206,7 @@ def cancel_MA(driver):      # 新增申请，撤销删除
     editMA(driver)
     submit(driver)
     cancel(driver)
-    deletebill(driver)
+    delete_bill(driver)
 
 
 def reject_MA(driver):      # 新增申请，驳回复制

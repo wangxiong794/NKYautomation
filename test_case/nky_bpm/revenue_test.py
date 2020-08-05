@@ -8,7 +8,7 @@ from service.bpm_service import revenue, common_funcation
 
 class Revenue(unittest.TestCase):
     """收入管理"""
-    run_again = False
+    # run_again = False
 
     @classmethod
     def setUpClass(cls):
@@ -34,41 +34,47 @@ class Revenue(unittest.TestCase):
         pass
 
     def test_01_CG(self):
-        """撤销收费单标准单并删除"""
+        """收费标准单新增、撤销、删除"""
         revenue.cancel_CG(self.driver)
 
     def test_02_CG(self):
-        """驳回及复制收费标准"""
+        """收费标准单新增、驳回、复制"""
         revenue.reject_CG(self.driver)
 
     def test_03_CG(self):
-        """审批通过收费标准"""
+        """收费标准单新增、通过"""
         revenue.standard_CG(self.driver)
 
     def test_11_RE(self):
-        """撤销收费审批单并删除"""
+        """收费审批单新增、删除"""
         revenue.cancel_RE(self.driver)
 
     def test_12_RE(self):
-        """驳回收费审批单"""
+        """收费审批单新增、驳回"""
         revenue.reject_RE(self.driver)
 
     def test_13_RE(self):
-        """审批通过收费审批单"""
+        """收费审批单新增、通过"""
         revenue.standard_RE(self.driver)
 
     def test_21_IC(self):
-        """撤销并删除收入登记"""
+        """收入登记单新增、撤销、删除"""
         revenue.cancel_IC(self.driver)
 
     def test_22_IC(self):
-        """驳回收入登记"""
+        """收入登记单新增、驳回"""
         revenue.reject_IC(self.driver)
 
     def test_23_IC(self):
-        """审批通过收入登记"""
+        """收入登记单新增、通过"""
         revenue.standard_IC(self.driver)
 
 
 if __name__ == '__main__':
     unittest.main()
+    # a = Revenue()
+    # a.setUpClass()
+    # a.setUp()
+    # a.test_23_IC()
+    # a.tearDown()
+    # a.tearDownClass()

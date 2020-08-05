@@ -25,8 +25,9 @@ def add_case():
     suite = unittest.TestSuite()
     discover = unittest.defaultTestLoader.discover(r".\\test_case\\nky_bpm", "*test.py",)
     suite.addTest(discover)
+
     filename = 'test' + str(time.strftime('%y%m%d%H%M%S')) + '.html'
-    BeautifulReport(suite).report(filename=filename, description='测试报告', log_path=r".\\report")
+    BeautifulReport(suite).report(filename=filename, description='测试报告',)
 
 
 def send_report():

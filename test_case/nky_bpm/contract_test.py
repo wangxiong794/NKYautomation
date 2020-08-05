@@ -33,7 +33,7 @@ class contractQuery(unittest.TestCase):
         pass
 
     def test_01_CT(self):
-        """发起事前并通过、对事前发起合同并通过、对该合同发起报销并通过、领用及核销"""
+        """发起事前、通过、发起合同、通过、发起报销、通过、领用、核销"""
         contract.BA_CT_RI(self.driver)
 
     def test_02_CT(self):

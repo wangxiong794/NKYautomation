@@ -4,10 +4,11 @@ import time
 
 from selenium.webdriver.common.keys import Keys
 
-from service.bpm_service.common_funcation import choice_apartment, choice_liucheng, submit, agree, cancel, deletebill, refuse, \
+from service.bpm_service.common_funcation import choice_apartment, choice_liucheng, submit, agree, cancel, delete_bill, refuse, \
     enter_apartment
 import random
 from service.bpm_service.pay import choice_paymethod
+
 
 # TODO
 def choice_CG(driver):
@@ -58,21 +59,39 @@ def choice_acount(driver):  # 选择账户
     # noinspection PyBroadException
     try:
         time.sleep(1)
-        driver.find_element(By.XPATH, "//input[@value='1']/../../../../../td[2]").click()
+        driver.find_element(By.XPATH, "//span[text()='账户名称']/../../../../../../tbody/tr[1]/td[2]").click()
     except Exception:
-        print("无可用收款账户进行选择")
+        print("账户选择失败")
     driver.find_element(By.XPATH, "//span[text()='下一步']/..").click()
 
 
-def choice_budget(driver):  # 选择预算项
-    # noinspection PyBroadException
-    try:
-        time.sleep(0.5)
-        driver.find_element(By.XPATH, "//span[text()='预算项目']/../../../../../../tbody/tr[1]/td[1]/div").click()
-        time.sleep(0.5)
-        driver.find_element(By.XPATH, "//span[text()='预算项目']/../../../../../../tbody/tr[2]/td[2]").click()
-    except Exception:
-        print("项目层级过深")
+def choice_budget(driver):  # 选预算项,与支出不一样
+    time.sleep(1)
+    driver.find_element(By.XPATH, "//tbody[@class='ant-table-tbody']/tr[1]/td[1]").click()
+    time.sleep(0.1)
+    l21 = str(driver.find_element(By.XPATH, "//tbody[@class='ant-table-tbody']/tr[2]/td[1]/div").get_attribute("aria-label"))
+    if l21 == "关闭行":
+        driver.find_element(By.XPATH, "//tbody[@class='ant-table-tbody']/tr[2]/td[1]").click()
+    elif l21 == "展开行":
+        driver.find_element(By.XPATH, "//tbody[@class='ant-table-tbody']/tr[2]/td[1]").click()
+        time.sleep(0.1)
+        l31 = str(driver.find_element(By.XPATH, "//tbody[@class='ant-table-tbody']/tr[2]/td[1]/div").get_attribute(
+            "aria-label"))
+        if l31 == "关闭行":
+            time.sleep(0.5)
+            driver.find_element(By.XPATH, "//tbody[@class='ant-table-tbody']/tr[3]/td[1]").click()
+        elif l31 == "展开行":
+            driver.find_element(By.XPATH, "//tbody[@class='ant-table-tbody']/tr[3]/td[1]").click()
+            time.sleep(0.1)
+            l41 = str(driver.find_element(By.XPATH, "//tbody[@class='ant-table-tbody']/tr[3]/td[1]/div").get_attribute(
+                "aria-label"))
+            if l41 == "关闭行":
+                driver.find_element(By.XPATH, "//tbody[@class='ant-table-tbody']/tr[4]/td[1]").click()
+            elif l41 == "展开行":
+                driver.find_element(By.XPATH, "//tbody[@class='ant-table-tbody']/tr[4]/td[1]").click()
+                time.sleep(0.1)
+                driver.find_element(By.XPATH, "//tbody[@class='ant-table-tbody']/tr[5]/td[1]").click()
+    time.sleep(0.5)
     driver.find_element(By.XPATH, "//span[text()='下一步']/..").click()
 
 
@@ -161,7 +180,7 @@ def cancel_CG(driver):  # 新增收费标准单 撤销并删除
     edit_CG(driver)
     submit(driver)
     cancel(driver)
-    deletebill(driver)
+    delete_bill(driver)
 
 
 def reject_CG(driver):  # 新增收费标准单 驳回复制 复制单据
@@ -188,7 +207,7 @@ def cancel_RE(driver):      # 新增收费审批单 撤销并删除
     edit_RE(driver)
     submit(driver)
     cancel(driver)
-    deletebill(driver)
+    delete_bill(driver)
 
 
 def reject_RE(driver):      # 新增收费审批单 驳回
@@ -221,7 +240,7 @@ def cancel_IC(driver):  # 撤销并删除收入登记
     submit(driver)
     time.sleep(5)
     cancel(driver)
-    deletebill(driver)
+    delete_bill(driver)
 
 
 def reject_IC(driver):  # 驳回收入登记
