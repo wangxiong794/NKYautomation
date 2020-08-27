@@ -23,3 +23,12 @@ class DB:
         self.cur.close()
         # 关闭数据库连接        
         self.conn.close()
+
+
+if __name__ == '__main__':
+    with DB() as db:
+        sql = "SELECT name,adjustment,actual,frozen,transit,available FROM budget_item WHERE `name` = '" + "养老保险" + "';"
+        db.execute(sql)
+        bd = list(db)[0]
+    print("预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s" %
+                  (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))

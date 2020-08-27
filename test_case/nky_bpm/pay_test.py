@@ -2,10 +2,13 @@
 
 """
 import unittest
+
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+
 from service.bpm_service import common_funcation, pay
 from service.bpm_service.pay import Pay
+from service.connectmysql import DB
 
 
 class apply(unittest.TestCase):
@@ -16,10 +19,10 @@ class apply(unittest.TestCase):
         chrome_options.add_argument('--headless')
         chrome_options.add_argument('--disable-gpu')
         cls.driver = webdriver.Chrome(chrome_options=chrome_options)
-        # cls.driver = webdriver.Chrome()
-        cls.driver.implicitly_wait(15)
+        cls.driver = webdriver.Chrome()
+        cls.log = common_funcation.caseLog()
         cls.ba = Pay(cls.driver)
-        cls.driver.set_window_size(1920, 1080)
+        cls.ba.driverSetting()
         common_funcation.login_code(cls.driver)
 
     @classmethod
@@ -33,49 +36,320 @@ class apply(unittest.TestCase):
         pass
 
     def test_00_BA(self):  # 20.4.28
-        """事前申请单发起、撤回、复制、驳回、复制、作废"""
-        pay.standard_BA_copy(self.driver)
-        # self.ba.menu()
-        # self.ba.add()
-        # self.ba.choiceBudget()
-        # self.ba.editMoney()
-        # self.ba.choicePath('事前申请单自审')
-        # self.ba.editDescription('事前申请单发起、撤回、复制、驳回、复制、作废')
-        # self.ba.
+        """事前申请单发起、撤回、复制、驳回、复制、通过、作废"""
+        # pay.standard_BA_copy(self.driver)
+        self.log.info("用例名称："+self.__dict__['_testMethodDoc'])
+        self.ba.menu()
+        self.ba.add()
+        self.ba.choiceBudget()
+        budgetName = self.ba.getBudgetName()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("预算项初始【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.editMoney('1000')
+        self.ba.choicePath('事前申请单自审')
+        self.ba.editDescription('事前申请单发起、撤回、复制、驳回、复制、作废')
+        self.ba.submit()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("提交事前单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.cancel()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("撤销事前单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.copyCancelBill()
+        self.ba.submit()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("复制已撤销【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.refuse()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("驳回新单据【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.menu()
+        self.ba.copyRefuseBill()
+        self.ba.submit()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("复制被驳回【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.agree()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("通过事前单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.menu()
+        self.ba.void()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("作废事前单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
 
     def test_01_BA(self):  # 20.4.28
         """无测算事前申请单发起、通过、报销、核销"""
-        pay.standard_BA(self.driver)
+        # pay.standard_BA(self.driver)
+        self.log.info("用例名称：" + self.__dict__['_testMethodDoc'])
+        self.ba.menu()
+        self.ba.add()
+        self.ba.choiceBudget()
+        budgetName = self.ba.getBudgetName()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("预算项初始【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.editMoney('1000')
+        self.ba.choicePath('事前申请单自审')
+        self.ba.editDescription('无测算事前申请单发起、通过、报销、核销')
+        self.ba.submit()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("提交事前单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.agree()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("通过事前单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.menu()
+        self.ba.inView()
+        self.ba.viewAddReimburse()
+        self.ba.editReimburse()
+        self.ba.submitReimburse()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("提交报销单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.agree()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("通过报销单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.useCheck()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("核销报销单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
 
-    def test_02_BA(self):   # 20.4.27
+    def test_02_BA(self):  # 20.4.27
         """培训费测算事前申请单发起、通过、报销、核销"""
-        pay.train_BA_RI(self.driver)
+        # pay.train_BA_RI(self.driver)
+        self.log.info("用例名称：" + self.__dict__['_testMethodDoc'])
+        self.ba.menu()
+        self.ba.add()
+        self.ba.choiceBudget()
+        budgetName = self.ba.getBudgetName()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("预算项初始【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.trainBA()
+        self.ba.editMoney('1000')
+        self.ba.choicePath('事前申请单自审')
+        self.ba.editDescription(self.__dict__['_testMethodDoc'])
+        self.ba.submit()
+        self.log.info("提交事前单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.agree()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("通过事前单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.menu()
+        self.ba.inView()
+        self.ba.viewAddReimburse()
+        self.ba.trainRI()
+        self.ba.editReimburse()
+        self.ba.submitReimburse()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("提交报销单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.agree()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("通过报销单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.useCheck()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("核销报销单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
 
-    def test_03_BA(self):   # 20.4.28
+    def test_03_BA(self):  # 20.4.28
         """接待费测算事前申请单发起、通过、报销、核销"""
-        pay.official_BA_RI(self.driver)
+        # pay.official_BA_RI(self.driver)
+        self.log.info("用例名称：" + self.__dict__['_testMethodDoc'])
+        self.ba.menu()
+        self.ba.add()
+        self.ba.choiceBudget()
+        budgetName = self.ba.getBudgetName()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("预算项初始【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.officialBA()
+        self.ba.editMoney('1000')
+        self.ba.choicePath('事前申请单自审')
+        self.ba.editDescription(self.__dict__['_testMethodDoc'])
+        self.ba.submit()
+        self.log.info("提交事前单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.agree()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("通过事前单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.menu()
+        self.ba.inView()
+        self.ba.viewAddReimburse()
+        self.ba.officialRI()
+        self.ba.editReimburse()
+        self.ba.submitReimburse()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("提交报销单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.agree()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("通过报销单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.useCheck()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("核销报销单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
 
-    def test_04_BA(self):     # 20.4.28
+    def test_04_BA(self):  # 20.4.28
         """会议费测算事前申请单发起、通过、报销、核销"""
-        pay.meeting_BA_RI(self.driver)
+        # pay.meeting_BA_RI(self.driver)
+        self.log.info("用例名称：" + self.__dict__['_testMethodDoc'])
+        self.ba.menu()
+        self.ba.add()
+        self.ba.choiceBudget()
+        budgetName = self.ba.getBudgetName()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("预算项初始【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.meetingBA()
+        self.ba.editMoney('1000')
+        self.ba.choicePath('事前申请单自审')
+        self.ba.editDescription(self.__dict__['_testMethodDoc'])
+        self.ba.submit()
+        self.log.info("提交事前单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.agree()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("通过事前单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.menu()
+        self.ba.inView()
+        self.ba.viewAddReimburse()
+        self.ba.meetingRI()
+        self.ba.editReimburse()
+        self.ba.submitReimburse()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("提交报销单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.agree()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("通过报销单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.useCheck()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("核销报销单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
 
-    def test_05_BA(self):   # 20.4.28
+    def test_05_BA(self):  # 20.4.28
         """差旅费测算事前申请单发起、通过、报销、核销"""
-        pay.travel_BA_RI(self.driver)
+        # pay.travel_BA_RI(self.driver)
+        self.log.info("用例名称：" + self.__dict__['_testMethodDoc'])
+        self.ba.menu()
+        self.ba.add()
+        self.ba.choiceBudget()
+        budgetName = self.ba.getBudgetName()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("预算项初始【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.travelBA()
+        self.ba.editMoney('1000')
+        self.ba.choicePath('事前申请单自审')
+        self.ba.editDescription(self.__dict__['_testMethodDoc'])
+        self.ba.submit()
+        self.log.info("提交事前单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.agree()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("通过事前单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.menu()
+        self.ba.inView()
+        self.ba.viewAddReimburse()
+        self.ba.travelRI()
+        self.ba.editReimburse()
+        self.ba.submitReimburse()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("提交报销单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.agree()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("通过报销单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.useCheck()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("核销报销单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
 
-    def test_06_BA(self):   # 20.4.28
+    def test_06_BA(self):  # 20.4.28
         """劳务费测算事前申请单发起、通过、报销、核销"""
-        pay.labor_BA_RI(self.driver)
+        # pay.labor_BA_RI(self.driver)
+        self.log.info("用例名称：" + self.__dict__['_testMethodDoc'])
+        self.ba.menu()
+        self.ba.add()
+        self.ba.choiceBudget()
+        budgetName = self.ba.getBudgetName()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("预算项初始【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.laborBA()
+        self.ba.editMoney('2000')
+        self.ba.choicePath('事前申请单自审')
+        self.ba.editDescription(self.__dict__['_testMethodDoc'])
+        self.ba.submit()
+        self.log.info("提交事前单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.agree()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("通过事前单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.menu()
+        self.ba.inView()
+        self.ba.viewAddReimburse()
+        self.ba.laborRI()
+        self.ba.editReimburse()
+        self.ba.submitReimburse()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("提交报销单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.agree()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("通过报销单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.useCheck()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("核销报销单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
 
-    def test_07_BA(self):   # 20.4.28
-        """申请明细事前申请单发起、通过。本用于采购，可采购白屏走不下去"""
-        pay.apply_detail_BA(self.driver)
+    def test_07_BA(self):  # 20.4.28
+        """申请明细事前申请单发起、通过"""
+        # pay.apply_detail_BA(self.driver)
+        self.log.info("用例名称：" + self.__dict__['_testMethodDoc'])
+        self.ba.menu()
+        self.ba.add()
+        self.ba.choiceBudget()
+        budgetName = self.ba.getBudgetName()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("预算项初始【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.detailInput()
+        self.ba.editMoney('1000')
+        self.ba.choicePath('事前申请单自审')
+        self.ba.editDescription(self.__dict__['_testMethodDoc'])
+        self.ba.submit()
+        self.log.info("提交事前单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        self.ba.agree()
+        bd = self.ba.budgetData(budgetName)
+        self.log.info("通过事前单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
+                      (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
 
-    def test_11_RI(self):   # 20.4.28
+    def test_11_RI(self):  # 20.4.28
         """无申请+劳务报销单发起、撤销、复制、通过、核销"""
         pay.standard_NORI(self.driver)
+        # self.log.info("用例名称：" + self.__dict__['_testMethodDoc'])
 
-    def test_12_RI(self):   # 20.4.28
+    def test_12_RI(self):  # 20.4.28
         """无申请报销单发起、撤销、复制、通过、核销"""
         pay.standard_NORI1(self.driver)
 
@@ -87,15 +361,15 @@ class apply(unittest.TestCase):
         """无申请+公务接待+关联事项报销单发起、撤销、复制、通过、核销"""
         pay.standard_NORI3(self.driver)
 
-    def test_15_RI(self):   # 20.4.28
+    def test_15_RI(self):  # 20.4.28
         """无申请报销单发起、通过、作废、删除"""
         pay.invalid_NO_RI(self.driver)
 
-    def test_16_RI(self):   # 20.4.28
+    def test_16_RI(self):  # 20.4.28
         """无申请+劳务报销单发起、通过、作废、删除"""
         pay.invalid_NO_RI1(self.driver)
 
-    def test_17_RI(self):   # 20.4.28
+    def test_17_RI(self):  # 20.4.28
         """无申请+公务接待报销单发起、通过、作废、删除"""
         pay.invalid_NO_RI2(self.driver)
 
@@ -123,7 +397,7 @@ class apply(unittest.TestCase):
         """发起事前、通过、详情页发起预付、驳回、删除"""
         pay.IM3(self.driver)
 
-    def test_41_BA(self):   # TODO
+    def test_41_BA(self):  # TODO
         """标准流程审批"""
         self.ba.menu()
         self.ba.add()
@@ -170,6 +444,6 @@ if __name__ == '__main__':
     # a = apply()
     # a.setUpClass()
     # a.setUp()
-    # a.test_41_BA()
+    # a.test_07_BA()
     # a.tearDown()
     # a.tearDownClass()

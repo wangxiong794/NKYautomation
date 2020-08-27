@@ -1,4 +1,4 @@
-ip = "123.56.223.19"
+ip = "39.106.158.149"
 user = "chendongxue"
 user_id = 10017
 run_id = "14005"

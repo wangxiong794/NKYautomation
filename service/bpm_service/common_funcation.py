@@ -1,35 +1,37 @@
 import json
-
 import requests
-from selenium.webdriver import ActionChains
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
-import time
 from selenium.webdriver.common.keys import Keys
 import random
 from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException
-
+import logging
+import time
+import os
+from get_root_path import root_dir
 # http://39.106.158.149/nky
 # dev3 47.93.245.21
 from config import common_header
+from service.connectmysql import DB
 
 # 123.56.223.19
-nky_url = 'http://47.93.196.74/nky'
+from service.logger import Log
+
+nky_url = 'http://dev2.neikongyi.com/nky'
 username = 'chendongxue'
 password = 'nky2018'
-chrome_options = Options()
-chrome_options.add_argument('--headless')
-chrome_options.add_argument('--disable-gpu')
-driver = webdriver.Chrome(chrome_options=chrome_options)
-# driver = webdriver.Chrome()
+
 
 
 class con(object):
     def __init__(self, driver):  # 如果不传driver，就默认这个值
         self.dr = driver.find_element_by_xpath
         self.driver = driver
-        self._ip = "47.93.196.74"
+        # self._ip = "47.93.196.74"
+
+    def driverSetting(self):
+        self.driver.implicitly_wait(15)
+        self.driver.set_window_size(1680, 1050)
 
     def login(self):
         self.driver.get(nky_url)
@@ -52,6 +54,8 @@ class con(object):
 
     def void(self):
         time.sleep(0.5)
+        self.dr("//div[@class='ant-table-body']/table/tbody/tr[1]/td[3]").click()
+        time.sleep(0.5)
         self.dr("//button[text()='更多']").click()
         time.sleep(0.5)
         self.dr("//button[text()='作废']").click()
@@ -62,6 +66,8 @@ class con(object):
 
     def delBill(self):
         time.sleep(1)
+        self.driver.refresh()
+        time.sleep(0.5)
         self.dr("//button[text()='更多']").click()
         self.dr("//button[text()='删除']").click()
         time.sleep(0.5)
@@ -80,7 +86,7 @@ class con(object):
     def inView(self):
         # from bill list choice the fist bill into view
         time.sleep(1)
-        self.dr("//div[@class='ant-table-body']/table/tbody/tr[1]/td[1]/div").click()
+        self.dr("//div[@class='ant-table-body']/table/tbody/tr[1]/td[3]").click()
 
     def cancel(self):
         time.sleep(0.5)
@@ -96,6 +102,18 @@ class con(object):
         self.dr("//button[text()='驳回']").click()
         time.sleep(1)
         self.dr("//span[text()='确 定']/..").click()
+        time.sleep(0.1)
+        self.dr("//span[text()='确认驳回该单据？']/../../div[2]/button[2]").click()
+        time.sleep(1)
+
+    def copyCancelBill(self):
+        time.sleep(0.5)
+        self.dr("//button[text()='复制单据']").click()
+
+    def copyRefuseBill(self):
+        self.inView()
+        time.sleep(0.5)
+        self.dr("//button[text()='复制单据']").click()
 
     def operator(self):
         # the first user in the list is the purchase operator by default
@@ -117,6 +135,7 @@ class con(object):
     def _sure(self):
         time.sleep(0.1)
         self.dr("//span[text()='确 定']/..").click()
+        time.sleep(1)
 
     def _more(self):
         time.sleep(0.3)
@@ -125,6 +144,9 @@ class con(object):
 
     def _nextPage(self):
         self.dr("//span[text()='下一步']/..").click()
+
+    def nextPage(self):
+        return self._nextPage()
 
     def _choicePath(self, pathName):
         self.dr("//div[@id='billFlowDefineId']/div/div").click()
@@ -210,7 +232,7 @@ class con(object):
             print("current url error!")
 
     def nextReviewer(self, rolename):
-        reviewName = self.dr("//span[text()='"+rolename+"']/../div/div").text
+        reviewName = self.dr("//span[text()='" + rolename + "']/../div/div").text
         # self.choice_menu('单位内控设置', '人员管理')
         userDict = {
             '马化腾': 'mahuateng',
@@ -235,10 +257,77 @@ class con(object):
         useName = userDict[reviewName]
         return useName
 
+    def calendar(self):     # 日历
+        time.sleep(0.5)
+        self.dr("//td[@class='ant-calendar-cell ant-calendar-today ant-calendar-selected-date']/div").click()
+        time.sleep(1)
+        self.dr("//td[@class='ant-calendar-cell ant-calendar-today ant-calendar-selected-start-date "
+                "ant-calendar-selected-date ant-calendar-selected-day']/div").click()
+
+
+
+# log_path = os.path.join(root_dir, "logs")
+
+
+class caseLog(object):
+
+    def __init__(self, log_path=os.path.join(root_dir, "logs")):
+
+        # 文件的命名
+        self.log_path = log_path
+        self.logName = os.path.join(self.log_path, '%s.log' % time.strftime('%Y_%m_%d'))
+
+        self.logger = logging.getLogger()
+        self.logger.setLevel(logging.DEBUG)
+
+        # 日志输出格式
+        self.formatter = logging.Formatter('[%(asctime)s] - %(filename)s] - %(levelname)s: %(message)s')
+
+    def __console(self, level, message):
+        # 创建一个FileHandler，用于写到本地
+        fh = logging.FileHandler(self.logName, 'a', encoding='utf-8')  # 这个是python3的
+        fh.setLevel(logging.DEBUG)
+        fh.setFormatter(self.formatter)
+        self.logger.addHandler(fh)
+
+        # 创建一个StreamHandler,用于输出到控制台
+        ch = logging.StreamHandler()
+        ch.setLevel(logging.DEBUG)
+        ch.setFormatter(self.formatter)
+        self.logger.addHandler(ch)
+
+        if level == 'info':
+            self.logger.info(message)
+        elif level == 'debug':
+            self.logger.debug(message)
+        elif level == 'warning':
+            self.logger.warning(message)
+        elif level == 'error':
+            self.logger.error(message)
+
+        # 这两行代码是为了避免日志输出重复问题
+        self.logger.removeHandler(ch)
+        self.logger.removeHandler(fh)
+
+        # 关闭打开的文件
+        fh.close()
+
+    def debug(self, message):
+        self.__console('debug', message)
+
+    def info(self, message):
+        self.__console('info', message)
+
+    def warning(self, message):
+        self.__console('warning', message)
+
+    def error(self, message):
+        self.__console('error', message)
+
 
 def login_code(driver):
     driver.get(nky_url)
-    driver.find_element(By.XPATH, "//input[@id='userName']").send_keys(username)
+    driver.find_elements(By.XPATH, "//input[@id='userName']")[0].send_keys(username)
     driver.find_element(By.XPATH, "//input[@id='password']").send_keys(password)
     driver.find_element_by_xpath("//button[@data-test-id='LogInButton']").click()
     time.sleep(5)
@@ -697,8 +786,11 @@ def invalid(driver):  # 作废
 
 
 if __name__ == '__main__':
-    br = webdriver.Chrome()
-    br.maximize_window()
-    br.implicitly_wait(15)
-    c = con(br)
-    c.login()
+    # br = webdriver.Chrome()
+    # br.maximize_window()
+    # br.implicitly_wait(15)
+    # c = con(br)
+    # c.login()
+    c = con()
+    a= c.budgetAvailable()
+    print(a)

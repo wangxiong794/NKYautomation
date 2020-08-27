@@ -203,7 +203,7 @@ def edit_PR(driver):
 def start_BA_PR(driver):  # 从详情页发起采购
     choice_BA(driver)
     time.sleep(0.1)
-    driver.find_element(By.XPATH, "//div[@class='ant-table-body']/table/tbody/tr[1]/td[1]/div").click()
+    driver.find_element(By.XPATH, "//div[@class='ant-table-body']/table/tbody/tr[1]/td[3]").click()
     time.sleep(0.5)
     driver.find_element(By.XPATH, "//button[text()='更多']").click()
     time.sleep(0.5)

@@ -11,6 +11,8 @@ from selenium.webdriver.common.keys import Keys
 import random
 import datetime
 
+from service.connectmysql import DB
+
 date_now = time.strftime("%Ya%mb%dc", time.localtime()).replace('a', "年").replace('b', '月').replace('c', '日')
 
 
@@ -714,8 +716,8 @@ def choice_apply_detail(driver):  # 选择产品或者明细，需要准备两�
     driver.find_element(By.XPATH, "//td[@id='0_name']/div/i").click()
     time.sleep(1)
     # 直接选产品编码为1与2，且为常用
-    driver.find_element(By.XPATH, "//tr[@data-row-key='10000']").click()
-    driver.find_element(By.XPATH, "//tr[@data-row-key='10001']").click()
+    driver.find_element(By.XPATH, "//tr[@data-row-key='1']").click()
+    driver.find_element(By.XPATH, "//tr[@data-row-key='2']").click()
     # driver.find_element(By.XPATH, "//td[text()='2']").click()
     time.sleep(0.1)
     driver.find_element(By.XPATH, "//span[text()='确 定']/..").click()
@@ -884,7 +886,7 @@ def standard_NORI(driver):
     choice_budget(driver)
     # choice_MA(driver) # 选关联事项申请单
     RI_labor(driver)
-    edit_money1(driver, '500')
+    edit_money1(driver, '2000')
     enter_apartment(driver)
     choice_path(driver, '报销申请单自审')
     edit_matter1(driver, '劳务费报销')
@@ -1300,6 +1302,20 @@ class Pay(con):
         time.sleep(1)
         self.dr("//span[text()='继续留下']/..").click()
 
+    def getBudgetName(self,placeholder='请输入申请金额'):
+        time.sleep(0.5)
+        BudgetName = self.dr("//input[@placeholder='"+placeholder+"']/../../../../../../../../div[1]/div[2]").text
+        return BudgetName
+
+    @staticmethod
+    def budgetData(budgetName):
+        with DB(host='123.56.223.19') as db:
+            sql = "SELECT name,adjustment,actual,frozen,transit,available FROM budget_item " \
+                  "WHERE `name` = '" + budgetName + "';"
+            db.execute(sql)
+            bd = list(db)[0]
+        return bd
+
     def viewAddReimburse(self):
         # from budgetApplication billView add reimburse
         self._more()
@@ -1347,13 +1363,428 @@ class Pay(con):
         self.choice_menu('支出管理', "报销申请")
         self.inView()
         self.check()
+        self.driver.refresh()
+        time.sleep(1)
         self._more()
         self.dr("//button[text()='经费核销']").click()
         self._sure()
+        time.sleep(1)
+
+    def trainBA(self):  # 增加培训费
+        # 培训费
+        self.dr("//button[@testid='2']").click()
+        # 培训名称
+        self.dr("//input[@id='trainingFeeName']").send_keys('培训费test')
+        # 日历
+        self.dr("//span[@id='date']/span/input[1]").click()
+
+        self.calendar()
+
+        # 地点
+        self.dr("//input[@id='location']").send_keys('培训地点' + time.strftime('%m%d%H%M%S'))
+        # 培训类别
+        self.dr( "//div[@id='trainingTypeId']/div/div").click()
+        time.sleep(0.1)
+        self.dr("//li[text()='一类培训']").click()
+        time.sleep(1)
+        # 参训人数
+        self.dr("//input[@id='trainingNumber']").send_keys("1")
+        # 工作人员数
+        self.dr("//input[@id='staffNumber']").send_keys("0")
+        self.dr("//input[@id='teacherNumber']").send_keys('1')
+
+        self.dr("//td[@id='0_Number']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='0_Number']/div/div/div/div[2]/input").send_keys('1')
+        self.dr("//td[@id='0_Days']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='0_Days']/div/div/div/div[2]/input").send_keys('1')
+        self.dr("//td[@id='0_Remark']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='0_Remark']/div/div/input").send_keys('住宿费')
+        self.dr("//td[@id='1_Number']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='1_Number']/div/div/div/div[2]/input").send_keys('1')
+        self.dr("//td[@id='1_Days']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='1_Days']/div/div/div/div[2]/input").send_keys('1')
+        self.dr("//td[@id='1_Remark']/div").click()
+        time.sleep(0.1)
+        self.dr( "//td[@id='1_Remark']/div/div/input").send_keys('伙食费')
+        self.dr("//td[@id='2_Number']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='2_Number']/div/div/div/div[2]/input").send_keys('1')
+        self.dr("//td[@id='2_Days']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='2_Days']/div/div/div/div[2]/input").send_keys('1')
+        self.dr("//td[@id='2_Remark']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='2_Remark']/div/div/input").send_keys('场地/资料/交通费')
+        self.dr("//td[@id='3_Number']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='3_Number']/div/div/div/div[2]/input").send_keys('1')
+        self.dr("//td[@id='3_Days']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='3_Days']/div/div/div/div[2]/input").send_keys('1')
+        self.dr("//td[@id='3_Remark']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='3_Remark']/div/div/input").send_keys('其他费用')
+        self.dr("//td[@id='4_Amount']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='4_Amount']/div/div/div/div[2]/input").send_keys('100')
+        self.dr("//td[@id='4_Remark']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='4_Remark']/div/div/input").send_keys('讲课费(税后总额)')
+        self.dr("//td[@id='5_Amount']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='5_Amount']/div/div/div/div[2]/input").send_keys('100')
+        self.dr("//td[@id='5_Remark']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='5_Remark']/div/div/input").send_keys('个人所得税(总额)')
+        self.dr("//td[@id='6_Amount']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='6_Amount']/div/div/div/div[2]/input").send_keys('100')
+        self.dr("//td[@id='6_Remark']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='6_Remark']/div/div/input").send_keys('城市间交通费(总额)')
+        # js = 'var q = document.querySelector("#globalLayoutContent").scrollTo(0,-1000)'
+        # driver.execute_script(js)
+
+    def trainRI(self):
+        time.sleep(0.5)
+        js = 'var q = document.querySelector("#globalLayoutContent").scrollTo(0,1000)'
+        self.driver.execute_script(js)
+        self.dr("//td[@id='0_Amount']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='0_Amount']/div/div/div/div[2]/input").send_keys('400')
+        self.dr("//td[@id='1_Amount']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='1_Amount']/div/div/div/div[2]/input").send_keys('150')
+        self.dr("//td[@id='2_Amount']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='2_Amount']/div/div/div/div[2]/input").send_keys('70')
+        self.dr("//td[@id='3_Amount']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='3_Amount']/div/div/div/div[2]/input").send_keys('30')
+        self.dr("//td[@id='4_Amount']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='4_Amount']/div/div/div/div[2]/input").send_keys('100')
+        self.dr("//td[@id='5_Amount']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='5_Amount']/div/div/div/div[2]/input").send_keys('100')
+        self.dr("//td[@id='6_Amount']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='6_Amount']/div/div/div/div[2]/input").send_keys('100')
+
+    def officialBA(self):  # 接待费标准测算
+        self.dr("//button[@testid='5']").click()
+        time.sleep(0.5)
+        self.dr("//input[@id='guestUnit']").send_keys("单位" + str(time.strftime('%m%d%H%M%S')))
+        self.dr("//input[@id='guestLeaderName']").send_keys(
+            "领队" + str(time.strftime('%m%d%H%M%S')))
+        self.dr("//div[@id='staffRankId']/div/div").click()
+        time.sleep(0.1)
+        self.dr( "//input[@id='staffRankId']").send_keys(Keys.ENTER)
+        self.dr( "//span[@id='receptionDate']").click()
+
+        self.calendar()
+
+        self.dr( "//input[@id='receptionNumber']").send_keys(1)
+        self.dr("//input[@id='guestNumber']").send_keys(1)
+        self.dr("//input[@id='accompanyNumber']").send_keys(1)
+        self.dr("//input[@id='otherCost']").send_keys(100)
+
+    def officialRI(self): # 接待费报销
+        time.sleep(1)
+        self.dr("//input[@id='officialLetter']").send_keys('接待公函')
+        time.sleep(0.2)
+        self.dr("//input[@id='guestName_0']").send_keys('对象1')
+        self.dr("//input[@id='guestUnit_0']").send_keys('单位1')
+        self.dr("//div[@id='staffRankId_0']/div").click()
+        time.sleep(0.1)
+        self.dr("//input[@id='staffRankId_0']").send_keys(Keys.ENTER)
+        self.dr("//div[@id='guestNameAccompany_0']/div").click()
+        time.sleep(0.1)
+        self.dr("//div[@id='guestNameAccompany_0']/div/div/ul/li/div/input").send_keys('陪玩1')
+        self.dr("//div[@id='staffRankIdAccompany_0']/div").click()
+        time.sleep(0.1)
+        self.dr("//input[@id='staffRankIdAccompany_0']").send_keys(Keys.ENTER)
+        self.dr("//input[@id='guestUnitAccompany_0']").send_keys('test')
+        # 工作餐
+        js = 'var q =document.querySelector("#globalLayoutContent").scrollTo(0,1000)'
+        self.driver.execute_script(js)
+        work_food_path = "//div[text()='工作餐']/../div[2]/div/div/div/div/div/div[1]/div/table/tbody/tr"
+        self.dr(work_food_path + "/td[2]/div").click()
+        time.sleep(0.1)
+        self.dr("//a[text()='今天']").click()
+        self.dr(work_food_path + "/td[3]/div").click()
+        time.sleep(0.1)
+        self.dr(work_food_path + "/td[3]/div/div/input").send_keys('场所1')
+        self.dr(work_food_path + "/td[6]/div").click()
+        time.sleep(0.5)
+        self.dr(work_food_path + "/td[6]/div/div/div/div[2]/input").send_keys('360')
+
+        # 交通费用
+        transport_path = "//div[text()='工作餐']/../div[4]/div/div/div/div/div/div[1]/div/table/tbody/tr"
+        self.dr(transport_path + "/td[2]/div").click()
+        time.sleep(0.1)
+        # /html/body/div[7]/div/div/div/div/div[2]/div[3]/span/a
+        self.dr("//a[text()='今天']").click()
+        self.dr(transport_path + "/td[3]/div").click()
+        time.sleep(0.1)
+        self.dr(transport_path + "/td[3]/div/div/input").send_keys('交通项目1')
+        self.dr(transport_path + "/td[4]/div").click()
+        time.sleep(0.1)
+        self.dr(transport_path + "/td[4]/div/div/input").send_keys('1')
+        self.dr(transport_path + "/td[5]/div").click()
+        time.sleep(0.1)
+        self.dr(transport_path + "/td[5]/div/div/input").send_keys('路线1')
+        self.dr(transport_path + "/td[6]/div").click()
+        time.sleep(0.5)
+        self.dr(transport_path + "/td[6]/div/div/div/div[2]/input").send_keys('100')
+
+    def meetingBA(self):  # 会议费测算
+        # 会议费
+        self.dr("//button[@testid='3']").click()
+        self.dr("//input[@id='meetingName']").send_keys('会议一')
+        self.dr("//span[@id='dateRange']/span/input[1]").click()
+
+        self.calendar()
+
+        # 参会人数
+        self.dr("//input[@id='meetingAddress']").send_keys('地点一')
+        self.dr("//div[@id='meetingLevelId']/div/div").click()
+        time.sleep(0.5)
+        self.dr("//li[text()='一类会议']").click()
+
+        self.dr("//input[@id='meetingNumber']").send_keys('1')
+        time.sleep(1)
+        self.dr("//input[@id='staffNumber']").send_keys("1")
+
+        self.dr("//td[@id='0_Number']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='0_Number']/div/div/div/div[2]/input").send_keys('1')
+        self.dr("//td[@id='0_Days']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='0_Days']/div/div/div/div[2]/input").send_keys('1')
+        self.dr("//td[@id='0_Remark']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='0_Remark']/div/div/input").send_keys('住宿费')
+        self.dr("//td[@id='1_Number']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='1_Number']/div/div/div/div[2]/input").send_keys('1')
+        self.dr("//td[@id='1_Days']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='1_Days']/div/div/div/div[2]/input").send_keys('1')
+        self.dr("//td[@id='1_Remark']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='1_Remark']/div/div/input").send_keys('伙食费')
+        self.dr("//td[@id='2_Number']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='2_Number']/div/div/div/div[2]/input").send_keys('1')
+        self.dr("//td[@id='2_Days']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='2_Days']/div/div/div/div[2]/input").send_keys('1')
+        self.dr("//td[@id='2_Remark']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='2_Remark']/div/div/input").send_keys('其他费用')
+        self.dr("//td[@id='3_Amount']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='3_Amount']/div/div/div/div[2]/input").send_keys('20')
+        self.dr("//td[@id='3_Remark']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='3_Remark']/div/div/input").send_keys('会议场地租金')
+        self.dr("//td[@id='4_Amount']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='4_Amount']/div/div/div/div[2]/input").send_keys('20')
+        self.dr("//td[@id='4_Remark']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='4_Remark']/div/div/input").send_keys('交通费')
+        self.dr("//td[@id='5_Amount']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='5_Amount']/div/div/div/div[2]/input").send_keys('20')
+        self.dr("//td[@id='5_Remark']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='5_Remark']/div/div/input").send_keys('文件印刷费')
+        self.dr("//td[@id='6_Amount']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='6_Amount']/div/div/div/div[2]/input").send_keys('20')
+        self.dr("//td[@id='6_Remark']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='6_Remark']/div/div/input").send_keys('医药费')
+        self.dr("//td[@id='7_Amount']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='7_Amount']/div/div/div/div[2]/input").send_keys('20')
+        self.dr("//td[@id='7_Remark']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='7_Remark']/div/div/input").send_keys('其他')
+
+    def meetingRI(self):  # 会议费报销
+        time.sleep(0.5)
+        js = 'var q = document.querySelector("#globalLayoutContent").scrollTo(0,1000)'
+        self.driver.execute_script(js)
+        self.dr("//td[@id='0_Amount']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='0_Amount']/div/div/div/div[2]/input").send_keys('400')
+        self.dr("//td[@id='1_Amount']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='1_Amount']/div/div/div/div[2]/input").send_keys('150')
+        self.dr("//td[@id='2_Amount']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='2_Amount']/div/div/div/div[2]/input").send_keys('100')
+        self.dr("//td[@id='3_Amount']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='3_Amount']/div/div/div/div[2]/input").send_keys('20')
+        self.dr("//td[@id='4_Amount']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='4_Amount']/div/div/div/div[2]/input").send_keys('20')
+        self.dr("//td[@id='5_Amount']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='5_Amount']/div/div/div/div[2]/input").send_keys('20')
+        self.dr("//td[@id='6_Amount']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='6_Amount']/div/div/div/div[2]/input").send_keys('20')
+        self.dr("//td[@id='7_Amount']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='7_Amount']/div/div/div/div[2]/input").send_keys('20')
+
+    def travelBA(self):
+
+        # 差旅费
+        self.dr("//button[@testid='1']").click()
+        # 日历
+        time.sleep(0.5)
+        self.dr("//div[@title='出差时间']/../div[3]/div/div/div/span/span/span/input[1]").click()
+
+        self.calendar()
+
+        # 出差地点--第一个地区北京
+        self.dr("//div[@title='出差地点']/../div[3]/div/div/div/span/span").click()
+        time.sleep(0.5)
+        self.dr( "//li[text()='北京']").click()
+        time.sleep(0.1)
+        # driver.find_element(By.XPATH, "//li[text()='北京（全市）']").click()
+        # driver.find_element(By.XPATH, "//div[@title='交通工具']/../div[3]/div/div/div/span/div").click()
+        # time.sleep(0.1)
+        # driver.find_element(By.XPATH, "//li[text()='飞机']").click()
+        # driver.find_element(By.XPATH, "//div[@title='城市间交通费']/../div[3]/div/div/div/span/div/div[2]/input").click()
+        self.dr("//div[@title='城市间交通费']/../div[3]/div/div/div/span/div/div[2]/input").send_keys(
+            20)
+
+    def travelRI(self):  # 差旅费报销
+        time.sleep(0.5)
+        # 系统内人员
+        self.dr("//div[@id='travelSystemUsers_0']/div").click()
+        time.sleep(0.1)
+        self.dr("//input[@id='travelSystemUsers_0']").send_keys(Keys.ENTER)
+        self.dr("//div[@id='trafficToolStr_0']/div").click()
+        time.sleep(0.1)
+        self.dr("//input[@id='trafficToolStr_0']").send_keys(Keys.ENTER)
+        #   费用明细
+        js = 'var q=document.querySelector("#globalLayoutContent").scrollTo(0,10000)'
+        self.driver.execute_script(js)
+        self.dr("//input[@id='transportFeeAmount_0']").send_keys('20')
+        self.dr("//input[@id='busFeeAmount_0']").send_keys('80')
+        self.dr("//input[@id='lodgingFeeAmount_0']").send_keys('0')
+        self.dr("//input[@id='foodFeeAmount_0']").send_keys('100')
+
+    def laborBA(self):  # 填经费页面加劳务费，labor:劳务
+        # 劳务费
+        time.sleep(0.5)
+        self.dr("//button[@testid='4']").click()
+
+    def laborRI(self):  # 劳务费报销
+        time.sleep(0.5)
+        self.dr("//button[@testid='labor']").click()
+        time.sleep(0.5)
+        self.dr("//div[@class='reimburse-labor-to-view']/div/div[2]/div/section["
+                                      "2]/div/div/div/div/div/div/div[2]/div/div/table/tbody/tr/td[2]/div").click()
+        time.sleep(1)
+        self.dr("//input[@placeholder='请输入专家姓名']").send_keys('叶安世')
+        time.sleep(0.5)
+        self.dr("//td[text()='叶安世']/..").click()
+        time.sleep(0.2)
+        self.dr("//span[text()='确 定']/..").click()
+        time.sleep(0.5)
+        # 劳务分类
+        self.dr("//div[@class='reimburse-labor-to-view']/div/div[2]/div/section["
+                                      "2]/div/div/div/div/div/div/div[1]/div/table/tbody/tr/td[3]/div").click()
+        time.sleep(0.1)
+        self.dr("//li[text()='专家劳务']").click()
+        # 税后实发单价
+        # driver.find_element(By.XPATH, "//div[@class='reimburse-labor-to-view']/div/div[2]/div/section["
+        #                               "2]/div/div/div/div/div/div/div[1]/div/table/tbody/tr/td[6]/div").click()
+        # time.sleep(0.1)
+        # driver.find_element(By.XPATH, "//div[@class='reimburse-labor-to-view']/div/div[2]/div/section["
+        #                               "2]/div/div/div/div/div/div/div[1]/div/table/tbody/tr/td[6]/div/div/div["
+        #                               "2]/input").send_keys('500')
+        # 数量
+        js = 'var q=document.querySelector("#globalLayoutContent > div > div.reimburse-labor-to-view > div > ' \
+             'div.antd-pro-components-v2-card-view-card-wrapper > div > section:nth-child(2) > div > div > div > div > ' \
+             'div > div > div.ant-table-scroll > div").scrollTo(400,0) '
+        self.driver.execute_script(js)
+        time.sleep(0.5)
+        # //div[@class='reimburse-labor-to-view']/div/div[2]/div/section[2]/div/div/div/div/div/div/div[1]/div/table/tbody/tr/td[8]/div"
+        self.dr("//td[@id='0_hours']/div").click()
+        time.sleep(0.5)
+        self.dr("//td[@id='0_hours']/div/div/div/div[2]/input").send_keys('1')
+
+    def detailInput(self):  # 输入产品或资产
+        time.sleep(0.5)
+        self.dr("//button[@testid='applyDetails']").click()
+        time.sleep(0.5)
+        # 明细内容
+        self.dr("//td[@id='0_name']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='0_name']/div/div/input").send_keys('明细' + time.strftime('%m%d%H%M%S'))
+        # 型号
+        self.dr("//td[@id='0_specification']/div").click()
+
+        self.dr("//td[@id='0_specification']/div/div/input").send_keys(
+            '型号' + time.strftime('%H%M%S'))
+        # 计量单位
+        self.dr("//td[@id='0_unitId']/div").click()
+        time.sleep(0.1)
+        self.dr("//li[text()='支']").click()
+        # 数量
+        self.dr("//td[@id='0_quantity']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='0_quantity']/div/div/div/div[2]/input").send_keys('2')
+        js = 'var q=document.querySelector("#applyEdit_fee_applyDetails > div.antd-pro-components-v2-card-card-card > ' \
+             'div:nth-child(3) > div > div > div > div > div > div.ant-table-scroll > div").scrollTo(1000,0) '
+        self.driver.execute_script(js)
+        time.sleep(0.1)
+        # 单价
+        self.dr("//td[@id='0_price']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='0_price']/div/div/div/div[2]/input").send_keys('100')
+        # 推荐供应商
+        self.dr("//td[@id='0_supplierId']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='0_supplierId']/div/div/div/div/div/div/div/input").send_keys(
+            Keys.ENTER)
+        # 政采目录
+        self.dr("//td[@id='0_governmentPurchaseCatalogueId']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='0_governmentPurchaseCatalogueId']/div/div/div/div/div/div/div/input").send_keys(
+            Keys.ENTER)
+        # 备注
+        self.dr("//td[@id='0_description']/div").click()
+        time.sleep(0.1)
+        self.dr("//td[@id='0_description']/div/div/input").send_keys(
+            '备注' + time.strftime('%m%d%H%M%S'))
+
+    def menuRI(self):
+        self.choice_menu("支出管理", "报销申请")
+
+    def addNoRI(self):  # 无申请报销
+        self.add()
+        time.sleep(0.5)
+        self.dr("//span[text()='+ 无申请报销']/..").click()
 
 
 if __name__ == "__main__":
     driver = webdriver.Chrome()
     driver.implicitly_wait(15)
     common_funcation.login_code(driver)
-    IM2(driver)
+    # IM2(driver)
