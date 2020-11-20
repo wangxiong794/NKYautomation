@@ -3,7 +3,6 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from service.bpm_service import common_funcation, asset
 from service.bpm_service.asset import LowCost, asset, dataAsset
-from service.bpm_service.common_funcation import driver
 
 
 # TODO UI二期后，还需要进行改动
@@ -14,8 +13,8 @@ class ASSET(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.driver = driver
-        # cls.driver = webdriver.Chrome()
+        # cls.driver = driver
+        cls.driver = webdriver.Chrome()
         cls.lc = LowCost(cls.driver)
         cls.zc = asset(cls.driver)
         cls.dt = dataAsset(cls.driver)
@@ -25,7 +24,7 @@ class ASSET(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        driver.quit()
+        cls.driver.quit()
 
     def setUp(self):
         self.driver.refresh()

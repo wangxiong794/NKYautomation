@@ -23,7 +23,7 @@ if not os.path.exists(report_path): os.mkdir(report_path)  # 如果没有该文�
 def add_case():
     """加载所有的测试用例"""
     suite = unittest.TestSuite()
-    discover = unittest.defaultTestLoader.discover(r".\\test_case\\nky_bpm", "pay_test.py",)
+    discover = unittest.defaultTestLoader.discover(r".\\test_case\\nky_bpm", "*test.py",)
     suite.addTest(discover)
 
     filename = 'test' + str(time.strftime('%y%m%d%H%M%S')) + '.html'

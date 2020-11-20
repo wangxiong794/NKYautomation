@@ -46,6 +46,7 @@ class apply(unittest.TestCase):
         bd = self.ba.budgetData(budgetName)
         self.log.info("预算项初始【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
                       (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        available1 = bd['available']
         self.ba.editMoney('1000')
         self.ba.choicePath('事前申请单自审')
         self.ba.editDescription('事前申请单发起、撤回、复制、驳回、复制、作废')
@@ -53,10 +54,14 @@ class apply(unittest.TestCase):
         bd = self.ba.budgetData(budgetName)
         self.log.info("提交事前单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
                       (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        available2 = bd['available']
+        self.assertEqual(available1-1000,available2,"发起事前申请时，可用预算扣减失败，检查单据提交是否成功，若成功金额是否正确")
         self.ba.cancel()
         bd = self.ba.budgetData(budgetName)
         self.log.info("撤销事前单【预算项：%s，调整后金额：%s，已发生金额：%s，冻结金额：%s，在途金额：%s，可用预算：%s】" %
                       (bd['name'], bd['adjustment'], bd['actual'], bd['frozen'], bd['transit'], bd['available']))
+        available3 = bd['available']
+        self.assertEqual(available3, available1, "撤销事前申请时，可用预算退还失败，检查单据撤销是否成功，若成功金额是否正确")
         self.ba.copyCancelBill()
         self.ba.submit()
         bd = self.ba.budgetData(budgetName)
@@ -444,6 +449,6 @@ if __name__ == '__main__':
     # a = apply()
     # a.setUpClass()
     # a.setUp()
-    # a.test_07_BA()
+    # a.test_02_BA()
     # a.tearDown()
     # a.tearDownClass()

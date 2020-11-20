@@ -17,7 +17,7 @@ class contractQuery(unittest.TestCase):
         chrome_options.add_argument('--headless')
         chrome_options.add_argument('--disable-gpu')
         cls.driver = webdriver.Chrome(chrome_options=chrome_options)
-        # cls.driver = webdriver.Chrome()
+        cls.driver = webdriver.Chrome()
         cls.driver.implicitly_wait(15)
         cls.driver.set_window_size(1366, 1000)
         common_funcation.login_code(cls.driver)
@@ -50,4 +50,10 @@ class contractQuery(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    # unittest.main()
+    a = contractQuery()
+    a.setUpClass()
+    a.setUp()
+    a.test_01_CT()
+    a.tearDown()
+    a.tearDownClass()

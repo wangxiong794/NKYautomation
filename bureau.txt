@@ -1,0 +1,28 @@
+
+每次运行串行登录5次，max为5次中最大时间，min为中间时间，avg为平均时间
+单次运行：
+[{'UrlName': '绩效通', 'Url': 'http://dev3.neikongyi.com/bureau', 'number': 5, 'NoCache': {'页面加载时间': {'max': 3074, 'min': 820, 'avg': 1326.0}, 'DOM加载时间': {'max': 2234, 'min': 634, 'avg': 1006.6}}}]
+10线程并发运行：
+[{'UrlName': '绩效通', 'Url': 'http://dev3.neikongyi.com/bureau', 'number': 5, 'NoCache': {'页面加载时间': {'max': 19249, 'min': 1279, 'avg': 6185.8}, 'DOM加载时间': {'max': 4443, 'min': 1029, 'avg': 2366.2}}}]
+[{'UrlName': '绩效通', 'Url': 'http://dev3.neikongyi.com/bureau', 'number': 5, 'NoCache': {'页面加载时间': {'max': 27224, 'min': 2121, 'avg': 8545.4}, 'DOM加载时间': {'max': 20154, 'min': 1812, 'avg': 6321.6}}}]
+[{'UrlName': '绩效通', 'Url': 'http://dev3.neikongyi.com/bureau', 'number': 5, 'NoCache': {'页面加载时间': {'max': 25336, 'min': 2005, 'avg': 8719.2}, 'DOM加载时间': {'max': 17563, 'min': 1497, 'avg': 6299.2}}}]
+[{'UrlName': '绩效通', 'Url': 'http://dev3.neikongyi.com/bureau', 'number': 5, 'NoCache': {'页面加载时间': {'max': 29938, 'min': 1084, 'avg': 8712.0}, 'DOM加载时间': {'max': 21285, 'min': 858, 'avg': 6200.6}}}]
+[{'UrlName': '绩效通', 'Url': 'http://dev3.neikongyi.com/bureau', 'number': 5, 'NoCache': {'页面加载时间': {'max': 20601, 'min': 3035, 'avg': 8339.4}, 'DOM加载时间': {'max': 12698, 'min': 2421, 'avg': 5536.8}}}]
+[{'UrlName': '绩效通', 'Url': 'http://dev3.neikongyi.com/bureau', 'number': 5, 'NoCache': {'页面加载时间': {'max': 32766, 'min': 2118, 'avg': 10006.2}, 'DOM加载时间': {'max': 26667, 'min': 1168, 'avg': 8050.6}}}]
+[{'UrlName': '绩效通', 'Url': 'http://dev3.neikongyi.com/bureau', 'number': 5, 'NoCache': {'页面加载时间': {'max': 31884, 'min': 2111, 'avg': 10023.0}, 'DOM加载时间': {'max': 26381, 'min': 1152, 'avg': 7967.0}}}]
+[{'UrlName': '绩效通', 'Url': 'http://dev3.neikongyi.com/bureau', 'number': 5, 'NoCache': {'页面加载时间': {'max': 31736, 'min': 2446, 'avg': 9066.2}, 'DOM加载时间': {'max': 26453, 'min': 1354, 'avg': 7165.6}}}]
+[{'UrlName': '绩效通', 'Url': 'http://dev3.neikongyi.com/bureau', 'number': 5, 'NoCache': {'页面加载时间': {'max': 33832, 'min': 2861, 'avg': 11248.2}, 'DOM加载时间': {'max': 29008, 'min': 1319, 'avg': 8723.4}}}]
+[{'UrlName': '绩效通', 'Url': 'http://dev3.neikongyi.com/bureau', 'number': 5, 'NoCache': {'页面加载时间': {'max': 31348, 'min': 2735, 'avg': 10523.0}, 'DOM加载时间': {'max': 26063, 'min': 1138, 'avg': 8110.2}}}]
+————————————————————分割线———————————————————
+————————————————————分割线———————————————————
+[{'UrlName': '绩效通', 'Url': 'http://dev3.neikongyi.com/bureau', 'number': 5, 'NoCache': {'页面加载时间': {'max': 18182, 'min': 1405, 'avg': 5334.8}, 'DOM加载时间': {'max': 7989, 'min': 1049, 'avg': 3030.2}}}]
+[{'UrlName': '绩效通', 'Url': 'http://dev3.neikongyi.com/bureau', 'number': 5, 'NoCache': {'页面加载时间': {'max': 22151, 'min': 1466, 'avg': 6779.4}, 'DOM加载时间': {'max': 10812, 'min': 1217, 'avg': 4263.2}}}]
+[{'UrlName': '绩效通', 'Url': 'http://dev3.neikongyi.com/bureau', 'number': 5, 'NoCache': {'页面加载时间': {'max': 22786, 'min': 2619, 'avg': 7136.4}, 'DOM加载时间': {'max': 11849, 'min': 2203, 'avg': 4624.2}}}]
+[{'UrlName': '绩效通', 'Url': 'http://dev3.neikongyi.com/bureau', 'number': 5, 'NoCache': {'页面加载时间': {'max': 32282, 'min': 2285, 'avg': 9054.2}, 'DOM加载时间': {'max': 24321, 'min': 2030, 'avg': 7188.2}}}]
+[{'UrlName': '绩效通', 'Url': 'http://dev3.neikongyi.com/bureau', 'number': 5, 'NoCache': {'页面加载时间': {'max': 30858, 'min': 2037, 'avg': 8864.6}, 'DOM加载时间': {'max': 24052, 'min': 1777, 'avg': 7244.8}}}]
+[{'UrlName': '绩效通', 'Url': 'http://dev3.neikongyi.com/bureau', 'number': 5, 'NoCache': {'页面加载时间': {'max': 34191, 'min': 2646, 'avg': 9597.2}, 'DOM加载时间': {'max': 26143, 'min': 2445, 'avg': 7685.8}}}]
+[{'UrlName': '绩效通', 'Url': 'http://dev3.neikongyi.com/bureau', 'number': 5, 'NoCache': {'页面加载时间': {'max': 27768, 'min': 2542, 'avg': 8590.8}, 'DOM加载时间': {'max': 23173, 'min': 2321, 'avg': 7349.8}}}]
+[{'UrlName': '绩效通', 'Url': 'http://dev3.neikongyi.com/bureau', 'number': 5, 'NoCache': {'页面加载时间': {'max': 33211, 'min': 1987, 'avg': 9433.4}, 'DOM加载时间': {'max': 27114, 'min': 1740, 'avg': 7931.2}}}]
+[{'UrlName': '绩效通', 'Url': 'http://dev3.neikongyi.com/bureau', 'number': 5, 'NoCache': {'页面加载时间': {'max': 32659, 'min': 2027, 'avg': 9438.2}, 'DOM加载时间': {'max': 20852, 'min': 1815, 'avg': 6777.8}}}]
+[{'UrlName': '绩效通', 'Url': 'http://dev3.neikongyi.com/bureau', 'number': 5, 'NoCache': {'页面加载时间': {'max': 32347, 'min': 2573, 'avg': 9488.2}, 'DOM加载时间': {'max': 25938, 'min': 2453, 'avg': 7825.4}}}]
+————————————————————分割线———————————————————

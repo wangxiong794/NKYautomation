@@ -22,12 +22,40 @@ username = 'chendongxue'
 password = 'nky2018'
 
 
-
 class con(object):
-    def __init__(self, driver):  # 如果不传driver，就默认这个值
-        self.dr = driver.find_element_by_xpath
+    def __init__(self, driver=None):  # 如果不传driver，就默认这个值
+        if driver is None:
+            self.dr = driver
+        else:
+            self.dr = driver.find_element_by_xpath
+
         self.driver = driver
         # self._ip = "47.93.196.74"
+
+    def screenShot(self):   # 截图
+        # img文件夹路径
+        img_path = os.path.join(r".\\..\\..\\img")
+        # img文件夹不存在，新建该文件夹
+        if not os.path.exists(img_path):
+            os.makedirs(img_path)
+        # 获取当前日期
+        local_date = time.strftime('%Y-%m-%d', time.localtime(time.time()))
+        # 日期文件夹路径
+        date_file_path = os.path.join(img_path, local_date)
+        # 日期文件夹不存在，新建该文件夹
+        if not os.path.exists(date_file_path):
+            os.makedirs(date_file_path)
+        # 截图存放路径
+        local_time = time.strftime('%Y-%m-%d %H%M%S', time.localtime(time.time()))
+        jt_name = local_time + '.png'
+        jt_path = os.path.join(date_file_path, jt_name)
+        try:
+            self.driver.get_screenshot_as_file(jt_path)
+            print('截图保存成功')
+        except BaseException:
+            # log1.error('截图失败', exc_info=1)
+            print('截图失败')
+        print('Screenshot_Path：', jt_path)
 
     def driverSetting(self):
         self.driver.implicitly_wait(15)
@@ -257,13 +285,11 @@ class con(object):
         useName = userDict[reviewName]
         return useName
 
-    def calendar(self):     # 日历
+    def calendar(self):  # 日历
         time.sleep(0.5)
-        self.dr("//td[@class='ant-calendar-cell ant-calendar-today ant-calendar-selected-date']/div").click()
+        self.dr("//td[contains(@class,'ant-calendar-cell ant-calendar-today ant-calendar-selected-date')]/div").click()
         time.sleep(1)
-        self.dr("//td[@class='ant-calendar-cell ant-calendar-today ant-calendar-selected-start-date "
-                "ant-calendar-selected-date ant-calendar-selected-day']/div").click()
-
+        self.dr("//td[contains(@class,'ant-calendar-cell ant-calendar-today ant-calendar-selected-date')]/div").click()
 
 
 # log_path = os.path.join(root_dir, "logs")
@@ -750,7 +776,10 @@ def enter_ct_type(driver):  # 选第一个合同类型
 def enter_b_supplier(driver):  # 乙方选第一个供应商
     driver.find_element(By.XPATH, "//div[@id='bSupplierId']/div").click()
     time.sleep(0.5)
-    driver.find_element(By.XPATH, "//tr[@data-row-key='10000']").click()
+    driver.find_element(By.XPATH, "//input[@placeholder='搜索供应商名称/创建部门']").send_keys("北京行控科技")
+    # driver.find_element(By.XPATH, "//tr[@data-row-key='10000']").click()
+    time.sleep(0.1)
+    driver.find_element(By.XPATH, "//div[contains(text(),'北京行控科技有限公司')]").click()
     time.sleep(0.1)
     driver.find_element(By.XPATH, "//span[text()='确 定']/..").click()
     time.sleep(0.1)
@@ -791,6 +820,7 @@ if __name__ == '__main__':
     # br.implicitly_wait(15)
     # c = con(br)
     # c.login()
+
     c = con()
-    a= c.budgetAvailable()
-    print(a)
+    c.screenShot()
+    # print(a)

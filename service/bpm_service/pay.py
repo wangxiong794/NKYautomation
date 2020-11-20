@@ -1,3 +1,4 @@
+# coding=utf-8
 """支出管理"""
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -77,6 +78,7 @@ def edit_matter(driver, ba_name):
 
 def edit_matter1(driver, ba_name):
     ba_matter = ba_name + str(time.strftime('%m%d%H%M%S'))
+    driver.find_element(By.XPATH, "//input[@id='attachmentNumber']").send_keys(5)
     driver.find_element(By.XPATH, "//textarea[@id='description']").send_keys(ba_matter)
 
 
@@ -1334,7 +1336,11 @@ class Pay(con):
         self._nextPage()
         # self.enterDepart()
         self.choicePath('报销申请单自审')
+        self._attachment()
         self.payDetail()
+
+    def _attachment(self):
+        self.dr("//input[@id='attachmentNumber']").send_keys(5)
 
     def submitReimburse(self):
         time.sleep(0.1)

@@ -1,4 +1,6 @@
 .idea
 venv
+logs
+/logs
 report
-
+/test_case/nky_bpm/building_test.py

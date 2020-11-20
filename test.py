@@ -43,5 +43,5 @@ class workSpace(object):
 #     print(a)
 # else:
 #     print("linux")
-a={1,9,5,0}
-print(sorted(a))
+# a={1,9,5,0}
+# print(sorted(a))

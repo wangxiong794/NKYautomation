@@ -84,3 +84,9 @@ class adjust(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+    # a = adjust()
+    # a.setUpClass()
+    # a.setUp()
+    # a.test_21_AD()
+    # a.tearDown()
+    # a.tearDownClass()

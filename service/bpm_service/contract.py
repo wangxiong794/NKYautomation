@@ -1,3 +1,4 @@
+# coding=utf-8
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
@@ -11,10 +12,10 @@ from service.bpm_service.common_funcation import enter_apartment, enter_b_suppli
 def start_BA_CT(driver):  # 从事前单详情页发起报销
     choice_BA(driver)
     time.sleep(0.1)
-    driver.find_element(By.XPATH, "//div[@class='ant-table-body']/table/tbody/tr[1]/td[1]/div").click()
+    driver.find_element(By.XPATH, "//div[@class='ant-table-body']/table/tbody/tr[1]/td[3]").click()
     time.sleep(0.5)
     driver.find_element(By.XPATH, "//button[text()='更多']").click()
-    time.sleep(0.1)
+    time.sleep(0.5)
     driver.find_element(By.XPATH, "//li[text()='申请合同']").click()
     time.sleep(0.5)
     driver.find_element(By.XPATH, "//span[text()='继续申请合同']/..").click()

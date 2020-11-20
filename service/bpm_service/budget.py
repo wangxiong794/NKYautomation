@@ -1,3 +1,4 @@
+# coding=utf-8
 import time
 
 from selenium.webdriver.common.by import By
@@ -191,6 +192,7 @@ def budget_ri_down(driver):     # 调整
     edit_money1(driver, '500')
     enter_apartment(driver)
     choice_path(driver, '报销申请单自审')
+    driver.find_element(By.XPATH, "//input[@id='attachmentNumber']").send_keys(5)
     edit_matter1(driver, '核销调减使用')
     pay_setting(driver)
     RIsubmit(driver)
@@ -232,6 +234,7 @@ def budget_ri_down1(driver):
     edit_money1(driver, '500')
     enter_apartment(driver)
     choice_path(driver, '报销申请单自审')
+    driver.find_element(By.XPATH, "//input[@id='attachmentNumber']").send_keys(5)
     edit_matter1(driver, '核销调减使用')
     pay_setting(driver)
     RIsubmit(driver)
@@ -273,6 +276,7 @@ def budget_ri_down2(driver):
     edit_money1(driver, '500')
     enter_apartment(driver)
     choice_path(driver, '报销申请单自审')
+    driver.find_element(By.XPATH, "//input[@id='attachmentNumber']").send_keys(5)
     edit_matter1(driver, '核销调减使用')
     pay_setting(driver)
     RIsubmit(driver)
@@ -308,6 +312,7 @@ def budget_ri_down3(driver):
     edit_money1(driver, '500')
     enter_apartment(driver)
     choice_path(driver, '报销申请单自审')
+    driver.find_element(By.XPATH, "//input[@id='attachmentNumber']").send_keys(5)
     edit_matter1(driver, '核销调减使用')
     pay_setting(driver)
     RIsubmit(driver)

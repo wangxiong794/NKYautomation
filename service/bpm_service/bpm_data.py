@@ -1,3 +1,4 @@
+# coding:utf-8
 """
 事前申请单的data明细
 
