@@ -17,7 +17,7 @@ from service.connectmysql import DB
 # 123.56.223.19
 from service.logger import Log
 
-nky_url = 'http://dev2.neikongyi.com/nky'
+nky_url = 'http://nky.neikongyi.com/nky'
 username = 'chendongxue'
 password = 'nky2018'
 

@@ -16,6 +16,7 @@ class page(object):
             chrome_options.add_argument('--headless')
             chrome_options.add_argument('--disable-gpu')
             self.driver = webdriver.Chrome(chrome_options=chrome_options)
+        self.dr = self.driver.find_element
         self.driver.implicitly_wait(15)
         self.driver.set_window_size(1366, 1000)
 
@@ -23,7 +24,7 @@ class page(object):
         cf = configparser.ConfigParser()
         cf.read(_filename, encoding="utf-8")
         locators = cf.get(section, option).split(':')
-        print(locators)
+        # print(locators)
         locMethod = locators[0]
         locExpression = locators[1]
         element = WebDriverWait(self.driver, 5).until(lambda x: x.find_element(locMethod, locExpression),
@@ -35,13 +36,16 @@ class page(object):
     def readConfig(_option):
         cf = configparser.ConfigParser()
         cf.read('../elements/config.ini', encoding="utf-8")
-        cf.get(section='config',option=_option)
+        return cf.get(section='config',option=_option)
 
-    def login(self, _filename='../elements/pay.ini', section='login'):
-        self.driver.get(self.readConfig('url'))
-        self.element(_filename, section, 'username').send_keys(self.readConfig('username'))
+    def login(self, _filename='../elements/conPage.ini', section='login'):
+        self.driver.get(str(self.readConfig('url')))
+        self.element(_filename, section, 'username').send_keys(self.readConfig('account'))
         self.element(_filename, section, 'password').send_keys(self.readConfig('password'))
         self.element(_filename, section, 'loginButton').click()
+        welcomeText=str(self.element(_filename, section, 'welcome').text)
+        assert "祝您开心每一天" in welcomeText
+        self.driver.refresh()
 
 
 if __name__ == "__main__":

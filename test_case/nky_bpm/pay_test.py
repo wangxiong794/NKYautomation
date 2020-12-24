@@ -15,10 +15,10 @@ class apply(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        chrome_options = Options()
-        chrome_options.add_argument('--headless')
-        chrome_options.add_argument('--disable-gpu')
-        cls.driver = webdriver.Chrome(chrome_options=chrome_options)
+        # chrome_options = Options()
+        # chrome_options.add_argument('--headless')
+        # chrome_options.add_argument('--disable-gpu')
+        # cls.driver = webdriver.Chrome(chrome_options=chrome_options)
         cls.driver = webdriver.Chrome()
         cls.log = common_funcation.caseLog()
         cls.ba = Pay(cls.driver)
@@ -445,10 +445,10 @@ class apply(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
-    # a = apply()
-    # a.setUpClass()
-    # a.setUp()
-    # a.test_02_BA()
-    # a.tearDown()
-    # a.tearDownClass()
+    # unittest.main()
+    a = apply()
+    a.setUpClass()
+    a.setUp()
+    a.test_00_BA()
+    a.tearDown()
+    a.tearDownClass()

@@ -38,10 +38,5 @@ class workSpace(object):
         return allTime
 
 
-# a = platform.architecture()[1]
-# if "Windows" in a:
-#     print(a)
-# else:
-#     print("linux")
-# a={1,9,5,0}
-# print(sorted(a))
+if __name__ == '__main__':
+    pass
