@@ -1,42 +1,46 @@
-# -*- coding: utf-8 -*-
-import platform
-
-from selenium import webdriver
-from selenium.webdriver import ActionChains
-from selenium.webdriver.common.keys import Keys
+import sys
+from PyQt5.QtWidgets import (QPushButton, QWidget,
+                             QLineEdit, QApplication)
 
 
-class workSpace(object):
+class Button(QPushButton):
+    def __init__(self, title, parent):
+        super().__init__(title, parent)
+
+        self.setAcceptDrops(True)
+
+    def dragEnterEvent(self, e):
+
+        if e.mimeData().hasFormat('text/plain'):
+            e.accept()
+        else:
+            e.ignore()
+
+    def dropEvent(self, e):
+
+        self.setText(e.mimeData().text())
+
+
+class Example(QWidget):
     def __init__(self):
-        self.driver = webdriver.Chrome()
-        self.allTime = """
-                                    let mytiming = window.performance.timing;
-                                    return mytiming;
-                                    """
+        super().__init__()
 
-    def _open(self):
-        self.driver.get("http://dev3.neikongyi.com/bureau")
+        self.initUI()
 
-    def _noCache(self):
-        userName = self.driver.find_element_by_id("userName")
-        action = ActionChains(self.driver)
-        action.click(userName).send_keys("admin1").send_keys(Keys.TAB).send_keys("nky2018").send_keys(
-            Keys.ENTER).perform()
+    def initUI(self):
+        edit = QLineEdit('', self)
+        edit.setDragEnabled(True)
+        edit.move(30, 65)
 
-    def main(self):
-        # self.__init__()
-        # 调用浏览器打开一个新窗口
-        self.driver.execute_script("window.open('','_blank');")
-        # 窗口定位到新打开的窗口
-        self.driver.switch_to.window(self.driver.window_handles[-1])
-        self._open()
-        self._noCache()
-        allTime = self.driver.execute_script(self.allTime)
-        self.driver.execute_script("window.close();")
-        # 窗口定位返回旧窗口
-        self.driver.switch_to.window(self.driver.window_handles[-1])
-        return allTime
+        button = Button("Button", self)
+        button.move(190, 65)
+
+        self.setWindowTitle('Simple drag & drop')
+        self.setGeometry(300, 300, 300, 150)
 
 
 if __name__ == '__main__':
-    pass
+    app = QApplication(sys.argv)
+    ex = Example()
+    ex.show()
+    app.exec_()  

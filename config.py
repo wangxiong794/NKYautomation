@@ -18,3 +18,8 @@ common_header = {
 }
 sql_user = 'nky2018'
 sql_password = "Neikongyi201*"
+
+test8 = "http://test8.neikongyi.com/nky"
+test8_user = "lijing"
+test8_pass = "123456"
+test8_org = '四川省人力资源和社会保障厅'
