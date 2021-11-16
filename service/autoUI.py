@@ -56,9 +56,9 @@ class MyGui(QWidget):
 
     def matterApplyRun(self):
         pass
-        # self.thread = runMatterApplyThread()
-        # self.thread.signal.connect(self.call_backlog)  # 进程连接回传到GUI的事件
-        # self.thread.start()
+        self.thread = runMatterApplyThread()
+        self.thread.signal.connect(self.call_backlog)  # 进程连接回传到GUI的事件
+        self.thread.start()
 
     def budgetApplicationRun(self):
         pass

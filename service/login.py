@@ -4,6 +4,15 @@ import requests
 from service.rw_cookie import write_file
 from config import ip,user,user_id,run_id,password
 
+# if __name__ == "__main__":
+#     app = QtWidgets.QApplication(sys.argv)
+#     MainWindow = QtWidgets.QMainWindow()
+#     ui = Ui_mainWindow()
+#     ui.setupUi(MainWindow)
+#     MainWindow.show()
+#     sys.exit(app.exec_())
+
+
 
 def need_Verify_Code():  # 获取cookie
     url = "http://" + ip + "/nky/service/session/needVerifyCode"
