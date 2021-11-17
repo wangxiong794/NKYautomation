@@ -43,15 +43,16 @@ class page(object):
     @staticmethod
     def readConfig(_option):
         cf = configparser.ConfigParser()
-        cf.read('../elements/config.ini', encoding="utf-8")
+        cf.read('../po_elements/config.ini', encoding="utf-8")
         return cf.get(section='config',option=_option)
 
-    def login(self, _filename='../elements/conPage.ini', section='login'):
+    def login(self, _filename='../po_elements/conPage.ini', section='login'):
         self.driver.get(test8)
         time.sleep(1)
         self.element(_filename, section, 'username').send_keys(test8_user)
         self.element(_filename, section, 'password').send_keys(test8_pass)
         self.element(_filename, section, 'org').click()
+        time.sleep(1)
         self.driver.find_element(By.XPATH,"//div[@title='"+test8_org+"']").click()
         self.element(_filename, section, 'loginButton').click()
         welcomeText=str(self.element(_filename, section, 'welcome').text)
@@ -88,3 +89,4 @@ class page(object):
 if __name__ == "__main__":
     c = page()
     c.login()
+    c.driver.close()

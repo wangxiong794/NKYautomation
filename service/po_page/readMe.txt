@@ -1,0 +1,3 @@
+po_page,po_elements,po_pageCase用于存放PO模式的代码
+PO模式意味着逻辑执行存放在page包中，定位存放在elements包里面
+po_case用于存放用例条目

@@ -13,7 +13,7 @@ cf = configparser.ConfigParser()
 
 class getElement:
     def __init__(self, elementFile):
-        self.elementPath = os.path.join(root_dir, "elements")
+        self.elementPath = os.path.join(root_dir, "po_elements")
         self.elementIni = os.path.join(self.elementPath, elementFile)
         print(self.elementPath)
 
@@ -48,7 +48,7 @@ def confParam(_filename=root_dir, flag="Test",_name='test'):
 
 
 if __name__ == "__main__":
-    url = confParam(_filename="./elements/pay.ini",flag='login', _name='username')
+    url = confParam(_filename="./po_elements/pay.ini",flag='login', _name='username')
     print(url)
 
 
