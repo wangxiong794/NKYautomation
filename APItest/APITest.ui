@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>762</width>
+    <height>693</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>内控易接口测试工具</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <layout class="QFormLayout" name="requestUI">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;接口名称：&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="inName"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;请求方法：&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="inMethod">
+        <property name="text">
+         <string>POST</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;请求参数：&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QTextEdit" name="inKey"/>
+      </item>
+     </layout>
+    </item>
+    <item row="2" column="1">
+     <widget class="QPushButton" name="clearData">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>40</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>快速清空</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <layout class="QFormLayout" name="responseUI">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>返回状态码：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QListView" name="outCode">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+          <horstretch>0</horstretch>
+          <verstretch>20</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>40</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>返回数据：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QListView" name="outData"/>
+      </item>
+     </layout>
+    </item>
+    <item row="3" column="1">
+     <widget class="QPushButton" name="startTest">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>40</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>开始测试</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QPushButton" name="stopConnection">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>40</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>40</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>断开链接</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QPushButton" name="loginButton">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>40</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>40</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>登录</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>762</width>
+     <height>26</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>clearData</sender>
+   <signal>clicked()</signal>
+   <receiver>inKey</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>433</x>
+     <y>577</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>347</x>
+     <y>348</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>clearData</sender>
+   <signal>clicked()</signal>
+   <receiver>outData</receiver>
+   <slot>clearSelection()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>488</x>
+     <y>585</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>505</x>
+     <y>339</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>clearData</sender>
+   <signal>clicked()</signal>
+   <receiver>outCode</receiver>
+   <slot>clearSelection()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>460</x>
+     <y>582</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>484</x>
+     <y>67</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>clearData</sender>
+   <signal>clicked()</signal>
+   <receiver>inName</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>562</x>
+     <y>586</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>354</x>
+     <y>53</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

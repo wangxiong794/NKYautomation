@@ -9,8 +9,8 @@ import requests
 service = [
     {"service": "demo4.neikongyi.com", "round": "14936",
      "password": "nga+eNSuUrhHx/K9W1C/a/qtWqsV30AHQjjm0tWToik=,1ihNzkC+zh+TKlMqP4Jz2jjyq6xf35sX,otJ+EuH/6L3TW51gTEKaLULuik2L+KbvrunnwS/G0P1VMKGG9F6JvGfWHn+NinGF3cFdVhnnDDAjDDBJbeBvhBvVcmRp03iAP7eSpZh1Zz4="},
-    {"service": "58.118.2.63", "round": "14201",
-     "password": "7FtAhUOPzKj/4R4zkn4z4kvUP0km71yFZ9LTYmxkW0c=,UeStnq9Cc1HXkzupml2z6q4feui1QdTP,djxuw9Duqz9Ll/eOv2dJVeuD8RlI+s5+WBOyYdxMp26QiBBhFY+cymp6Zh655d1nNrZj9BaoJR3HxMZWbHlWfjhk4ud7YTlQ4fGfDq4yKSE="}
+    {"service": "39.107.221.188", "round": "14604",
+     "password": "mYy8+QClL3k7B0tw7hxatyKuki1JJ7pyE++6JQKu+yw=,YeWqwTvWP32OHuttwv+j+NLT3vQrQ6tT,uXjqZj8MFez3rBlFL7xptS++0+MljjyVjBGd/VnNHBpstxmVgpvJoYcT9B5Jr9sOQktSrnMAgBG8IRRG0x51HYda/zeNBz4qQeqQA8lj6lw="}
 ]
 log = Log()
 
@@ -36,7 +36,7 @@ log = Log()
 class workSpace():
     def __init__(self):
         self.user = "admin1"
-        useService = service[0]
+        useService = service[1]
         self.ip = useService['service']
         self.cookie = self.need_Verify_Code()
         self.password = useService['password']
@@ -132,7 +132,7 @@ class workSpace():
 
 
 class DB(object):
-    def __init__(self, host=service[0]['service'], port=3306, db='nky', user='nky2018', passwd='Neikongyi201*',
+    def __init__(self, host=service[1]['service'], port=3306, db='nky', user='nky2018', passwd='Neikongyi201*',
                  charset='utf8'):
         # 建立连接
         self.conn = pymysql.connect(host=host, port=port, db=db, user=user, passwd=passwd, charset=charset)
@@ -310,11 +310,16 @@ def main(activity1='mergeProject'):
             requests.session().close()
 
 
+def test():
+    a = workSpace()
+    a.login()
+
 if __name__ == '__main__':
     # sql_budget_item(10126)
     # sql_indicator_item(10126)
     # sql_year_budget_item(10126)
-    for ab in range(0,20):
+    # test()
+    for ab in range(0,50):
         log.info("第%s轮"%str(ab))
         time.sleep(10)
         try:
