@@ -18,7 +18,7 @@ from get_root_path import root_dir
 class page(object):
     def __init__(self, interface=1, ):
         if interface == 1:
-            self.driver = webdriver.Chrome(os.path.join(root_dir,"chromedriver.exe"))
+            self.driver = webdriver.Chrome(os.path.join(root_dir, "chromedriver.exe"))
         else:
             chrome_options = Options()
             chrome_options.add_argument('--headless')
@@ -40,26 +40,30 @@ class page(object):
         # element = WebDriverWait(self.driver, 5).until(self.driver.find_element_by_xpath(locExpression),message="定位超时")
         return element
 
+    def driverSetting(self):
+        self.driver.implicitly_wait(15)
+        self.driver.set_window_size(1680, 1050)
+
     @staticmethod
     def readConfig(_option):
         cf = configparser.ConfigParser()
         cf.read('../po_elements/config.ini', encoding="utf-8")
-        return cf.get(section='config',option=_option)
+        return cf.get(section='config', option=_option)
 
-    def login(self, _filename='../po_elements/conPage.ini', section='login'):
+    def login(self, _filename=os.path.join(root_dir, 'service//po_elements//conPage.ini'), section='login'):
         self.driver.get(test8)
         time.sleep(1)
         self.element(_filename, section, 'username').send_keys(test8_user)
         self.element(_filename, section, 'password').send_keys(test8_pass)
         self.element(_filename, section, 'org').click()
         time.sleep(1)
-        self.driver.find_element(By.XPATH,"//div[@title='"+test8_org+"']").click()
+        self.driver.find_element(By.XPATH, "//div[@title='" + test8_org + "']").click()
         self.element(_filename, section, 'loginButton').click()
-        welcomeText=str(self.element(_filename, section, 'welcome').text)
+        welcomeText = str(self.element(_filename, section, 'welcome').text)
         assert "祝您开心每一天" in welcomeText
         self.driver.refresh()
 
-    def screenShot(self):  # 截图
+    def screenShot(self, file_name=""):  # 截图
         # img文件夹路径
         img_path = os.path.join(root_dir, "img")
         # logName = os.path.join(img_path, '%s.' % time.strftime('%Y_%m_%d'))
@@ -76,7 +80,7 @@ class page(object):
             os.makedirs(date_file_path)
         # 截图存放路径
         local_time = time.strftime('%Y-%m-%d_%H%M%S', time.localtime(time.time()))
-        jt_name = local_time + '.png'
+        jt_name = file_name+local_time + '.png'
         jt_path = os.path.join(date_file_path, jt_name)
         try:
             self.driver.get_screenshot_as_file(jt_path)
@@ -84,6 +88,44 @@ class page(object):
         except TimeoutError:
             print('截图超时，请重新运行')
         print('Screenshot_Path：', jt_path)
+
+    def choiceBudget(self):
+        l1 = str(
+            self.dr("//tbody[@class='ant-table-tbody']/tr[1]/td[1]/button").get_attribute(
+                "aria-label"))
+        if l1 == "展开行":
+            bfb0 = str(self.dr("//tbody[@class='ant-table-tbody']/tr[1]/td[2]/div/div[2]").text)
+            if "100" in bfb0:
+                print("第一条预算无可用金额")
+            else:
+                self.dr("//tbody[@class='ant-table-tbody']/tr[1]/td[1]").click()
+                time.sleep(0.1)
+                self.dr("//tbody[@class='ant-table-tbody']/tr[2]/td[1]").click()
+        elif l1 == "关闭行":
+            l2 = str(self.dr("//tbody[@class='ant-table-tbody']/tr[2]/td[1]/button").get_attribute(
+                "aria-label"))
+            if l2 == "展开行":
+                bfb = str(self.dr("//tbody[@class='ant-table-tbody']/tr[2]/td[2]/div/div[2]").text)
+                if "100" in bfb:
+                    print("第一条预算无可用金额")
+                else:
+                    self.dr("//tbody[@class='ant-table-tbody']/tr[2]/td[1]").click()
+                    time.sleep(0.1)
+                    self.dr("//tbody[@class='ant-table-tbody']/tr[3]/td[1]").click()
+            else:
+                self.dr("//tbody[@class='ant-table-tbody']/tr[3]/td[1]").click()
+                time.sleep(0.1)
+                self.dr("//tbody[@class='ant-table-tbody']/tr[4]/td[1]").click()
+        else:
+            print("预算项层级太深")
+        time.sleep(0.5)
+        self.dr("//span[text()='下一步']/..").click()
+
+    def button_QRTJ(self):
+        self.element(os.path.join(root_dir, 'service//po_elements/conPage.ini'), 'button', 'button_QRTJ').click()
+
+    def button_CKXQ(self):
+        self.element(os.path.join(root_dir, 'service//po_elements/conPage.ini'), 'button', 'button_QRTJ').click()
 
 
 if __name__ == "__main__":

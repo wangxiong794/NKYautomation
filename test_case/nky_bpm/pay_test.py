@@ -13,6 +13,9 @@ from service.connectmysql import DB
 
 class apply(unittest.TestCase):
 
+    ba = None
+    driver = None
+
     @classmethod
     def setUpClass(cls):
         # chrome_options = Options()
