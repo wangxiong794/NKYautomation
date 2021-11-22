@@ -143,13 +143,13 @@ def main():
             requests.session().close()
             break
         else:
-            if len(project_list)!=0:
+            if len(project_list) != 0:
                 for i in project_list:
                     project_id = i['bill_id']
                     log_id = i['id']
                     print(project_id, log_id)
                     a.standard_approve_log(log_id)
-                    log.info("项目%s已跳过田院审批，审批日志为%s" % (project_id, log_id))
+                    log.info("项目%s已代为田院审批，审批日志为%s" % (project_id, log_id))
             else:
                 log.info("暂无需要田院审批的项目")
                 requests.session().close()
