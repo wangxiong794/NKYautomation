@@ -34,28 +34,24 @@ class po_pay(unittest.TestCase):
 
     def test_po_BA_00(self):  # 20.4.28
         """事前申请单发起、撤回、复制、驳回、复制、通过、作废"""
-        try:
-            self.log.info("用例名称：" + self.__dict__['_testMethodDoc'])
-            self.pay.menu()
-            self.pay.add_budget()
-            self.pay.edit_2()
-            self.pay.edit_3(_description=str(self.__dict__['_testMethodDoc']))
-            self.pay.button_QRTJ()
-            self.pay.button_CKXQ()
-        except NoSuchElementException and InvalidArgumentException:
-            self.pay.screenShot(str(self.test_po_BA_00.__name__))
-
+        self.log.info("用例名称：" + self.__dict__['_testMethodDoc'])
+        self.pay.menu()
+        self.pay.add_budget()
+        self.pay.edit_2()
+        self.pay.edit_3(_description=str(self.__dict__['_testMethodDoc']))
+        self.pay.button_QRTJ()
+        self.pay.button_CKXQ()
     def test_po_a1(self):
         print("this test two")
 
 if __name__ == '__main__':
-    unittest.main()
-    # a = po_pay()
-    # try:
-    #     a.setUpClass()
-    #     a.setUp()
-    #     a.test_po_BA_00()
-    #     a.tearDown()
-    #     a.tearDownClass()
-    # except BaseException:
-    #     a.tearDownClass()
+    # unittest.main()
+    a = po_pay()
+    try:
+        a.setUpClass()
+        a.setUp()
+        a.test_po_BA_00()
+        a.tearDown()
+        a.tearDownClass()
+    except BaseException:
+        a.tearDownClass()

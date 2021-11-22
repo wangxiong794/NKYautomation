@@ -11,12 +11,13 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import configparser
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.common.exceptions import NoSuchElementException, InvalidArgumentException, TimeoutException
 
 from get_root_path import root_dir
 
 
-class page(object):
-    def __init__(self, interface=1, ):
+class page:
+    def __init__(self, interface=1):
         if interface == 1:
             self.driver = webdriver.Chrome(os.path.join(root_dir, "chromedriver.exe"))
         else:
@@ -29,16 +30,19 @@ class page(object):
         self.driver.set_window_size(1366, 1000)
 
     def element(self, _filename="", section='test', option='test'):
-        cf = configparser.ConfigParser()
-        cf.read(_filename, encoding="utf-8")
-        locators = cf.get(section, option).split(':')
-        # print(locators)
-        locMethod = locators[0]
-        locExpression = locators[1]
-        element = WebDriverWait(self.driver, 5).until(lambda x: x.find_element(locMethod, locExpression),
-                                                      message="定位超时")
-        # element = WebDriverWait(self.driver, 5).until(self.driver.find_element_by_xpath(locExpression),message="定位超时")
-        return element
+        try:
+            cf = configparser.ConfigParser()
+            cf.read(_filename, encoding="utf-8")
+            locators = cf.get(section, option).split(':')
+            # print(locators)
+            locMethod = locators[0]
+            locExpression = locators[1]
+            element = WebDriverWait(self.driver, 5).until(lambda x: x.find_element(locMethod, locExpression),
+                                                          message="定位超时")
+            # element = WebDriverWait(self.driver, 5).until(self.driver.find_element_by_xpath(locExpression),message="定位超时")
+            return element
+        except NoSuchElementException and InvalidArgumentException and TimeoutException:
+            self.screenShot()
 
     def driverSetting(self):
         self.driver.implicitly_wait(15)
@@ -80,7 +84,7 @@ class page(object):
             os.makedirs(date_file_path)
         # 截图存放路径
         local_time = time.strftime('%Y-%m-%d_%H%M%S', time.localtime(time.time()))
-        jt_name = file_name+local_time + '.png'
+        jt_name = file_name + local_time + '.png'
         jt_path = os.path.join(date_file_path, jt_name)
         try:
             self.driver.get_screenshot_as_file(jt_path)
@@ -89,37 +93,60 @@ class page(object):
             print('截图超时，请重新运行')
         print('Screenshot_Path：', jt_path)
 
-    def choiceBudget(self):
-        l1 = str(
-            self.dr("//tbody[@class='ant-table-tbody']/tr[1]/td[1]/button").get_attribute(
-                "aria-label"))
+    def check_budget_available(self, _number):
+        amount_str = "//tbody[@class='ant-table-tbody']/tr[%s]/td[3]/div" % str(_number)
+        _amount = str(self.dr(amount_str).text)
+        if _amount == "":
+            return 0
+        else:
+            return int(_amount.replace(',', ''))
+
+    def choiceBudget(self, lan_number=1):
+        # 判断行的aria-label的中文，若是展开行，则该行为末级项目，需要判断可用金额
+        # 若是关闭行，则判断是下一行
+        button_type_str = "//tbody[@class='ant-table-tbody']/tr[%s]/td[1]/button"
+        project_str = "//tbody[@class='ant-table-tbody']/tr[%s]/td[1]"
+        time.sleep(1)
+        # try:
+        print(button_type_str % str(lan_number))
+        l1 = str(self.dr(button_type_str % str(lan_number)).get_attribute("aria-label"))
+        print(l1)
+
         if l1 == "展开行":
-            bfb0 = str(self.dr("//tbody[@class='ant-table-tbody']/tr[1]/td[2]/div/div[2]").text)
-            if "100" in bfb0:
-                print("第一条预算无可用金额")
+            available_amount = self.check_budget_available(lan_number)
+            if available_amount == 0:
+                return self.choiceBudget(lan_number + 1)
             else:
-                self.dr("//tbody[@class='ant-table-tbody']/tr[1]/td[1]").click()
+                self.dr(project_str % str(lan_number)).click()
                 time.sleep(0.1)
-                self.dr("//tbody[@class='ant-table-tbody']/tr[2]/td[1]").click()
+                self.dr(project_str % str(lan_number + 1)).click()
         elif l1 == "关闭行":
-            l2 = str(self.dr("//tbody[@class='ant-table-tbody']/tr[2]/td[1]/button").get_attribute(
+            print(button_type_str % str(lan_number + 1))
+            l2 = str(self.dr(button_type_str % str(lan_number + 1)).get_attribute(
                 "aria-label"))
             if l2 == "展开行":
-                bfb = str(self.dr("//tbody[@class='ant-table-tbody']/tr[2]/td[2]/div/div[2]").text)
-                if "100" in bfb:
-                    print("第一条预算无可用金额")
+                available_amount = self.check_budget_available(lan_number+2)
+                if available_amount == 0:
+                    return self.choiceBudget(lan_number + 3)
                 else:
-                    self.dr("//tbody[@class='ant-table-tbody']/tr[2]/td[1]").click()
+                    self.dr(project_str % str(lan_number + 2)).click()
                     time.sleep(0.1)
-                    self.dr("//tbody[@class='ant-table-tbody']/tr[3]/td[1]").click()
+                    self.dr(project_str % str(lan_number + 3)).click()
             else:
-                self.dr("//tbody[@class='ant-table-tbody']/tr[3]/td[1]").click()
-                time.sleep(0.1)
-                self.dr("//tbody[@class='ant-table-tbody']/tr[4]/td[1]").click()
-        else:
-            print("预算项层级太深")
+                l3 = str(self.dr(button_type_str % str(lan_number + 2)).get_attribute(
+                    "aria-label"))
+                if l3 == "展开行":
+                    available_amount = self.check_budget_available(lan_number + 3)
+                    if available_amount == 0:
+                        return self.choiceBudget(lan_number + 4)
+                    else:
+                        self.dr(project_str % str(lan_number + 3)).click()
+                        time.sleep(0.1)
+                        self.dr(project_str % str(lan_number + 4)).click()
         time.sleep(0.5)
         self.dr("//span[text()='下一步']/..").click()
+        # except NoSuchElementException and InvalidArgumentException and TimeoutException:
+        #     self.screenShot()
 
     def button_QRTJ(self):
         self.element(os.path.join(root_dir, 'service//po_elements/conPage.ini'), 'button', 'button_QRTJ').click()
