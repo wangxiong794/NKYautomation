@@ -109,7 +109,8 @@ class page:
         time.sleep(1)
         # try:
         print(button_type_str % str(lan_number))
-        l1 = str(self.dr(button_type_str % str(lan_number)).get_attribute("aria-label"))
+        l1_str=button_type_str % str(lan_number)
+        l1 = str(self.dr(By,l1_str).get_attribute("aria-label"))
         print(l1)
 
         if l1 == "展开行":
