@@ -18,19 +18,27 @@ service = [
     {"service": "58.118.2.63", "round": "14201",
      "password": "7FtAhUOPzKj/4R4zkn4z4kvUP0km71yFZ9LTYmxkW0c=,UeStnq9Cc1HXkzupml2z6q4feui1QdTP,"
                  "djxuw9Duqz9Ll/eOv2dJVeuD8RlI+s5+WBOyYdxMp26QiBBhFY"
-                 "+cymp6Zh655d1nNrZj9BaoJR3HxMZWbHlWfjhk4ud7YTlQ4fGfDq4yKSE="}
+                 "+cymp6Zh655d1nNrZj9BaoJR3HxMZWbHlWfjhk4ud7YTlQ4fGfDq4yKSE="},
+    {
+        "service":"39.106.158.149","round":"14265","userName":"wxfz10wmyh7q","orgnizationId":200,
+        "userId":"10152",
+        "password":"KNgNaynOMNamTi7xAkeMYJ7OjUKTTEuFQEQIaTxsmCc=,9PO3xflDJY0hCKP8QKn2Rl9m7YKmok3q,"
+                   "+SVMcA8lpuo7+Njl3AGZaBvNpWkBZJ4/X1El3IfMge9xIL1Hs8ZGWN+TrT1ZyXR9lBv1rxb50hzXYcIPSsnIDXFzDZpX"
+                   "/q7XM6XgQOWzxQQ="
+    }
+
 ]
 
 
 class workSpace:
     def __init__(self):
-        self.user = "admin1"
-        useService = service[0]
+        useService = service[2]
+        self.user = useService['userName']
         self.ip = useService['service']
         self.cookie = self.need_Verify_Code()
         self.password = useService['password']
         self.round = useService["round"]
-        self.userId = '1'
+        self.userId = useService['userId']
         self.headers = {
             "Accept": "application/json",
             "Accept-Encoding": "gzip, deflate",
@@ -73,8 +81,11 @@ class workSpace:
             "password": self.password,
             "round": self.round,
         }
-        headers = self.headers
-        response = requests.request("POST", url, data=json.dumps(payload), headers=headers)
+        _headers = self.headers
+        del _headers['x-Current-User-Id']
+        print(_headers)
+        response = requests.request("POST", url, data=json.dumps(payload), headers=_headers)
+        print(response.text,response)
         has_time = response.elapsed.microseconds
         return has_time
 
@@ -87,8 +98,37 @@ class workSpace:
         }
         requests.request("PUT", modify_ct_url,data=json.dumps(payload), headers=self.headers)
 
+    def batchUpdateReimburse(self):
+        """批量核销"""
+        _url="http://" + self.ip +"/nky/service/reimburse/batchUpdateReimburse"
+        _payload={
+                "reimburseIds": [
+                    11954
+                ],
+                "closeApply": 'true'
+
+
+        }
+        res=requests.request("POST",_url,data=json.dumps(_payload),headers=self.headers)
+        print(res)
+        print(res.text)
+
+    def agree(self,_id):
+        _url="http://" + self.ip +"/nky/service/ApprovalLog/"+str(_id)
+        _payload={
+                "id": _id,
+                "approvalStatusId": 502,
+                "approvalDate": "2022-01-04T06:03:35.168Z",
+                "description": "同意，同意，同意",
+                "additionalValues": {}
+            }
+        print(_url,_payload,self.headers)
+        res=requests.request("PUT",_url,data=json.dumps(_payload),headers=self.headers)
+        print(res.text,res)
+
 
 if __name__ == "__main__":
     a = workSpace()
     a.login()
-    a.modify_contract(10275)
+
+    # a.agree(64770)

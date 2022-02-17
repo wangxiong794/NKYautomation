@@ -37,7 +37,7 @@ class page:
             # print(locators)
             locMethod = locators[0]
             locExpression = locators[1]
-            element = WebDriverWait(self.driver, 5).until(lambda x: x.find_element(locMethod, locExpression),
+            element = WebDriverWait(self.driver, 15).until(lambda x: x.find_element(locMethod, locExpression),
                                                           message="定位超时")
             # element = WebDriverWait(self.driver, 5).until(self.driver.find_element_by_xpath(locExpression),message="定位超时")
             return element
