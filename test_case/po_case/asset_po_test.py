@@ -5,35 +5,52 @@ from service.po_page import assetPage
 
 class po_asset(unittest.TestCase):
     log = common_funcation.caseLog()
-    FASI = assetPage.asset_FASI()
+    asset = assetPage.asset()
 
     @classmethod
     def setUpClass(cls) -> None:
-        cls.FASI.login()
+        cls.asset.login()
 
     @classmethod
     def tearDownClass(cls):
-        cls.FASI.driver.close()
+        cls.asset.driver.close()
 
     def setUp(self):
-        self.FASI.driver.refresh()
+        self.asset.driver.refresh()
 
     def tearDown(self):
         pass
 
-    def test_01_FASI(self):
-        """新增固定资产入库单"""
-        self.FASI.addFASI()
+    # def test_01_FASI(self):
+    #     """新增固定资产入库单"""
+    #     self.asset.addAssetWarehouse(self.__dict__['_testMethodDoc'])
 
+    # def test_11_FARP(self):
+    #     """新增固定资产领用单"""
+    #     self.asset.addAssetConsumer(self.__dict__['_testMethodDoc'])
+
+    # def test_21_FARP(self):
+    #     """新增固定资产退还单"""
+    #     self.asset.addAssetHandBack(self.__dict__['_testMethodDoc'])
+
+    # def test_81_inWarehouse(self):
+    #     """新增低值易耗入库单"""
+    #     self.asset.addInWarehouse(self.__dict__['_testMethodDoc'])
+
+    def test_91_inWarehouse(self):
+        """新增低值易耗领用出库单"""
+        self.asset.addOutWarehouse(self.__dict__['_testMethodDoc'])
 
 if __name__ =="__main__":
-    a = po_asset()
-    try:
-        a.setUpClass()
-        a.setUp()
-        a.test_01_FASI()
-        a.tearDown()
-        a.tearDownClass()
-
-    except BaseException:
-        a.tearDownClass()
+    unittest.main()
+    # a = po_asset()
+    # try:
+    #     a.setUpClass()
+    #     a.setUp()
+    #     # a.test_01_FASI()
+    #     a.test_11_FARP()
+    #     a.tearDown()
+    #     a.tearDownClass()
+    #
+    # except BaseException:
+    #     a.tearDownClass()
