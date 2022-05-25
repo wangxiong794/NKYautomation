@@ -40,7 +40,7 @@ def read(row):
 #     return str(url)
 
 
-def sg():
+def sg(keyword="中期自评报告"):
     log = Log()
     for i in range(1, 198):
         cname = read(i)
@@ -61,9 +61,12 @@ def sg():
             time.sleep(1)
             a = driver.execute_script("return document.documentElement.outerHTML")
         # print(a)
-            if "中期自评报告" in str(a):
+            if keyword in str(a):
                 # print(str(name)+":"+str(url))
                 log.info(str(name)+"单位存在报告：《"+str(url)+"》")
+                with open(r'log.txt','a+',encoding='utf-8') as f:
+                    f.write(str(time.strftime('%Y%m%d-%H:%M:%S: '))+str(name)+"单位存在报告：《"+str(url)+"》\n")
+                    f.close()
                 driver.quit()
             else:
                 log.warning(str(name) + "单位不存在")
@@ -71,7 +74,7 @@ def sg():
         except:
             driver.quit()
             log.warning(str(name)+"单位打开失败，域名是"+str(url))
-        os.system('taskkill /F /iM chrome.exe')
+        os.system('taskkill /F /iM firefox.exe')
 
 
 
@@ -91,4 +94,8 @@ def sg():
 if __name__ == "__main__":
     # a=read(1)
     # print(a[0])
-    sg()
+    a = input("请输入关键字(默认中期自评报告)：")
+    if a is None:
+        sg()
+    else:
+        sg(str(a))
