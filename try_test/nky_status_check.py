@@ -13,12 +13,7 @@ from email.utils import parseaddr, formataddr
 
 import xlrd
 
-
 import requests
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.firefox.options import Options
-
 
 
 def read_data(row1=2, row2=157):
@@ -39,36 +34,12 @@ def read_data(row1=2, row2=157):
                  }
         _nky_data.append(_dict)
     return _nky_data
-    # print(_nky_data)
-    # print(sheet.cell_value(1, 1))
-    # print([sheet.cell_value(row, 1), sheet.cell_value(row, 2)])
 
 
-class nky_server():
-    def __init__(self, url, user, password):
-        self.url = url
-        self.user = user
-        self.password = password
-        # caps = DesiredCapabilities.CHROME
-        # caps['loggingPrefs'] = {'performance': 'ALL'}
-        firefox_options = Options()
-        firefox_options.add_argument('--headless')
-        firefox_options.add_argument('--disable-gpu')
-        self.driver = webdriver.Firefox(options=firefox_options, executable_path='../geckodriver.exe',
-                                        )
-        self.driver.implicitly_wait(15)
-
-    def quit(self):
-        self.driver.quit()
-
-    def login(self):
-        self.driver.get(self.url)
-        self.driver.find_element(By.XPATH, "//input[@id='userName']").send_keys(self.url)
-        self.driver.find_element(By.XPATH, "//input[@id='password']").send_keys(self.password)
-        self.driver.find_element(By.XPATH, "//button[@data-test-id='LogInButton']").click()
-        time.sleep(5)
-        log_list = self.driver.get_log('driver')
-        print(log_list)
+def read_rows():
+    book = xlrd.open_workbook(r"内控易登录信息.xls")
+    sheet = book.sheet_by_index(0)
+    return int(sheet.nrows)
 
 
 class Log:
@@ -194,6 +165,9 @@ class API_test():
             "referrerPolicy": "strict-origin-when-cross-origin"
         }
 
+    def __del__(self):
+        requests.session().close()
+
     def need_Verify_Code(self):  # 获取cookie
         url = self.csfs + self.ip + "/nky/service/session/needVerifyCode"
         headers = {
@@ -238,16 +212,24 @@ class API_test():
         # _response_text=str(_response.text)
         if 'data' in str(_response):
             self.log.info('登录成功')
-            return True
+            return '登录成功'
             # return self.headers
-        elif 'error' in str(_response):
-            self.log.info("登录失败,错误信息" + str(_response))
-            self.log_error.info("登录失败,错误信息" + str(_response))
-            return False
+        elif 'errors' in str(_response):
+            msg = "登录失败,错误信息" + str(_response)
+            if "-2" in str(_response):
+                msg += "密码错误"
+            elif "-1" in str(_response):
+                msg += "用户不存在"
+            else:
+                pass
+            self.log.info(msg)
+            self.log_error.info(msg)
+            return msg
         else:
-            self.log.info("登录失败,错误码" + str(_response))
-            self.log_error.info("登录失败,错误码" + str(_response))
-            return False
+            msg = "登录失败,错误信息" + str(_response)
+            self.log.info(msg)
+            self.log_error.info(msg)
+            return msg
 
     def graphql_ri(self):
         # 返回已通过的报销单ID，用于打印
@@ -270,7 +252,7 @@ class API_test():
             if _response["data"]["list"]:
                 return _response["data"]["list"][0]['id']
             else:
-                msg=self.org_name + "报销单查询成功，但数据为空" + str(_response)
+                msg = self.org_name + "报销单查询成功，但数据为空" + str(_response)
                 self.log_error.info(msg)
                 return msg
         else:
@@ -342,10 +324,13 @@ class API_test():
             return msg
 
 
-def choose_address():
-    address = input("请输入执行地区，按enter结束，0全部，1北京，2四川,3单条执行：")
+def choose_address(flag='0'):
+    if flag == '1':
+        address = input("请输入执行地区，按enter结束，0全部，1北京，2四川,3单条执行：")
+    else:
+        address = '0'
     if address == '0':
-        nky_data = read_data(2, 158)
+        nky_data = read_data(2, read_rows())
     elif address == '1':
         nky_data = read_data(2, 138)
     elif address == '2':
@@ -361,17 +346,23 @@ def choose_address():
     return nky_data
 
 
-def run():
+def run(key=None):
     # 主程序
-    nky_data = choose_address()
+    if key is None:
+        nky_data = choose_address()
+    else:
+        nky_data = choose_address(key)
     for nky in nky_data:
         # print(nky)
         ap = API_test(nky, h='https')
         ap.log.info("=====开始执行：" + str(nky['org_name']))
         result = ap.login()
-        if result is True:
+        if '成功' in result:
             ap.log.info("开始查询流程接口：service/workflow/process-list")
-            result1 = ap.process_list()
+            try:
+                result1 = ap.process_list()
+            except TimeoutError:
+                result1 = ap.process_list()
             if "成功" in result1:
                 # ap.log.info("开始查询报销单")
                 ri = ap.graphql_ri()
@@ -389,7 +380,7 @@ def run():
             else:
                 send_report(nky['org_name'], result1)
         else:
-            send_report(nky['org_name'], "登录失败,错误信息")
+            send_report(nky['org_name'], result)
 
 
 def test():
@@ -413,4 +404,5 @@ def test():
 
 
 if __name__ == "__main__":
+    # run('1')
     run()
