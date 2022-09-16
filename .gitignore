@@ -8,3 +8,4 @@ img
 /img
 *.log
 *.xls
+/try_test/*.xls
