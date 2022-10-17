@@ -2,12 +2,27 @@ import re
 import time
 import pandas as pd
 import xlrd
+import xlwt
 from git.repo import Repo
 from xlutils.copy import copy
 from git import Git
+import datetime
+
+global code_base
 
 
-def get_object(code_base="nky"):
+def get_fetch():
+    if code_base == "nky":
+        code_path = "E:\\nkyworkspace\\nky\\nky"
+    elif code_base == "webapp":
+        code_path = "E:\\nkyworkspace\\webapp"
+    else:
+        code_path = "E:\\nkyworkspace\\mobile"
+    g = Git(code_path)
+    g.fetch()
+
+
+def get_object(start_date):
     # 此方法用于针对固定的本地代码分支，拉取指定格式的Git_log信息
     if code_base == "nky":
         code_path = "E:\\nkyworkspace\\nky\\nky"
@@ -68,10 +83,11 @@ def get_object(code_base="nky"):
     # %s 提交说明
     """
     # --branches 指所有分支 --remotes 指远程分支，为保证数据准确性，拉取最新的代码git fetch 和git pull
-    g = Git(code_path)
-    g.fetch()
-    repo = str(repo.git.log("--since=1days", "--no-merges", "--branches", "--remotes", "--shortstat",
-                            "--pretty=startLog%an-%cd"))
+    # repo = str(repo.git.log("--since=1days", "--no-merges", "--branches", "--remotes", "--shortstat",
+    #                         "--pretty=startLog%an-%cd"))
+    repo = str(
+        repo.git.log("--since='%s'" % str(start_date) + " 00:00:00", "--until='%s'" % str(start_date) + " 23:59:59",
+                     "--no-merges", "--branches", "--remotes", "--shortstat", "--pretty=startLog%an-%cd"))
     # print(repo)
     # 去掉换行符
     repo = repo.replace('\n', '')
@@ -91,7 +107,7 @@ def get_object(code_base="nky"):
     return repo
 
 
-def write_data(text, code_base='nky'):
+def write_data(text, write_date):
     # 此方法用于数据解析，将git拿到的内容，转换成想要的数据并保存
     # 参数格式如下
     test_text = ['Mway-Fri Sep 16 14:47:54 2022 +0800 2 files changed, 2 insertions(+), 1 deletion(-)',
@@ -100,83 +116,141 @@ def write_data(text, code_base='nky'):
                  'yeweigang-Fri Sep 16 09:36:52 2022 +0800 55 files changed, 3331 insertions(+), 67 deletions(-)',
                  'Mway-Thu Sep 15 18:26:38 2022 +0800 2 files changed, 12 deletions(-)']
     # 定义三个空列表，用于分别存放提交人、增加行、删除行，方便转换成矩阵视图，方便分组求和计数
-    null_author = []
-    null_add_line = []
-    null_del_line = []
-    # 将列表数据遍历，解析提交信息
-    for text1 in text:
-        # 用-拆解信息，取左边部分为提交人
-        author = str(re.split("-", text1)[0])
-        # 将获取到的提交人，添加到总的列表中
-        null_author.append(author)
-        # 用字符串changed分割字符串，取右侧部分，找到提交信息，如【 2 insertions(+), 1 deletion(-)】
-        total_line = str(re.split("changed,", text1)[1])
-        # 若提交信息中没有新增行，将字符串构造成 新增0行，方便解析
-        if "+" not in total_line:
-            total_line = "0 insertions(+)," + total_line
-        # 若提交信息中没有删除行，将字符串构造成 删除0行，方便解析
-        if "-" not in total_line:
-            total_line = total_line + ",0 deletions(-)"
-        # 用字符串insert分割【 2 insertions(+), 1 deletion(-)】，取左侧部分，替换空格，得到新增行
-        add_line = int(re.split("insert", total_line)[0].replace(" ", ""))
-        # 将取到的新增行，添加到列表中
-        null_add_line.append(add_line)
-        # 用字符串insert分割【 2 insertions(+), 1 deletion(-)】，取右侧部分，只截取数字部分，得到删除行
-        del_line = int(re.findall(r'\d+', re.split("insert", total_line)[1])[0])
-        # 将取到的删除行，添加到列表中
-        null_del_line.append(del_line)
-    # 将三个列表信息转换到矩阵二维表中，来进行分组求和，数据举例
-    # 其中第一列为序号，author为提交者，add_line为新增行，del_line为删除行，数据与test_text一致
-    """
-          author  add_line  del_line
-    0       Mway         2         1
-    1       Mway         2         0
-    2  yeweigang         1         1
-    3  yeweigang      3331        67
-    4       Mway         0        12
-    """
-    df = pd.DataFrame({'author': null_author, "add_line": null_add_line, "del_line": null_del_line})
-    # 构造新的矩阵，用于存放提交次数，第一行为标题
-    # 与mysql的 select count('add_line') from 表 group by 'author' 类似
-    """
-    author
-    Mway         3
-    yeweigang    2
-    """
-    df1 = df.groupby("author").size()
-    # 构造了新的矩阵，用于存放新增行合计，数据举例
-    # 与mysql的 select sum('add_line') from 表 group by 'author' 类似
-    """
-    author
-    Mway            4
-    yeweigang    3332
-    """
-    add_lines = df.groupby("author")["add_line"].sum()
-    # 构造了新的矩阵，用于存放删除行合计，数据举例
-    """
-    author
-    Mway         13
-    yeweigang    68
-    """
-    del_lines = df.groupby("author")["del_line"].sum()
-    # 去重代码提交者
-    authors = list(set(null_author))
-    for author in authors:
-        # 根据提交者去寻找新增行的矩阵中对应新增行
-        add_line = int(add_lines[author])
-        # 根据提交者去寻找删除行的矩阵中对应删除行
-        del_line = int(del_lines[author])
-        # 根据提交者去寻找提交次数的矩阵中对应次数
-        submit_number = int(df1[author])
-        # print(author, submit_number, add_line, del_line)
-        # 将得到的数据填写到Excel中
-        write_excel(code_base, author, submit_number, add_line, del_line)
+    if len(text) == 0:
+        print("无提交信息，无需记录表格")
+    else:
+        null_author = []
+        null_add_line = []
+        null_del_line = []
+        # 将列表数据遍历，解析提交信息
+        for text1 in text:
+            # 用-拆解信息，取左边部分为提交人
+            author = str(re.split("-", text1)[0])
+            # 将获取到的提交人，添加到总的列表中
+            null_author.append(author)
+            # 获取提交日期信息，用于存放明细表
+            sub_time = str(re.findall("\-(.*?)\+0800", text1)).replace('ybj-', "").replace("[\'", "").replace("\']", "")
+            # print(sub_time)
+            # 周
+            week = str(re.split(" ", sub_time)[0])
+            # 月
+            month = str(re.split(" ", sub_time)[1])
+            month_number = translate_month(month)
+            # 日
+            work_day = str(re.split(" ", sub_time)[2])
+            # 时间
+            work_time = str(re.split(" ", sub_time)[3])
+            # 年
+            work_year = str(re.split(" ", sub_time)[4])
+            work_date = work_year + "-" + month_number + "-" + work_day
+            # 用字符串changed分割字符串，取右侧部分，找到提交信息，如【 2 insertions(+), 1 deletion(-)】
+            total_line = str(re.split("changed,", text1)[1])
+            # 若提交信息中没有新增行，将字符串构造成 新增0行，方便解析
+            if "+" not in total_line:
+                total_line = "0 insertions(+)," + total_line
+            # 若提交信息中没有删除行，将字符串构造成 删除0行，方便解析
+            if "-" not in total_line:
+                total_line = total_line + ",0 deletions(-)"
+            # 用字符串insert分割【 2 insertions(+), 1 deletion(-)】，取左侧部分，替换空格，得到新增行
+            add_line = int(re.split("insert", total_line)[0].replace(" ", ""))
+            # 将取到的新增行，添加到列表中
+            null_add_line.append(add_line)
+            # 用字符串insert分割【 2 insertions(+), 1 deletion(-)】，取右侧部分，只截取数字部分，得到删除行
+            del_line = int(re.findall(r'\d+', re.split("insert", total_line)[1])[0])
+            # 将取到的删除行，添加到列表中
+            null_del_line.append(del_line)
+            # 写入明细表
+            write_data_item(code_base, author, work_date, week, work_time, add_line, del_line)
+
+        # 将三个列表信息转换到矩阵二维表中，来进行分组求和，数据举例
+        # 其中第一列为序号，author为提交者，add_line为新增行，del_line为删除行，数据与test_text一致
+        """
+              author  add_line  del_line
+        0       Mway         2         1
+        1       Mway         2         0
+        2  yeweigang         1         1
+        3  yeweigang      3331        67
+        4       Mway         0        12
+        """
+        df = pd.DataFrame({'author': null_author, "add_line": null_add_line, "del_line": null_del_line})
+        # 构造新的矩阵，用于存放提交次数，第一行为标题
+        # 与mysql的 select count('add_line') from 表 group by 'author' 类似
+        """
+        author
+        Mway         3
+        yeweigang    2
+        """
+        df1 = df.groupby("author").size()
+        # 构造了新的矩阵，用于存放新增行合计，数据举例
+        # 与mysql的 select sum('add_line') from 表 group by 'author' 类似
+        """
+        author
+        Mway            4
+        yeweigang    3332
+        """
+        add_lines = df.groupby("author")["add_line"].sum()
+        # 构造了新的矩阵，用于存放删除行合计，数据举例
+        """
+        author
+        Mway         13
+        yeweigang    68
+        """
+        del_lines = df.groupby("author")["del_line"].sum()
+        # 去重代码提交者
+        authors = list(set(null_author))
+        for author in authors:
+            # 根据提交者去寻找新增行的矩阵中对应新增行
+            add_line = int(add_lines[author])
+            # 根据提交者去寻找删除行的矩阵中对应删除行
+            del_line = int(del_lines[author])
+            # 根据提交者去寻找提交次数的矩阵中对应次数
+            submit_number = int(df1[author])
+            # print(author, submit_number, add_line, del_line)
+            # 将得到的数据填写到Excel中
+            write_excel(code_base, author, submit_number, add_line, del_line, write_date)
 
 
-def write_excel(code, author, submit_number, add_line, del_line):
+def translate_month(_month):
+    _data = {
+        "Jan": "1", "Feb": "2", "Mar": "3", "Apr": "4", "May": "5", "Jun": "6", "Jul": "7", "Aug": "8", "Sept": "9",
+        "Oct": "10", "Nov": "11", "Dec": "12"
+    }
+    return _data[_month]
+
+
+def write_data_item(code, author, work_date, week, work_time, add_line, del_line,
+                    xls_path='code_log.xls'):
     # 将每次执行数据写入到Excel
     # 读取Excel文件，若该Excel已被其他程序打开，则会运行报错
-    wb = xlrd.open_workbook('code_log.xls', encoding_override='utf-8', formatting_info=True)
+    wb = xlrd.open_workbook('E:\\eclipse\\NKYautomation\\try_test\\code_log.xls', encoding_override='utf-8',
+                            formatting_info=True)
+    # copy读取信息
+    wt = copy(wb)
+    # 获取Excel中第一个sheet
+    st = wb.sheet_by_index(1)
+    # 在此sheet中寻找数据的最大行数
+    max_row = st.nrows
+    # 获取复制后读取的Excel文件信息中的第一个sheet
+    w = wt.get_sheet(1)
+    # 开始写入信息，每次循环最大行数max_row固定
+    w.write(max_row, 0, code)
+    # 因考虑到代码每日运行统计代码提交量，记录执行日期
+    w.write(max_row, 1, author)
+    w.write(max_row, 2, work_date)
+    w.write(max_row, 3, week)
+    w.write(max_row, 4, work_time)
+    w.write(max_row, 5, add_line)
+    w.write(max_row, 6, del_line)
+    # w.write(max_row, 7, xlwt.Formula(week_number))
+    # 保存Excel文件
+    wt.save('code_log.xls')
+
+
+def write_excel(code, author, submit_number, add_line, del_line, write_date, xls_path='code_log.xls'):
+    # 将每次执行数据写入到Excel
+    # 读取Excel文件，若该Excel已被其他程序打开，则会运行报错
+    wb = xlrd.open_workbook('E:\\eclipse\\NKYautomation\\try_test\\code_log.xls', encoding_override='utf-8',
+                            formatting_info=True)
     # copy读取信息
     wt = copy(wb)
     # 获取Excel中第一个sheet
@@ -188,11 +262,13 @@ def write_excel(code, author, submit_number, add_line, del_line):
     # 开始写入信息，每次循环最大行数max_row固定
     w.write(max_row, 0, code)
     # 因考虑到代码每日运行统计代码提交量，记录执行日期
-    w.write(max_row, 1, time.strftime("%Y-%m-%d %H:%M"))
+    # w.write(max_row, 1, time.strftime("%Y-%m-%d %H:%M"))
+    w.write(max_row, 1, str(write_date))
     w.write(max_row, 2, author)
     w.write(max_row, 3, submit_number)
     w.write(max_row, 4, add_line)
     w.write(max_row, 5, del_line)
+    # w.write(max_row, 6, xlwt.Formula(b"WEEKNUM(B%s)" % (max_row + 1)))
     # 保存Excel文件
     wt.save('code_log.xls')
 
@@ -211,5 +287,13 @@ def write_excel(code, author, submit_number, add_line, del_line):
 
 
 if __name__ == "__main__":
-    a = get_object("webapp")
-    write_data(a)
+    # a = get_object("webapp")
+    # write_data(a)
+    code_base = "webapp"
+    begin = datetime.date(2022, 7, 10)
+    end = datetime.date(2022, 7, 14)
+    for d in range((end - begin).days + 1):
+        day = begin + datetime.timedelta(d)
+        print(day)
+        a = get_object(day)
+        write_data(a, day)

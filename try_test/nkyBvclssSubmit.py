@@ -128,10 +128,11 @@ class DB(object):
 def sql_submit_bill():
     # 查询待提交的SQL
     with DB() as db_1:
-        sql_1 = "SELECT id,bill_flow_define_id FROM pm_special_project WHERE status_id=1 AND fiscal_year_id=10002;"
+        sql_1 = 'SELECT id,bill_flow_define_id FROM pm_special_project WHERE status_id=1 AND fiscal_year_id=10002 AND ' \
+                'id in (SELECT a.bill_id FROM approval_log as a LEFT JOIN pm_special_project as b on a.bill_id=b.id ' \
+                'WHERE a.modified_time like "%2022-09-06%" AND a.approval_status_id=504 AND b.status_id=1); '
         db_1.execute(sql_1)
         return list(db_1)
-
 
 def test():
     a = workSpace()
