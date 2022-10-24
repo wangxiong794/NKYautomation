@@ -11,7 +11,7 @@ import datetime
 global code_base
 
 
-def get_fetch():
+def git_fetch():
     if code_base == "nky":
         code_path = "E:\\nkyworkspace\\nky\\nky"
     elif code_base == "webapp":
@@ -126,13 +126,13 @@ def write_data(text, write_date):
         for text1 in text:
             # 用-拆解信息，取左边部分为提交人
             author = str(re.split("-", text1)[0])
-            # 将获取到的提交人，添加到总的列表中
-            null_author.append(author)
+
             # 获取提交日期信息，用于存放明细表
             sub_time = str(re.findall("\-(.*?)\+0800", text1)).replace('ybj-', "").replace("[\'", "").replace("\']", "")
             # print(sub_time)
             # 周
             week = str(re.split(" ", sub_time)[0])
+            week = translate_week(week)
             # 月
             month = str(re.split(" ", sub_time)[1])
             month_number = translate_month(month)
@@ -153,14 +153,21 @@ def write_data(text, write_date):
                 total_line = total_line + ",0 deletions(-)"
             # 用字符串insert分割【 2 insertions(+), 1 deletion(-)】，取左侧部分，替换空格，得到新增行
             add_line = int(re.split("insert", total_line)[0].replace(" ", ""))
-            # 将取到的新增行，添加到列表中
-            null_add_line.append(add_line)
+
             # 用字符串insert分割【 2 insertions(+), 1 deletion(-)】，取右侧部分，只截取数字部分，得到删除行
             del_line = int(re.findall(r'\d+', re.split("insert", total_line)[1])[0])
-            # 将取到的删除行，添加到列表中
-            null_del_line.append(del_line)
-            # 写入明细表
-            write_data_item(code_base, author, work_date, week, work_time, add_line, del_line)
+            # 单次提交大于5000行的数量，均判断为无效提交，因为代码提交
+            if add_line > 5000 or del_line > 5000:
+                pass
+            else:
+                # 将获取到的提交人，添加到总的列表中
+                null_author.append(author)
+                # 将取到的新增行，添加到列表中
+                null_add_line.append(add_line)
+                # 将取到的删除行，添加到列表中
+                null_del_line.append(del_line)
+                # 写入明细表
+                write_data_item(code_base, translate_author(author), work_date, week, work_time, add_line, del_line)
 
         # 将三个列表信息转换到矩阵二维表中，来进行分组求和，数据举例
         # 其中第一列为序号，author为提交者，add_line为新增行，del_line为删除行，数据与test_text一致
@@ -207,15 +214,55 @@ def write_data(text, write_date):
             submit_number = int(df1[author])
             # print(author, submit_number, add_line, del_line)
             # 将得到的数据填写到Excel中
-            write_excel(code_base, author, submit_number, add_line, del_line, write_date)
+            write_excel(code_base, translate_author(author), submit_number, add_line, del_line, write_date)
 
 
 def translate_month(_month):
     _data = {
-        "Jan": "1", "Feb": "2", "Mar": "3", "Apr": "4", "May": "5", "Jun": "6", "Jul": "7", "Aug": "8", "Sept": "9",
+        "Jan": "1", "Feb": "2", "Mar": "3", "Apr": "4", "May": "5", "Jun": "6", "Jul": "7", "Aug": "8", "Sep": "9",
         "Oct": "10", "Nov": "11", "Dec": "12"
     }
-    return _data[_month]
+    if _month in _data:
+        return _data[_month]
+    else:
+        return _month
+
+
+def translate_author(_name):
+    _data = {
+        "bryan": "叶柏军",
+        "huanglijie": "黄李洁",
+        "lenovo": "lenovo",
+        "Mway": "侯明未",
+        "nkybj01": "纪向峰",
+        "tangting": "唐婷",
+        "wumusenlin000": "张森林",
+        "yeweigang": "叶伟刚",
+        "yingxu.xuying": "徐莹",
+        "yingxu.yingxu": "徐莹",
+        "ywg": "叶伟刚",
+        "1169307736": "侯明未"
+    }
+    if _name in _data:
+        return _data[_name]
+    else:
+        return _name
+
+
+def translate_week(_week_day):
+    _data = {
+        'Sun': "星期天",
+        'Mon': "星期一",
+        'Tue': "星期二",
+        'Wed': "星期三",
+        'Thu': "星期四",
+        'Fri': "星期五",
+        'Sat': "星期六"
+    }
+    if _week_day in _data:
+        return _data[_week_day]
+    else:
+        return _week_day
 
 
 def write_data_item(code, author, work_date, week, work_time, add_line, del_line,
@@ -241,7 +288,7 @@ def write_data_item(code, author, work_date, week, work_time, add_line, del_line
     w.write(max_row, 4, work_time)
     w.write(max_row, 5, add_line)
     w.write(max_row, 6, del_line)
-    # w.write(max_row, 7, xlwt.Formula(week_number))
+    w.write(max_row, 7, "=WEEKNUM(C%s)" % str(max_row + 1))
     # 保存Excel文件
     wt.save('code_log.xls')
 
@@ -268,7 +315,7 @@ def write_excel(code, author, submit_number, add_line, del_line, write_date, xls
     w.write(max_row, 3, submit_number)
     w.write(max_row, 4, add_line)
     w.write(max_row, 5, del_line)
-    # w.write(max_row, 6, xlwt.Formula(b"WEEKNUM(B%s)" % (max_row + 1)))
+    w.write(max_row, 6, "=WEEKNUM(B%s)" % str(max_row + 1))
     # 保存Excel文件
     wt.save('code_log.xls')
 
@@ -289,11 +336,13 @@ def write_excel(code, author, submit_number, add_line, del_line, write_date, xls
 if __name__ == "__main__":
     # a = get_object("webapp")
     # write_data(a)
-    code_base = "webapp"
-    begin = datetime.date(2022, 7, 10)
-    end = datetime.date(2022, 7, 14)
-    for d in range((end - begin).days + 1):
-        day = begin + datetime.timedelta(d)
-        print(day)
-        a = get_object(day)
-        write_data(a, day)
+    for code_base in ("nky", "mobile", "webapp"):
+        # code_base = "nky"
+        git_fetch()
+        begin = datetime.date(2022, 7, 15)
+        end = datetime.date(2022, 10, 15)
+        for d in range((end - begin).days + 1):
+            day = begin + datetime.timedelta(d)
+            print(day)
+            a = get_object(day)
+            write_data(a, day)

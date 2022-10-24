@@ -8,4 +8,6 @@ img
 /img
 *.log
 *.xls
+*.xlsx
 /try_test/*.xls
+/try_test/code_log透析表.xlsx
