@@ -123,6 +123,59 @@ def read_indicator():
         # new_data.append(task_data)
 
 
+def read_amount():
+    # 从原表的第三个sheet中解析建设任务的项目资金
+    book = xlrd.open_workbook(r"建设任务提取原表.xls", formatting_info=True)
+    table = book.sheet_by_index(2)
+    nrows = table.nrows  # 包括标题
+    # 获取总列数
+    ncols = table.ncols
+    # 计算出合并的单元格有哪些
+    colspan = {}
+    if table.merged_cells:
+        for item in table.merged_cells:
+            for row in range(item[0], item[1]):
+                for col in range(item[2], item[3]):
+                    # 合并单元格的首格是有值的，所以在这里进行了去重
+                    if (row, col) != (item[0], item[2]):
+                        colspan.update({(row, col): (item[0], item[2])})
+    # 读取每行数据
+    data = []
+    for i in range(1, nrows):
+        row = []
+        for j in range(ncols):
+            # 假如碰见合并的单元格坐标，取合并的首格的值即可
+            if colspan.get((i, j)):
+                row.append(table.cell_value(*colspan.get((i, j))))
+            else:
+                # # 第4列第4行开始为末级建设任务
+                # if i > 2 and j > 2:
+                #     _data = table.cell_value(i, j)
+                #     # 将末级建设任务str根据序号拆分成list的末级建设任务
+                #     row.append(jx_data(_data))
+                # else:
+                row.append(table.cell_value(i, j))
+        del row[3]
+        del row[4]
+        del row[5]
+        del row[6]
+        del row[7]
+        del row[8]
+        del row[2]
+        # print(row)
+        if row[1] == '小计':
+            pass
+        else:
+            data.append(row)
+    del data[0]
+    del data[0]
+    del data[0]
+    for a_data in data:
+        # print(a_data)
+        write_data_amount(a_data[0], a_data[1], int(a_data[2]) * 10000, int(a_data[3]) * 10000, int(a_data[4]) * 10000,
+                          int(a_data[5]) * 10000, int(a_data[6]) * 10000)
+
+
 def write_data_indicator(ind1, ind2, ind3, unit, task):
     # 将每次执行数据写入到Excel
     # 读取Excel文件，若该Excel已被其他程序打开，则会运行报错
@@ -142,6 +195,31 @@ def write_data_indicator(ind1, ind2, ind3, unit, task):
     w.write(max_row, 2, ind3)
     w.write(max_row, 3, unit)
     w.write(max_row, 4, task)
+    # 保存Excel文件
+    wt.save('建设任务提取文件.xls')
+
+
+def write_data_amount(task1, task2, zy_amount, df_amount, jb_amount, hy_amount, xx_amount):
+    # 将每次执行数据写入到Excel
+    # 读取Excel文件，若该Excel已被其他程序打开，则会运行报错
+    wb = xlrd.open_workbook('E:\\eclipse\\NKYautomation\\try_test\\建设任务提取文件.xls', encoding_override='utf-8',
+                            formatting_info=True)
+    # copy读取信息
+    wt = copy(wb)
+    # 获取Excel中第一个sheet
+    st = wb.sheet_by_index(2)
+    # 在此sheet中寻找数据的最大行数
+    max_row = st.nrows
+    # 获取复制后读取的Excel文件信息中的第一个sheet
+    w = wt.get_sheet(2)
+    # 开始写入信息，每次循环最大行数max_row固定
+    w.write(max_row, 0, task1)
+    w.write(max_row, 1, task2)
+    w.write(max_row, 2, zy_amount)
+    w.write(max_row, 3, df_amount)
+    w.write(max_row, 4, jb_amount)
+    w.write(max_row, 5, hy_amount)
+    w.write(max_row, 6, xx_amount)
     # 保存Excel文件
     wt.save('建设任务提取文件.xls')
 
@@ -488,5 +566,4 @@ def re_math_data():
 
 
 if __name__ == "__main__":
-    # read_indicator()
-    read()
+    read_amount()
