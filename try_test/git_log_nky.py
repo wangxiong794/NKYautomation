@@ -16,6 +16,10 @@ def git_fetch():
         code_path = "E:\\nkyworkspace\\nky\\nky"
     elif code_base == "webapp":
         code_path = "E:\\nkyworkspace\\webapp"
+    elif code_base == "bureauweb":
+        code_path = "E:\\nkyworkspace\\bureauweb"
+    elif code_base == "bureau":
+        code_path = "E:\\nkyworkspace\\bureau"
     else:
         code_path = "E:\\nkyworkspace\\mobile"
     g = Git(code_path)
@@ -28,6 +32,10 @@ def get_object(start_date):
         code_path = "E:\\nkyworkspace\\nky\\nky"
     elif code_base == "webapp":
         code_path = "E:\\nkyworkspace\\webapp"
+    elif code_base == "bureauweb":
+        code_path = "E:\\nkyworkspace\\bureauweb"
+    elif code_base == "bureau":
+        code_path = "E:\\nkyworkspace\\bureau"
     else:
         code_path = "E:\\nkyworkspace\\mobile"
     repo = Repo(path=code_path)
@@ -241,7 +249,10 @@ def translate_author(_name):
         "yingxu.xuying": "徐莹",
         "yingxu.yingxu": "徐莹",
         "ywg": "叶伟刚",
-        "1169307736": "侯明未"
+        "1169307736": "侯明未",
+        "ShunPing Wang":"王顺平",
+        "王顺平":"王顺平"
+
     }
     if _name in _data:
         return _data[_name]
@@ -336,11 +347,11 @@ def write_excel(code, author, submit_number, add_line, del_line, write_date, xls
 if __name__ == "__main__":
     # a = get_object("webapp")
     # write_data(a)
-    for code_base in ("nky", "mobile", "webapp"):
-        # code_base = "nky"
+    for code_base in ("nky", "mobile", "webapp","bureauweb","bureau"):
+        # code_base = "bureauweb"
         git_fetch()
-        begin = datetime.date(2022, 7, 15)
-        end = datetime.date(2022, 10, 15)
+        begin = datetime.date(2019, 1, 1)
+        end = datetime.date(2019, 12, 31)
         for d in range((end - begin).days + 1):
             day = begin + datetime.timedelta(d)
             print(day)
