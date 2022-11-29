@@ -430,7 +430,7 @@ if __name__ == "__main__":
     # if len(_symbol) == 0:
     #     _symbol = "①②③④⑤⑥⑦⑧⑨"
     print("正在开始提取，请稍后,三级任务分隔符为%s" % _symbol)
-    read()
+    # read()
     read_indicator()
-    read_amount()
+    # read_amount()
     print("提取完成，请查看双高任务书提取文件")
