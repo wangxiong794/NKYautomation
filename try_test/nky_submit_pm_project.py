@@ -183,7 +183,6 @@ def read_data():
         pm_guide_user_item AS a
         LEFT JOIN pm_special_guide AS b ON a.pm_special_guide_id = b.id
         LEFT JOIN pm_project_class AS d ON b.pm_project_class_id = d.id
-        LEFT JOIN user_orgnization AS e ON a.user_ids = e.user_id
     WHERE
         b.is_quota = 1;
     """
