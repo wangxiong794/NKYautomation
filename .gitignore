@@ -7,9 +7,4 @@ __pycache__
 img
 /img
 *.log
-*.xls
-*.xlsx
-*.docx
-*.txt
-*.jpg
 *.exe

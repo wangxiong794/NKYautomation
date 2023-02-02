@@ -347,11 +347,11 @@ def write_excel(code, author, submit_number, add_line, del_line, write_date, xls
 if __name__ == "__main__":
     # a = get_object("webapp")
     # write_data(a)
-    for code_base in ( "nky","bureau"):
+    for code_base in ( "nky","bureau","webapp","mobile","bureauweb"):
         # code_base = "bureauweb"
         git_fetch()
-        begin = datetime.date(2021, 1, 1)
-        end = datetime.date(2021, 12, 31)
+        begin = datetime.date(2022, 1, 1)
+        end = datetime.date(2022, 12, 31)
         for d in range((end - begin).days + 1):
             day = begin + datetime.timedelta(d)
             print(day)
