@@ -23,7 +23,7 @@ def corpid_to_opencorpid(provider_access_token):
     _url = 'https://qyapi.weixin.qq.com/cgi-bin/service/corpid_to_opencorpid?provider_access_token='+provider_access_token
     _payload = {
         # 参数corpid需要替换客户的CropID
-        "corpid": "ww34133f17f607ef76"
+        "corpid": "wx135bad1e23d17274"
     }
     _response = requests.request("POST", _url, data=json.dumps(_payload)).text
     print(_response)
