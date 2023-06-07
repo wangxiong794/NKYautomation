@@ -1,8 +1,8 @@
+import os
 import re
 import time
 import pandas as pd
 import xlrd
-import xlwt
 from git.repo import Repo
 from xlutils.copy import copy
 from git import Git
@@ -13,15 +13,17 @@ global code_base
 
 def git_fetch():
     if code_base == "nky":
-        code_path = "E:\\nkyworkspace\\nky\\nky"
+        code_path = "/Users/wangxiong/Documents/nky/codespce/nky"
     elif code_base == "webapp":
-        code_path = "E:\\nkyworkspace\\webapp"
-    elif code_base == "bureauweb":
-        code_path = "E:\\nkyworkspace\\bureauweb"
-    elif code_base == "bureau":
-        code_path = "E:\\nkyworkspace\\bureau"
-    else:
-        code_path = "E:\\nkyworkspace\\mobile"
+        code_path = "/Users/wangxiong/Documents/nky/codespce/webapp"
+    elif code_base == "framework":
+        code_path = "/Users/wangxiong/Documents/nky/codespce/framework"
+    elif code_base == "mobile":
+        code_path = "/Users/wangxiong/Documents/nky/codespce/mobile"
+    elif code_base == "jxt":
+        code_path = "/Users/wangxiong/Documents/nky/codespce/bureau"
+    elif code_base == "jxtweb":
+        code_path = "/Users/wangxiong/Documents/nky/codespce/bureauweb"
     g = Git(code_path)
     g.fetch()
 
@@ -29,15 +31,19 @@ def git_fetch():
 def get_object(start_date):
     # 此方法用于针对固定的本地代码分支，拉取指定格式的Git_log信息
     if code_base == "nky":
-        code_path = "E:\\nkyworkspace\\nky\\nky"
+        code_path = "/Users/wangxiong/Documents/nky/codespce/nky"
     elif code_base == "webapp":
-        code_path = "E:\\nkyworkspace\\webapp"
-    elif code_base == "bureauweb":
-        code_path = "E:\\nkyworkspace\\bureauweb"
-    elif code_base == "bureau":
-        code_path = "E:\\nkyworkspace\\bureau"
-    else:
-        code_path = "E:\\nkyworkspace\\mobile"
+        code_path = "/Users/wangxiong/Documents/nky/codespce/webapp"
+    elif code_base == "framework":
+        code_path = "/Users/wangxiong/Documents/nky/codespce/framework"
+    elif code_base == "mobile":
+        code_path = "/Users/wangxiong/Documents/nky/codespce/mobile"
+    elif code_base == "jxt":
+        code_path = "/Users/wangxiong/Documents/nky/codespce/bureau"
+    elif code_base == "jxtweb":
+        code_path = "/Users/wangxiong/Documents/nky/codespce/bureauweb"
+    g = Git(code_path)
+    # g.fetch()
     repo = Repo(path=code_path)
     # a=repo.iter_commits("master")
     # repo = repo.git.log("--since='2022-9-15'", "--until='2022-9-16'")
@@ -165,7 +171,7 @@ def write_data(text, write_date):
             # 用字符串insert分割【 2 insertions(+), 1 deletion(-)】，取右侧部分，只截取数字部分，得到删除行
             del_line = int(re.findall(r'\d+', re.split("insert", total_line)[1])[0])
             # 单次提交大于5000行的数量，均判断为无效提交，因为代码提交
-            if add_line > 5000 or del_line > 5000:
+            if add_line > 2000 or del_line > 2000:
                 pass
             else:
                 # 将获取到的提交人，添加到总的列表中
@@ -250,8 +256,8 @@ def translate_author(_name):
         "yingxu.yingxu": "徐莹",
         "ywg": "叶伟刚",
         "1169307736": "侯明未",
-        "ShunPing Wang":"王顺平",
-        "王顺平":"王顺平"
+        "ShunPing Wang": "王顺平",
+        "王顺平": "王顺平"
 
     }
     if _name in _data:
@@ -280,7 +286,7 @@ def write_data_item(code, author, work_date, week, work_time, add_line, del_line
                     xls_path='code_log.xls'):
     # 将每次执行数据写入到Excel
     # 读取Excel文件，若该Excel已被其他程序打开，则会运行报错
-    wb = xlrd.open_workbook('E:\\eclipse\\NKYautomation\\try_test\\code_log.xls', encoding_override='utf-8',
+    wb = xlrd.open_workbook('./code_logs.xls', encoding_override='utf-8',
                             formatting_info=True)
     # copy读取信息
     wt = copy(wb)
@@ -301,13 +307,13 @@ def write_data_item(code, author, work_date, week, work_time, add_line, del_line
     w.write(max_row, 6, del_line)
     w.write(max_row, 7, "=WEEKNUM(C%s)" % str(max_row + 1))
     # 保存Excel文件
-    wt.save('code_log.xls')
+    wt.save('code_logs.xls')
 
 
 def write_excel(code, author, submit_number, add_line, del_line, write_date, xls_path='code_log.xls'):
     # 将每次执行数据写入到Excel
     # 读取Excel文件，若该Excel已被其他程序打开，则会运行报错
-    wb = xlrd.open_workbook('E:\\eclipse\\NKYautomation\\try_test\\code_log.xls', encoding_override='utf-8',
+    wb = xlrd.open_workbook('./code_logs.xls', encoding_override='utf-8',
                             formatting_info=True)
     # copy读取信息
     wt = copy(wb)
@@ -328,7 +334,7 @@ def write_excel(code, author, submit_number, add_line, del_line, write_date, xls
     w.write(max_row, 5, del_line)
     w.write(max_row, 6, "=WEEKNUM(B%s)" % str(max_row + 1))
     # 保存Excel文件
-    wt.save('code_log.xls')
+    wt.save('code_logs.xls')
 
 
 # def os_git():
@@ -347,11 +353,11 @@ def write_excel(code, author, submit_number, add_line, del_line, write_date, xls
 if __name__ == "__main__":
     # a = get_object("webapp")
     # write_data(a)
-    for code_base in ( "nky","bureau"):
-        # code_base = "bureauweb"
+    # for code_base in ("nky", "webapp",  "mobile"):
+    for code_base in ("jxt", "jxtweb"):
         git_fetch()
-        begin = datetime.date(2021, 1, 1)
-        end = datetime.date(2021, 12, 31)
+        begin = datetime.date(2022, 10, 1)
+        end = datetime.date(2022, 12, 31)
         for d in range((end - begin).days + 1):
             day = begin + datetime.timedelta(d)
             print(day)

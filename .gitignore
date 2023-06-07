@@ -13,3 +13,7 @@ img
 *.txt
 *.jpg
 *.exe
+*.pdf
+*.zip
+*.doc
+./try_test/file
