@@ -101,12 +101,13 @@ def get_object(start_date):
     #                         "--pretty=startLog%an-%cd"))
     repo = str(
         repo.git.log("--since='%s'" % str(start_date) + " 00:00:00", "--until='%s'" % str(start_date) + " 23:59:59",
-                     "--no-merges", "--branches", "--remotes", "--shortstat", "--pretty=startLog%an-%cd"))
+                     "--no-merges", "--branches", "--remotes", "--shortstat", "--pretty=startLog%an-%cd-%s"))
     # print(repo)
     # 去掉换行符
     repo = repo.replace('\n', '')
     # 由于git.log命名中，故意增加了startLog字符，用于分割提交记录
     repo = repo.split("startLog")
+    # print(repo)
     # 将得到的list去除空字符串，最终得到的结果应该类似如下
     """
     
@@ -118,7 +119,11 @@ def get_object(start_date):
     """
     repo = [x.strip() for x in repo if x.strip() != '']
     print(repo)
-    return repo
+    # if "合并" in repo or "Merge" in repo:
+    if  "Merge" in repo:
+        pass
+    else:
+        return repo
 
 
 def write_data(text, write_date):
@@ -140,7 +145,9 @@ def write_data(text, write_date):
         for text1 in text:
             # 用-拆解信息，取左边部分为提交人
             author = str(re.split("-", text1)[0])
-
+            # # 提交注释
+            # remark = str(re.split("-", text1)[2])
+            # remark = str(re.split("file"),remark)[0]
             # 获取提交日期信息，用于存放明细表
             sub_time = str(re.findall("\-(.*?)\+0800", text1)).replace('ybj-', "").replace("[\'", "").replace("\']", "")
             # print(sub_time)
@@ -353,11 +360,12 @@ def write_excel(code, author, submit_number, add_line, del_line, write_date, xls
 if __name__ == "__main__":
     # a = get_object("webapp")
     # write_data(a)
-    # for code_base in ("nky", "webapp",  "mobile"):
-    for code_base in ("jxt", "jxtweb"):
+    for code_base in ( "webapp",  "mobile"):
+    # for code_base in ("nky"):
+
         git_fetch()
-        begin = datetime.date(2022, 10, 1)
-        end = datetime.date(2022, 12, 31)
+        begin = datetime.date(2023, 1, 1)
+        end = datetime.date(2023, 6, 30)
         for d in range((end - begin).days + 1):
             day = begin + datetime.timedelta(d)
             print(day)
